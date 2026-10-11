@@ -364,4 +364,12 @@
     <string name="help_privacy">Privacy policy</string>
     <string name="help_version">Version %1$s (%2$d)</string>
     <string name="help_no_app">No app available to open this link.</string>
+    <string name="admin_stock_label">Stock</string>
+    <string name="admin_stock_failed">Couldn\'t adjust the stock</string>
+    <string name="admin_image_add">Image</string>
+    <string name="admin_image_uploaded">Image uploaded</string>
+    <string name="admin_image_uploaded_detail">It shows up on the product in a few moments.</string>
+    <string name="admin_image_failed">Couldn\'t upload the image</string>
+    <string name="admin_image_invalid_type">Use PNG, JPEG, HEIC or WebP.</string>
+    <string name="admin_image_too_large">The image must be at most 4 MB.</string>
 </resources>
