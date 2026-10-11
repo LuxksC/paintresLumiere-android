@@ -173,4 +173,13 @@
     <string name="cart_icon_a11y_count">Carrinho, %1$d itens</string>
     <string name="cart_error_stock_title">Estoque insuficiente</string>
     <string name="cart_error_stock_message">Disponível para adicionar: %1$d</string>
+
+    <!-- Admin -->
+    <string name="tab_admin">Admin</string>
+    <string name="admin_title">Administração</string>
+    <string name="admin_subtitle">GESTÃO DA LOJA</string>
+    <string name="admin_section_products">Produtos</string>
+    <string name="admin_section_products_subtitle">Catálogo, estoque e imagens</string>
+    <string name="admin_section_orders">Pedidos</string>
+    <string name="admin_section_orders_subtitle">Status de produção e entrega</string>
 </resources>
