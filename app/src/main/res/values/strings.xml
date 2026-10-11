@@ -314,4 +314,17 @@
     <string name="boleto_copy_line">Copiar linha digitável</string>
     <string name="boleto_line_copied">Linha digitável copiada</string>
     <string name="boleto_instructions">A produção começa assim que a primeira parcela for paga. A compensação do boleto pode levar até 3 dias úteis — esta tela e o pedido atualizam sozinhos.</string>
+    <string name="card_number">Número do cartão</string>
+    <string name="card_holder">Nome impresso no cartão</string>
+    <string name="card_holder_placeholder">COMO NO CARTÃO</string>
+    <string name="card_expiry">Validade</string>
+    <string name="card_cvv">CVV</string>
+    <string name="card_installments">Pagamento em %1$d parcelas</string>
+    <string name="card_field_invalid">Verifique este campo.</string>
+    <string name="card_security_note">Os dados do cartão são enviados direto ao provedor de pagamento e nunca ficam salvos no app ou nos nossos servidores.</string>
+    <string name="card_pay">Pagar</string>
+    <string name="card_declined">Pagamento recusado. Verifique os dados ou use outro cartão.</string>
+    <string name="card_not_confirmed">Não foi possível confirmar o pagamento agora.</string>
+    <string name="card_unavailable">Pagamento por cartão ainda não está disponível nesta versão.</string>
+    <string name="card_choose_another">Escolher outra forma de pagamento</string>
 </resources>
