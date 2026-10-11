@@ -138,4 +138,17 @@
     <string name="details_buy">Comprar</string>
     <string name="details_unavailable_button">Indisponível</string>
     <string name="details_add_to_cart">Adicionar ao carrinho</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Perfil</string>
+    <string name="profile_subtitle">SUA CONTA</string>
+    <string name="profile_menu_edit">Editar perfil</string>
+    <string name="profile_menu_notifications">Notificações</string>
+    <string name="profile_menu_security">Segurança</string>
+    <string name="profile_menu_help">Ajuda e suporte</string>
+    <string name="profile_logout">Sair</string>
+    <string name="profile_delete_account">Excluir conta</string>
+    <string name="profile_delete_title">Excluir sua conta?</string>
+    <string name="profile_delete_message">Sua conta será desativada e você sairá do app. Esta ação não pode ser desfeita pelo app.</string>
+    <string name="profile_delete_confirm">Excluir</string>
 </resources>
