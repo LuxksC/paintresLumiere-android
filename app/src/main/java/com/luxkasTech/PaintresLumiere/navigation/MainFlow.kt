@@ -228,7 +228,20 @@ fun MainFlow(
                         )
                     }
                     composable<OrderDetailDestination> {
-                        OrderDetailRoute(onBack = { navController.popBackStack() })
+                        OrderDetailRoute(
+                            onBack = { navController.popBackStack() },
+                            onResumePayment = { orderId, payment ->
+                                val encoded = json.encodeToString(Payment.serializer(), payment)
+                                navController.navigate(
+                                    if (payment.method == PaymentMethod.PIX) {
+                                        PixPaymentDestination(orderId, encoded)
+                                    } else {
+                                        BoletoPaymentDestination(orderId, encoded)
+                                    },
+                                )
+                            },
+                            onChoosePaymentMethod = { orderId -> navController.navigate(PaymentMethodDestination(orderId)) },
+                        )
                     }
                     composable<PaymentMethodDestination> {
                         PaymentMethodRoute(
