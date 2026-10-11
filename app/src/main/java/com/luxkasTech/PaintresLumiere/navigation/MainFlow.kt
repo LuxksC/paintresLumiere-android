@@ -37,6 +37,7 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
+import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
 import kotlinx.serialization.Serializable
 
 // Tab graphs
@@ -120,7 +121,7 @@ fun MainFlow(navController: NavHostController = rememberNavController()) {
                     }
                 }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
-                    composable<ProfileDestination> { FlowPlaceholder() }
+                    composable<ProfileDestination> { ProfileRoute() }
                 }
             }
         }
