@@ -59,7 +59,11 @@ import com.luxkasTech.PaintresLumiere.feature.payment.PixPaymentRoute
 import kotlinx.serialization.json.Json
 import com.luxkasTech.PaintresLumiere.feature.orders.detail.OrderDetailRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
+import com.luxkasTech.PaintresLumiere.feature.profile.ProfileMenuItem
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
+import com.luxkasTech.PaintresLumiere.feature.profile.settings.HelpRoute
+import com.luxkasTech.PaintresLumiere.feature.profile.settings.NotificationsRoute
+import com.luxkasTech.PaintresLumiere.feature.profile.settings.SecurityRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.edit.EditProfileRoute
 import kotlinx.serialization.Serializable
 
@@ -78,6 +82,9 @@ import kotlinx.serialization.Serializable
 @Serializable data class CategoryProductsDestination(val category: String)
 @Serializable data object ProfileDestination
 @Serializable data object EditProfileDestination
+@Serializable data object NotificationsDestination
+@Serializable data object SecurityDestination
+@Serializable data object HelpDestination
 @Serializable data object OrdersDestination
 @Serializable data class OrderDetailDestination(val orderId: String)
 @Serializable data class PaymentMethodDestination(val orderId: String)
@@ -318,11 +325,25 @@ fun MainFlow(
                 }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
                     composable<ProfileDestination> {
-                        ProfileRoute(onEditProfile = { navController.navigate(EditProfileDestination) })
+                        ProfileRoute(
+                            onMenuItemSelected = { item ->
+                                navController.navigate(
+                                    when (item) {
+                                        ProfileMenuItem.EditProfile -> EditProfileDestination
+                                        ProfileMenuItem.Notifications -> NotificationsDestination
+                                        ProfileMenuItem.Security -> SecurityDestination
+                                        ProfileMenuItem.Help -> HelpDestination
+                                    },
+                                )
+                            },
+                        )
                     }
                     composable<EditProfileDestination> {
                         EditProfileRoute(onFinished = { navController.popBackStack() })
                     }
+                    composable<NotificationsDestination> { NotificationsRoute(onBack = { navController.popBackStack() }) }
+                    composable<SecurityDestination> { SecurityRoute(onBack = { navController.popBackStack() }) }
+                    composable<HelpDestination> { HelpRoute(onBack = { navController.popBackStack() }) }
                 }
             }
         }
