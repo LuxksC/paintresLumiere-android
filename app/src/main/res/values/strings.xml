@@ -23,4 +23,12 @@
     <string name="ds_stepper_decrease">Diminuir quantidade</string>
     <string name="ds_stepper_increase">Aumentar quantidade</string>
     <string name="ds_page_indicator_a11y">Imagem %1$d de %2$d</string>
+
+    <!-- Errors (mirror iOS APIError / MessagesService) -->
+    <string name="error_network">Sem conexão. Verifique sua internet e tente novamente.</string>
+    <string name="error_unauthorized">Credenciais inválidas.</string>
+    <string name="error_conflict">Este registro já existe.</string>
+    <string name="error_request_failed">Não foi possível concluir a solicitação.</string>
+    <string name="error_decoding">Não foi possível ler a resposta do servidor.</string>
+    <string name="error_unknown">Ocorreu um erro inesperado.</string>
 </resources>

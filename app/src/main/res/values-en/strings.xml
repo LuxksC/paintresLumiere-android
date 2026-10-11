@@ -20,4 +20,12 @@
     <string name="ds_stepper_decrease">Decrease quantity</string>
     <string name="ds_stepper_increase">Increase quantity</string>
     <string name="ds_page_indicator_a11y">Image %1$d of %2$d</string>
+
+    <!-- Errors -->
+    <string name="error_network">No connection. Check your internet and try again.</string>
+    <string name="error_unauthorized">Invalid credentials.</string>
+    <string name="error_conflict">This record already exists.</string>
+    <string name="error_request_failed">Request failed.</string>
+    <string name="error_decoding">Failed to parse server response.</string>
+    <string name="error_unknown">An unexpected error occurred.</string>
 </resources>
