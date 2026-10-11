@@ -54,6 +54,7 @@ class MockFixturesTest {
             assertTrue("SKU ${product.sku} has no variants mock", variants.isNotEmpty())
         }
         assertTrue(apiCall { products.getPopularProducts(5) }.products.isNotEmpty())
+        assertTrue(apiCall { products.getCategories() }.categories.isNotEmpty())
     }
 
     @Test
@@ -87,7 +88,7 @@ class MockFixturesTest {
     fun `every mock file is covered by this test`() {
         // When you add a mock, exercise it above and list it here.
         val covered = setOf(
-            "DELETE/products/_.json", "DELETE/users/me.json", "GET/products.json", "GET/products/popular.json",
+            "DELETE/products/_.json", "DELETE/users/me.json", "GET/products.json", "GET/products/popular.json", "GET/products/categories.json",
             "GET/products/sku/_.json", "GET/products/sku/_.meta.json", "GET/profile.json", "POST/auth/google.json",
             "POST/login.json", "POST/logout.json", "POST/products.json", "POST/products.meta.json",
             "POST/signup.json", "POST/signup.meta.json", "PUT/products/_.json",
