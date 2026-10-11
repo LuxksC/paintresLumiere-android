@@ -8,4 +8,15 @@
     <string name="common_back">Voltar</string>
     <string name="common_cancel">Cancelar</string>
     <string name="common_or">ou</string>
+
+    <!-- Design System -->
+    <string name="ds_input_show_password">Mostrar senha</string>
+    <string name="ds_input_hide_password">Ocultar senha</string>
+    <string name="ds_password_strength_weak">Fraca</string>
+    <string name="ds_password_strength_moderate">Força moderada</string>
+    <string name="ds_password_strength_strong">Forte</string>
+    <string name="ds_badge_ready">Pronto</string>
+    <string name="ds_badge_draft">Rascunho</string>
+    <string name="ds_badge_processing">Processando</string>
+    <string name="ds_badge_error">Erro</string>
 </resources>

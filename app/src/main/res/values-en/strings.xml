@@ -5,4 +5,15 @@
     <string name="common_back">Back</string>
     <string name="common_cancel">Cancel</string>
     <string name="common_or">or</string>
+
+    <!-- Design System -->
+    <string name="ds_input_show_password">Show password</string>
+    <string name="ds_input_hide_password">Hide password</string>
+    <string name="ds_password_strength_weak">Weak</string>
+    <string name="ds_password_strength_moderate">Moderate strength</string>
+    <string name="ds_password_strength_strong">Strong</string>
+    <string name="ds_badge_ready">Ready</string>
+    <string name="ds_badge_draft">Draft</string>
+    <string name="ds_badge_processing">Processing</string>
+    <string name="ds_badge_error">Error</string>
 </resources>
