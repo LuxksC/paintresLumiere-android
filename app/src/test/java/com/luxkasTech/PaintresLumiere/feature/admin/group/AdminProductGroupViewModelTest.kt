@@ -21,7 +21,7 @@ class AdminProductGroupViewModelTest {
         variants = Result.success(listOf(testVariant("v1"), testVariant("v2")))
     }
     private val admin = FakeAdminProductRepository()
-    private val vm = AdminProductGroupViewModel(SavedStateHandle(mapOf("sku" to "LUNA")), products, admin, FakeMessagesService())
+    private val vm by lazy { AdminProductGroupViewModel(SavedStateHandle(mapOf("sku" to "LUNA")), products, admin, FakeMessagesService()) }
 
     @Test
     fun `lists the SKU variants`() {
