@@ -7,6 +7,9 @@ import com.luxkasTech.PaintresLumiere.data.auth.AuthApi
 import com.luxkasTech.PaintresLumiere.data.auth.GoogleAuthRequest
 import com.luxkasTech.PaintresLumiere.data.auth.LoginRequest
 import com.luxkasTech.PaintresLumiere.data.auth.SignUpRequest
+import com.luxkasTech.PaintresLumiere.data.order.CreateOrderRequest
+import com.luxkasTech.PaintresLumiere.data.order.OrderApi
+import com.luxkasTech.PaintresLumiere.data.order.OrderStatus
 import com.luxkasTech.PaintresLumiere.data.product.ProductApi
 import com.luxkasTech.PaintresLumiere.data.profile.ProfileApi
 import com.luxkasTech.PaintresLumiere.data.profile.UserType
@@ -44,6 +47,7 @@ class MockFixturesTest {
     private val auth = retrofit.create(AuthApi::class.java)
     private val profile = retrofit.create(ProfileApi::class.java)
     private val admin = retrofit.create(AdminProductApi::class.java)
+    private val orders = retrofit.create(OrderApi::class.java)
 
     @Test
     fun `catalog mocks decode, and every listed SKU has variants`() = runTest {
@@ -90,6 +94,20 @@ class MockFixturesTest {
     }
 
     @Test
+    fun `order mocks decode and every listed order has a detail`() = runTest {
+        val page = apiCall { orders.getOrders() }
+        assertEquals(page.total, page.data.size)
+        page.data.forEach { summary ->
+            val detail = apiCall { orders.getOrder(summary.id) }
+            assertEquals(summary.status, detail.status)
+            assertEquals(summary.totalAmount, detail.totalAmount)
+            assertTrue(detail.statusHistory.isNotEmpty())
+        }
+        val created = apiCall { orders.createOrder(CreateOrderRequest()) }
+        assertEquals(OrderStatus.RECEIVED, created.status)
+    }
+
+    @Test
     fun `every mock file is covered by this test`() {
         // When you add a mock, exercise it above and list it here.
         val covered = setOf(
@@ -97,12 +115,14 @@ class MockFixturesTest {
             "GET/products/sku/_.json", "GET/products/sku/_.meta.json", "GET/profile.json", "POST/auth/google.json",
             "POST/login.json", "POST/logout.json", "POST/products.json", "POST/products.meta.json",
             "POST/signup.json", "POST/signup.meta.json", "PUT/products/_.json",
+            "GET/orders.json", "GET/orders/_.json", "GET/orders/_.meta.json", "POST/orders.json", "POST/orders.meta.json",
         )
         val files = mocksDir.walkTopDown()
             .filter { it.isFile && it.extension == "json" }
             .map { it.relativeTo(mocksDir).invariantSeparatorsPath }
             .filterNot { it.startsWith("GET/products/sku/") && it != "GET/products/sku/_.json" && it != "GET/products/sku/_.meta.json" }
             .filterNot { it.startsWith("GET/products@category=") } // exercised through the categories loop
+            .filterNot { it.startsWith("GET/orders/ord-") } // exercised through the orders loop
             .toSet()
         assertEquals("Register new mocks in MockFixturesTest", emptySet<String>(), files - covered)
     }

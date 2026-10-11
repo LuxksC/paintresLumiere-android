@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "id": "ord-1001",
+      "number": "PL-1001",
+      "status": "em_producao",
+      "total_amount": 348.76,
+      "created_at": "2026-10-08T13:20:00Z",
+      "item_count": 14,
+      "thumbnail_url": null
+    },
+    {
+      "id": "ord-0987",
+      "number": "PL-0987",
+      "status": "entregue",
+      "total_amount": 239.4,
+      "created_at": "2026-09-21T18:02:00Z",
+      "item_count": 6,
+      "thumbnail_url": null
+    },
+    {
+      "id": "ord-0950",
+      "number": "PL-0950",
+      "status": "cancelado",
+      "total_amount": 109.8,
+      "created_at": "2026-09-02T10:11:00Z",
+      "item_count": 2,
+      "thumbnail_url": null
+    }
+  ],
+  "nextCursor": null,
+  "total": 3
+}
