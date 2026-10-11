@@ -4,8 +4,10 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.AdminPanelSettings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
@@ -32,6 +34,8 @@ import androidx.navigation.compose.rememberNavController
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
+import com.luxkasTech.PaintresLumiere.feature.admin.AdminHomeRoute
+import com.luxkasTech.PaintresLumiere.feature.admin.AdminSection
 import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
@@ -41,12 +45,14 @@ import kotlinx.serialization.Serializable
 // Tab graphs
 @Serializable data object HomeGraph
 @Serializable data object ProfileGraph
+@Serializable data object AdminGraph
 
 // Destinations
 @Serializable data object HomeDestination
 @Serializable data class ProductDetailsDestination(val sku: String)
 @Serializable data object CartDestination
 @Serializable data object ProfileDestination
+@Serializable data object AdminDestination
 
 private enum class MainTab(
     val graph: Any,
@@ -66,6 +72,14 @@ private enum class MainTab(
         Icons.Outlined.Home,
         Icons.Filled.Home,
     ),
+    Admin(
+        AdminGraph,
+        { d -> d.hierarchy.any { it.hasRoute<AdminGraph>() } },
+        { d -> d.hasRoute<AdminDestination>() },
+        R.string.tab_admin,
+        Icons.Outlined.AdminPanelSettings,
+        Icons.Filled.AdminPanelSettings,
+    ),
     Profile(
         ProfileGraph,
         { d -> d.hierarchy.any { it.hasRoute<ProfileGraph>() } },
@@ -82,16 +96,22 @@ private enum class MainTab(
  * the tab roots; pushed screens (product details, …) get the full height.
  */
 @Composable
-fun MainFlow(navController: NavHostController = rememberNavController()) {
+fun MainFlow(
+    isAdmin: Boolean,
+    onAdminSectionSelected: (AdminSection) -> Unit,
+    navController: NavHostController = rememberNavController(),
+) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
-    val showBottomBar = destination == null || MainTab.entries.any { it.isRoot(destination) }
+    // The Admin tab only exists for confirmed admins (role from GET /profile).
+    val tabs = MainTab.entries.filter { it != MainTab.Admin || isAdmin }
+    val showBottomBar = destination == null || tabs.any { it.isRoot(destination) }
 
     Scaffold(
         containerColor = PLColor.backgroundPrimary,
         bottomBar = {
             if (showBottomBar) {
-                MainBottomBar(destination) { tab ->
+                MainBottomBar(tabs, destination) { tab ->
                     navController.navigate(tab.graph) {
                         popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                         launchSingleTop = true
@@ -123,6 +143,9 @@ fun MainFlow(navController: NavHostController = rememberNavController()) {
                         )
                     }
                 }
+                navigation<AdminGraph>(startDestination = AdminDestination) {
+                    composable<AdminDestination> { AdminHomeRoute(onSectionSelected = onAdminSectionSelected) }
+                }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
                     composable<ProfileDestination> { ProfileRoute() }
                 }
@@ -132,9 +155,9 @@ fun MainFlow(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-private fun MainBottomBar(destination: NavDestination?, onSelect: (MainTab) -> Unit) {
+private fun MainBottomBar(tabs: List<MainTab>, destination: NavDestination?, onSelect: (MainTab) -> Unit) {
     NavigationBar(containerColor = PLColor.backgroundSecondary) {
-        MainTab.entries.forEach { tab ->
+        tabs.forEach { tab ->
             val selected = destination?.let(tab.ownsDestination) == true
             NavigationBarItem(
                 selected = selected,
