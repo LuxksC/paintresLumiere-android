@@ -16,4 +16,8 @@
     <string name="ds_badge_draft">Draft</string>
     <string name="ds_badge_processing">Processing</string>
     <string name="ds_badge_error">Error</string>
+    <string name="ds_product_card_price_discounted_a11y">%1$s, down from %2$s</string>
+    <string name="ds_stepper_decrease">Decrease quantity</string>
+    <string name="ds_stepper_increase">Increase quantity</string>
+    <string name="ds_page_indicator_a11y">Image %1$d of %2$d</string>
 </resources>
