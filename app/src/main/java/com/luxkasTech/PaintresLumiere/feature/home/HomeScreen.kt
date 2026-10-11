@@ -24,7 +24,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,12 +57,14 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PaintresLumiereThe
 import com.luxkasTech.PaintresLumiere.data.product.Product
 import com.luxkasTech.PaintresLumiere.data.product.ProductPricing
 import com.luxkasTech.PaintresLumiere.data.product.ProductStatus
+import com.luxkasTech.PaintresLumiere.feature.cart.CartIconWithBadge
 import com.luxkasTech.PaintresLumiere.feature.product.toCardData
 import java.math.BigDecimal
 
 @Composable
 fun HomeRoute(
     onProductSelected: (sku: String) -> Unit,
+    onCartRequested: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -73,7 +74,7 @@ fun HomeRoute(
         onRefresh = viewModel::refresh,
         onRetry = viewModel::retry,
         onNotificationsClick = viewModel::onNotificationsClick,
-        onCartClick = viewModel::onCartClick,
+        onCartClick = onCartRequested,
     )
 }
 
@@ -123,7 +124,7 @@ private fun CatalogGrid(
     ) {
         item(span = { GridItemSpan(maxLineSpan) }, key = "header") {
             Column {
-                HomeHeader(onNotificationsClick, onCartClick)
+                HomeHeader(state.cartCount, onNotificationsClick, onCartClick)
                 PLDivider(Modifier.padding(top = PLSpacing.md))
             }
         }
@@ -155,7 +156,7 @@ private fun CatalogGrid(
 }
 
 @Composable
-private fun HomeHeader(onNotificationsClick: () -> Unit, onCartClick: () -> Unit) {
+private fun HomeHeader(cartCount: Int, onNotificationsClick: () -> Unit, onCartClick: () -> Unit) {
     Row(Modifier.padding(top = PLSpacing.sm), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
             Text(
@@ -173,9 +174,7 @@ private fun HomeHeader(onNotificationsClick: () -> Unit, onCartClick: () -> Unit
         IconButton(onClick = onNotificationsClick) {
             Icon(Icons.Outlined.Notifications, stringResource(R.string.home_notifications), tint = PLColor.textMuted)
         }
-        IconButton(onClick = onCartClick) {
-            Icon(Icons.Outlined.ShoppingCart, stringResource(R.string.home_cart), tint = PLColor.textMuted)
-        }
+        CartIconWithBadge(count = cartCount, onClick = onCartClick)
     }
 }
 
@@ -285,6 +284,6 @@ private fun HomeScreenPreview() {
         previewProduct("4", "Nome personalizado"),
     )
     PaintresLumiereTheme {
-        HomeScreen(HomeUiState(catalog = products, popular = products.take(2), isLoading = false), {}, {}, {}, {}, {})
+        HomeScreen(HomeUiState(catalog = products, popular = products.take(2), isLoading = false, cartCount = 3), {}, {}, {}, {}, {})
     }
 }
