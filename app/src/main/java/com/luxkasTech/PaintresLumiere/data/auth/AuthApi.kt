@@ -22,6 +22,10 @@ interface AuthApi {
     @POST("auth/reset-password")
     suspend fun resetPassword(@Body body: ResetPasswordRequest)
 
+    /** Proposed `PUT /profile/password` — no backend card yet; the `mock` flavor serves it. */
+    @retrofit2.http.PUT("profile/password")
+    suspend fun changePassword(@Body body: ChangePasswordRequest)
+
     @POST("logout")
     suspend fun logout()
 
