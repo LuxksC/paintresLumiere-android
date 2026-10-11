@@ -99,4 +99,8 @@
     <string name="auth_forgot_sent">If this email is registered, you will receive a reset link shortly.</string>
     <string name="auth_forgot_spam_hint">Didn\'t receive it? Check your spam folder or try again.</string>
     <string name="auth_forgot_back_to_login">Back to sign in</string>
+
+    <!-- Main tabs -->
+    <string name="tab_home">Home</string>
+    <string name="tab_profile">Profile</string>
 </resources>
