@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.PaintresLumiere" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Dark-only brand theme; Compose draws everything, this only colors the window before the
+         first frame so there is no white flash. -->
+    <style name="Theme.PaintresLumiere" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/background_primary</item>
+        <item name="android:colorBackground">@color/background_primary</item>
+    </style>
 </resources>
