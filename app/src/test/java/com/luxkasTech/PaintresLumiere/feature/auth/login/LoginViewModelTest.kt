@@ -66,4 +66,25 @@ class LoginViewModelTest {
         viewModel.onPasswordChange("right")
         assertNull(viewModel.state.value.error)
     }
+
+    @Test
+    fun `google token is exchanged with the API`() {
+        viewModel.loginWithGoogle("google-id-token")
+        assertEquals(listOf("google-id-token"), repository.googleTokens)
+    }
+
+    @Test
+    fun `rejected google token surfaces the mapped error`() {
+        repository.googleResult = CompletableDeferred<Unit>().apply { completeExceptionally(ApiError.Conflict("Email linked to another Google account")) }
+        viewModel.loginWithGoogle("token")
+        assertFalse(viewModel.state.value.isLoading)
+        assertEquals(UiText.Raw("Email linked to another Google account"), viewModel.state.value.error)
+    }
+
+    @Test
+    fun `picker failure shows a friendly error without calling the API`() {
+        viewModel.onGoogleSignInFailed()
+        assertEquals(UiText.Resource(R.string.auth_login_google_failed), viewModel.state.value.error)
+        assertTrue(repository.googleTokens.isEmpty())
+    }
 }
