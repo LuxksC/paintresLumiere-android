@@ -1,0 +1,56 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000009",
+      "name": "Letra A",
+      "slug": "letra-a-gold-8x12",
+      "description": "Letra A em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 15,
+      "category": "letters",
+      "barcode": "7890000000009",
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.0,
+        "final_price": 19.9
+      },
+      "specifications": {
+        "color": "gold",
+        "dimensions": {
+          "width": 8,
+          "height": 12,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000010",
+      "name": "Letra A",
+      "slug": "letra-a-transparent-8x12",
+      "description": "Letra A em acrílico espelhado, cortado a laser. Acabamento transparent.",
+      "images": [],
+      "stock_quantity": 9,
+      "category": "letters",
+      "barcode": "7890000000010",
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.0,
+        "final_price": 19.9
+      },
+      "specifications": {
+        "color": "transparent",
+        "dimensions": {
+          "width": 8,
+          "height": 12,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    }
+  ]
+}

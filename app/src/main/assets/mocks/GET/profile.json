@@ -1,0 +1,11 @@
+{
+  "id": "00000000-0000-4000-8000-100000000001",
+  "type": "admin",
+  "name": "Lucas",
+  "lastname": "Mock",
+  "phone": "11987654321",
+  "email": "lucas@mock.paintres",
+  "cpf": null,
+  "cnpj": null,
+  "image": null
+}
