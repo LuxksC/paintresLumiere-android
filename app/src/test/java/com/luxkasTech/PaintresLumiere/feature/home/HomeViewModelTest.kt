@@ -133,4 +133,29 @@ class HomeViewModelTest {
         viewModel.onQueryChange(" ")
         assertFalse(viewModel.state.value.isSearching)
     }
+
+    @Test
+    fun `a paginated catalog keeps server order and loads the next page`() {
+        repository.catalogPages = mapOf(
+            null to Result.success(com.luxkasTech.PaintresLumiere.core.network.Page(listOf(testProduct("1", "Zeca"), testProduct("2", "Ana")), nextCursor = "p2")),
+            "p2" to Result.success(com.luxkasTech.PaintresLumiere.core.network.Page(listOf(testProduct("3", "Bia")))),
+        )
+        val viewModel = viewModel()
+        assertEquals(listOf("Zeca", "Ana"), viewModel.state.value.catalog.map { it.name })
+        viewModel.loadMore()
+        assertEquals(listOf("Zeca", "Ana", "Bia"), viewModel.state.value.catalog.map { it.name })
+        assertEquals(null, viewModel.state.value.nextCursor)
+    }
+
+    @Test
+    fun `a failed page keeps the cursor for a retry`() {
+        repository.catalogPages = mapOf(
+            null to Result.success(com.luxkasTech.PaintresLumiere.core.network.Page(listOf(testProduct("1")), nextCursor = "p2")),
+            "p2" to Result.failure(ApiError.Network(IOException())),
+        )
+        val viewModel = viewModel()
+        viewModel.loadMore()
+        assertEquals("p2", viewModel.state.value.nextCursor)
+        assertFalse(viewModel.state.value.isLoadingMore)
+    }
 }

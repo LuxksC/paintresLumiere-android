@@ -56,17 +56,22 @@ class MockFixturesTest {
 
     @Test
     fun `catalog mocks decode, and every listed SKU has variants`() = runTest {
-        val catalog = apiCall { products.getProducts() }.products
+        val catalog = apiCall { products.getProducts() }.items
         assertTrue(catalog.isNotEmpty())
         catalog.forEach { product ->
             val variants = apiCall { products.getProductBySku(product.sku) }.products
             assertTrue("SKU ${product.sku} has no variants mock", variants.isNotEmpty())
         }
         assertTrue(apiCall { products.getPopularProducts(5) }.products.isNotEmpty())
+        // Paginated shape: two pages that together are the whole catalog.
+        val first = apiCall { products.getProducts(limit = 20) }
+        val second = apiCall { products.getProducts(cursor = first.nextCursor, limit = 20) }
+        assertEquals(catalog.map { it.id }, (first.items + second.items).map { it.id })
+        assertEquals(null, second.nextCursor)
         val categories = apiCall { products.getCategories() }.categories
         assertTrue(categories.isNotEmpty())
         categories.forEach { summary ->
-            val inCategory = apiCall { products.getProducts(category = summary.category.raw) }.products
+            val inCategory = apiCall { products.getProducts(category = summary.category.raw) }.items
             assertEquals("count for ${summary.category}", summary.productCount, inCategory.size)
         }
     }
@@ -168,6 +173,7 @@ class MockFixturesTest {
             .map { it.relativeTo(mocksDir).invariantSeparatorsPath }
             .filterNot { it.startsWith("GET/products/sku/") && it != "GET/products/sku/_.json" && it != "GET/products/sku/_.meta.json" }
             .filterNot { it.startsWith("GET/products@category=") } // exercised through the categories loop
+            .filterNot { it.startsWith("GET/products@") && it.contains("limit=20") } // pagination pages, exercised above
             .filterNot { it.startsWith("GET/orders/ord-") } // exercised through the orders loop
             .toSet()
         assertEquals("Register new mocks in MockFixturesTest", emptySet<String>(), files - covered)
