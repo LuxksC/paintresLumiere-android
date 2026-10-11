@@ -65,6 +65,7 @@ import java.math.BigDecimal
 fun CartRoute(
     onBack: () -> Unit,
     onBrowseCatalog: () -> Unit,
+    onCheckoutRequested: () -> Unit,
     viewModel: CartViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -78,7 +79,7 @@ fun CartRoute(
             onClear = viewModel::requestClear,
             onConfirmClear = viewModel::confirmClear,
             onDismissClear = viewModel::dismissClear,
-            onCheckout = viewModel::checkout,
+            onCheckout = onCheckoutRequested,
         ),
     )
 }

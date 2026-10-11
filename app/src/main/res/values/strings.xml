@@ -260,4 +260,17 @@
     <string name="order_step_done">concluído</string>
     <string name="order_step_current">etapa atual</string>
     <string name="order_step_upcoming">próxima etapa</string>
+
+    <!-- Checkout -->
+    <string name="checkout_title">Finalizar compra</string>
+    <string name="checkout_notes">Observações</string>
+    <string name="checkout_notes_placeholder">Ex.: entregar na loja do centro</string>
+    <string name="checkout_place_order">Confirmar pedido</string>
+    <string name="checkout_server_total_hint">O valor final é confirmado pelo servidor ao criar o pedido.</string>
+    <string name="checkout_error_stock">Um item ficou sem estoque. Ajuste o carrinho e tente novamente.</string>
+    <string name="checkout_back_to_cart">Voltar ao carrinho</string>
+    <string name="confirmation_title">Pedido recebido!</string>
+    <string name="confirmation_next_steps">Avisaremos a cada etapa: produção, envio e entrega. Acompanhe pela aba Pedidos.</string>
+    <string name="confirmation_view_order">Ver pedido</string>
+    <string name="confirmation_back_to_catalog">Voltar ao catálogo</string>
 </resources>
