@@ -88,9 +88,6 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-
-    /** Notifications, security and help screens are a separate ticket (#25). */
-    fun onMenuItemClick(item: ProfileMenuItem) = messages.showComingSoon()
 }
 
 enum class ProfileMenuItem { EditProfile, Notifications, Security, Help }
