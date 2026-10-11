@@ -10,7 +10,9 @@ import com.luxkasTech.PaintresLumiere.testing.FakeCartRepository
 import com.luxkasTech.PaintresLumiere.testing.FakeMessagesService
 import com.luxkasTech.PaintresLumiere.testing.MainDispatcherRule
 import com.luxkasTech.PaintresLumiere.testing.testCartItem
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -28,9 +30,14 @@ class CartViewModelTest {
     // Lazy: the ViewModel launches stateIn on creation, which needs the Main dispatcher rule active.
     private val viewModel by lazy { CartViewModel(cart, messages) }
 
+    /** `stateIn(WhileSubscribed)` only follows the cart while someone collects it, like the screen does. */
+    private fun TestScope.subscribe() {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.state.collect {} }
+    }
+
     @Test
     fun `state mirrors the shared cart`() = runTest {
-        viewModel.state.launchIn(backgroundScope)
+        subscribe()
         assertEquals(2, viewModel.state.value.cart.itemCount)
         cart.set(Cart())
         assertTrue(viewModel.state.value.cart.isEmpty)
@@ -55,7 +62,7 @@ class CartViewModelTest {
 
     @Test
     fun `clearing asks for confirmation first`() = runTest {
-        viewModel.state.launchIn(backgroundScope)
+        subscribe()
         viewModel.requestClear()
         assertTrue(viewModel.state.value.confirmingClear)
         assertEquals(0, cart.clearCalls)
