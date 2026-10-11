@@ -1,0 +1,148 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "sku": "LUNA",
+      "name": "Luna",
+      "slug": "luna",
+      "description": "Luna em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 16,
+      "status": "active",
+      "pricing": {
+        "selling_price": 49.9,
+        "discount_rate": 0.15,
+        "final_price": 42.41
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000004",
+      "sku": "SOL",
+      "name": "Sol",
+      "slug": "sol",
+      "description": "Sol em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 10,
+      "status": "active",
+      "pricing": {
+        "selling_price": 39.9,
+        "discount_rate": 0.0,
+        "final_price": 39.9
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000006",
+      "sku": "ESTRELA",
+      "name": "Estrela",
+      "slug": "estrela",
+      "description": "Estrela em acrílico espelhado, cortado a laser. Acabamento silver.",
+      "images": [],
+      "stock_quantity": 0,
+      "status": "out_of_stock",
+      "pricing": {
+        "selling_price": 29.9,
+        "discount_rate": 0.0,
+        "final_price": 29.9
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000007",
+      "sku": "NUM-0",
+      "name": "Número 0",
+      "slug": "num-0",
+      "description": "Número 0 em acrílico espelhado, cortado a laser. Acabamento black.",
+      "images": [],
+      "stock_quantity": 26,
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.1,
+        "final_price": 17.91
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000009",
+      "sku": "LETRA-A",
+      "name": "Letra A",
+      "slug": "letra-a",
+      "description": "Letra A em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 24,
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.0,
+        "final_price": 19.9
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000011",
+      "sku": "BEATRIZ",
+      "name": "Beatriz",
+      "slug": "beatriz",
+      "description": "Beatriz em acrílico espelhado, cortado a laser. Acabamento rose.",
+      "images": [],
+      "stock_quantity": 7,
+      "status": "active",
+      "pricing": {
+        "selling_price": 59.9,
+        "discount_rate": 0.2,
+        "final_price": 47.92
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000013",
+      "sku": "CORACAO",
+      "name": "Coração",
+      "slug": "coracao",
+      "description": "Coração em acrílico espelhado, cortado a laser. Acabamento rose.",
+      "images": [],
+      "stock_quantity": 13,
+      "status": "active",
+      "pricing": {
+        "selling_price": 24.9,
+        "discount_rate": 0.0,
+        "final_price": 24.9
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000015",
+      "sku": "MIGUEL",
+      "name": "Miguel",
+      "slug": "miguel",
+      "description": "Miguel em acrílico espelhado, cortado a laser. Acabamento silver.",
+      "images": [],
+      "stock_quantity": 8,
+      "status": "active",
+      "pricing": {
+        "selling_price": 54.9,
+        "discount_rate": 0.0,
+        "final_price": 54.9
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    }
+  ]
+}

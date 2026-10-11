@@ -1,0 +1,56 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000011",
+      "name": "Beatriz",
+      "slug": "beatriz-rose-25x8",
+      "description": "Beatriz em acrílico espelhado, cortado a laser. Acabamento rose.",
+      "images": [],
+      "stock_quantity": 5,
+      "category": "names",
+      "barcode": "7890000000011",
+      "status": "active",
+      "pricing": {
+        "selling_price": 59.9,
+        "discount_rate": 0.2,
+        "final_price": 47.92
+      },
+      "specifications": {
+        "color": "rose",
+        "dimensions": {
+          "width": 25,
+          "height": 8,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000012",
+      "name": "Beatriz",
+      "slug": "beatriz-gold-25x8",
+      "description": "Beatriz em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 2,
+      "category": "names",
+      "barcode": "7890000000012",
+      "status": "active",
+      "pricing": {
+        "selling_price": 64.9,
+        "discount_rate": 0.2,
+        "final_price": 51.92
+      },
+      "specifications": {
+        "color": "gold",
+        "dimensions": {
+          "width": 25,
+          "height": 8,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    }
+  ]
+}
