@@ -133,6 +133,23 @@ class MockFixturesTest {
     }
 
     @Test
+    fun `cart mocks decode into the app cart`() = runTest {
+        val api = retrofit.create(com.luxkasTech.PaintresLumiere.data.cart.CartApi::class.java)
+        val repo = com.luxkasTech.PaintresLumiere.data.cart.RemoteCartRepository(
+            api,
+            com.luxkasTech.PaintresLumiere.core.session.SessionManager(com.luxkasTech.PaintresLumiere.testing.MemoryTokenStorage("jwt")),
+            backgroundScope,
+        )
+        val cart = repo.refresh()
+        assertEquals(2, cart.itemCount)
+        assertEquals("20 × 8 × 3cm", cart.items.single().sizeLabel)
+        repo.addItem(com.luxkasTech.PaintresLumiere.testing.testVariant("v1"), 1)
+        repo.updateQuantity("ci-1", 3)
+        assertTrue(repo.removeItem("ci-1").isEmpty)
+        assertTrue(repo.clear().isEmpty)
+    }
+
+    @Test
     fun `every mock file is covered by this test`() {
         // When you add a mock, exercise it above and list it here.
         val covered = setOf(
@@ -143,6 +160,7 @@ class MockFixturesTest {
             "POST/orders/_/payment~method=pix.json", "POST/orders/_/payment~method=pix.meta.json",
             "POST/orders/_/payment~method=boleto_parcelado.json", "POST/orders/_/payment~method=boleto_parcelado.meta.json",
             "POST/orders/_/payment~method=credit_card.json", "POST/orders/_/payment~method=credit_card.meta.json",
+            "GET/cart.json", "POST/cart/items.json", "PATCH/cart/items/_.json", "DELETE/cart/items/_.json", "DELETE/cart.json",
             "GET/orders.json", "GET/orders/_.json", "GET/orders/_.meta.json", "POST/orders.json", "POST/orders.meta.json",
         )
         val files = mocksDir.walkTopDown()
