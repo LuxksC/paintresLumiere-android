@@ -35,6 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLButton
@@ -46,17 +48,39 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLRadius
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLSpacing
 import com.luxkasTech.PaintresLumiere.data.order.OrderDetail
 import com.luxkasTech.PaintresLumiere.data.order.OrderItem
+import com.luxkasTech.PaintresLumiere.data.payment.Payment
 import com.luxkasTech.PaintresLumiere.feature.orders.OrderStatusBadge
 
 @Composable
-fun OrderDetailRoute(onBack: () -> Unit, viewModel: OrderDetailViewModel = hiltViewModel()) {
+fun OrderDetailRoute(
+    onBack: () -> Unit,
+    onResumePayment: (orderId: String, payment: Payment) -> Unit,
+    onChoosePaymentMethod: (orderId: String) -> Unit,
+    viewModel: OrderDetailViewModel = hiltViewModel(),
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    OrderDetailScreen(state, onBack, viewModel::refresh, viewModel::retry)
+    // Coming back from a payment screen: refresh so the section shows the new charge/status.
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.onResume() }
+    OrderDetailScreen(
+        state = state,
+        onBack = onBack,
+        onRefresh = viewModel::refresh,
+        onRetry = viewModel::retry,
+        onResumePayment = { payment -> state.order?.let { onResumePayment(it.id, payment) } },
+        onChoosePaymentMethod = { state.order?.let { onChoosePaymentMethod(it.id) } },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OrderDetailScreen(state: OrderDetailUiState, onBack: () -> Unit, onRefresh: () -> Unit, onRetry: () -> Unit) {
+fun OrderDetailScreen(
+    state: OrderDetailUiState,
+    onBack: () -> Unit,
+    onRefresh: () -> Unit,
+    onRetry: () -> Unit,
+    onResumePayment: (Payment) -> Unit = {},
+    onChoosePaymentMethod: () -> Unit = {},
+) {
     Column(
         Modifier
             .fillMaxSize()
@@ -99,6 +123,11 @@ fun OrderDetailScreen(state: OrderDetailUiState, onBack: () -> Unit, onRefresh: 
                 ) {
                     Header(order)
                     Section(stringResource(R.string.order_section_tracking)) { OrderTimelineView(state.timeline) }
+                    if (order.payments.isNotEmpty() || order.canPay) {
+                        Section(stringResource(R.string.order_section_payment)) {
+                            PaymentSectionContent(order, onResumePayment, onChoosePaymentMethod)
+                        }
+                    }
                     Section(stringResource(R.string.order_section_items)) {
                         order.items.forEachIndexed { i, item ->
                             if (i > 0) HorizontalDivider(color = PLColor.borderSubtle)
