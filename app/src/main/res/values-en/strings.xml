@@ -68,4 +68,27 @@
     <string name="auth_login_submit">Login</string>
     <string name="auth_login_no_account">Don\'t have an account?</string>
     <string name="auth_login_create_account">Create account</string>
+
+    <!-- Auth · Sign up -->
+    <string name="auth_signup_title">Create account</string>
+    <string name="auth_signup_subtitle">Join Paintres Lumière and start creating.</string>
+    <string name="auth_signup_required_hint">* required fields</string>
+    <string name="auth_signup_field_name">Name *</string>
+    <string name="auth_signup_field_name_placeholder">Your full name</string>
+    <string name="auth_signup_field_email">Email address *</string>
+    <string name="auth_signup_field_password">Password *</string>
+    <string name="auth_signup_field_password_placeholder">Min. 8 characters</string>
+    <string name="auth_signup_field_confirm">Confirm password *</string>
+    <string name="auth_signup_field_confirm_placeholder">Repeat password</string>
+    <string name="auth_signup_optional_header">OPTIONAL INFORMATION</string>
+    <string name="auth_signup_field_cpf">CPF</string>
+    <string name="auth_signup_field_cnpj">CNPJ</string>
+    <string name="auth_signup_field_phone">Phone</string>
+    <string name="auth_signup_submit">Create account</string>
+    <string name="auth_signup_have_account">Already have an account?</string>
+    <string name="auth_signup_sign_in">Sign in</string>
+    <string name="auth_signup_error_name">Name must be at least 2 characters.</string>
+    <string name="auth_signup_error_email">Please enter a valid email address.</string>
+    <string name="auth_signup_error_password">Password must be at least 8 characters.</string>
+    <string name="auth_signup_error_confirm">Passwords do not match.</string>
 </resources>
