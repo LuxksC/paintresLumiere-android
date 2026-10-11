@@ -1,0 +1,28 @@
+{
+  "categories": [
+    {
+      "category": "names",
+      "label": "Nomes",
+      "productCount": 3,
+      "imageUrl": null
+    },
+    {
+      "category": "images",
+      "label": "Imagens",
+      "productCount": 3,
+      "imageUrl": null
+    },
+    {
+      "category": "numbers",
+      "label": "Números",
+      "productCount": 1,
+      "imageUrl": null
+    },
+    {
+      "category": "letters",
+      "label": "Letras",
+      "productCount": 1,
+      "imageUrl": null
+    }
+  ]
+}
