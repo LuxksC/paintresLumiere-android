@@ -178,4 +178,11 @@
     <string name="admin_section_products_subtitle">Catalog, stock and images</string>
     <string name="admin_section_orders">Orders</string>
     <string name="admin_section_orders_subtitle">Production and delivery status</string>
+    <string name="admin_products_title">Products</string>
+    <string name="admin_products_search">Search</string>
+    <string name="admin_products_search_placeholder">Name or SKU</string>
+    <string name="admin_products_empty">No products found.</string>
+    <string name="admin_products_create">New product</string>
+    <string name="admin_products_active_only">Showing active products only. Inactive products will appear once the API admin endpoint is available.</string>
+    <string name="admin_products_row_meta">SKU %1$s · %2$d in stock</string>
 </resources>
