@@ -31,4 +31,22 @@
     <string name="error_request_failed">Não foi possível concluir a solicitação.</string>
     <string name="error_decoding">Não foi possível ler a resposta do servidor.</string>
     <string name="error_unknown">Ocorreu um erro inesperado.</string>
+
+    <!-- Product enums -->
+    <string name="product_category_names">Nomes</string>
+    <string name="product_category_numbers">Números</string>
+    <string name="product_category_images">Imagens</string>
+    <string name="product_category_letters">Letras</string>
+    <string name="product_category_unknown">Outros</string>
+    <string name="product_status_active">Em estoque</string>
+    <string name="product_status_inactive">Indisponível</string>
+    <string name="product_status_out_of_stock">Esgotado</string>
+    <string name="product_status_unavailable">Indisponível</string>
+    <string name="product_color_gold">Dourado</string>
+    <string name="product_color_silver">Prata</string>
+    <string name="product_color_bronze">Bronze</string>
+    <string name="product_color_rose">Rosé</string>
+    <string name="product_color_transparent">Transparente</string>
+    <string name="product_color_black">Preto</string>
+    <string name="product_color_unknown">Outra cor</string>
 </resources>
