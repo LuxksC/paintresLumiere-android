@@ -12,6 +12,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,6 +44,10 @@ class ProfileViewModel @Inject constructor(
 
     init {
         loadProfile()
+        // Keep showing the latest data after an edit (the store is updated by Edit Profile).
+        currentUser.profile
+            .onEach { profile -> if (profile != null) _state.update { it.copy(profile = profile) } }
+            .launchIn(viewModelScope)
     }
 
     fun loadProfile() {
@@ -82,7 +88,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    /** Edit profile, notifications, security and help screens are separate tickets. */
+    /** Notifications, security and help screens are a separate ticket (#25). */
     fun onMenuItemClick(item: ProfileMenuItem) = messages.showComingSoon()
 }
 
