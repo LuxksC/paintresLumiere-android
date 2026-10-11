@@ -15,6 +15,7 @@ hiltNavigationCompose = "1.2.0"
 kotlinxSerialization = "1.7.3"
 coroutines = "1.9.0"
 coil = "2.7.0"
+splashscreen = "1.0.1"
 retrofit = "2.11.0"
 okhttp = "4.12.0"
 
@@ -49,6 +50,7 @@ retrofit-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "con
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashscreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
