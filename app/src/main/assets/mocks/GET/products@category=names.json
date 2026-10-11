@@ -1,0 +1,58 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000001",
+      "sku": "LUNA",
+      "name": "Luna",
+      "slug": "luna",
+      "description": "Luna em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 16,
+      "status": "active",
+      "pricing": {
+        "selling_price": 49.9,
+        "discount_rate": 0.15,
+        "final_price": 42.41
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000011",
+      "sku": "BEATRIZ",
+      "name": "Beatriz",
+      "slug": "beatriz",
+      "description": "Beatriz em acrílico espelhado, cortado a laser. Acabamento rose.",
+      "images": [],
+      "stock_quantity": 7,
+      "status": "active",
+      "pricing": {
+        "selling_price": 59.9,
+        "discount_rate": 0.2,
+        "final_price": 47.92
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000015",
+      "sku": "MIGUEL",
+      "name": "Miguel",
+      "slug": "miguel",
+      "description": "Miguel em acrílico espelhado, cortado a laser. Acabamento silver.",
+      "images": [],
+      "stock_quantity": 8,
+      "status": "active",
+      "pricing": {
+        "selling_price": 54.9,
+        "discount_rate": 0.0,
+        "final_price": 54.9
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    }
+  ]
+}
