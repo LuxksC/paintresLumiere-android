@@ -5,7 +5,12 @@ import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.messages.ToastType
 import com.luxkasTech.PaintresLumiere.core.network.ApiError
 import com.luxkasTech.PaintresLumiere.testing.FakeAuthRepository
+import com.luxkasTech.PaintresLumiere.core.session.SessionManager
+import com.luxkasTech.PaintresLumiere.data.profile.CurrentUserStore
 import com.luxkasTech.PaintresLumiere.data.profile.UserProfile
+import com.luxkasTech.PaintresLumiere.testing.MemoryTokenStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import com.luxkasTech.PaintresLumiere.testing.FakeMessagesService
 import com.luxkasTech.PaintresLumiere.testing.FakeProfileRepository
 import com.luxkasTech.PaintresLumiere.testing.MainDispatcherRule
@@ -24,7 +29,7 @@ class ProfileViewModelTest {
     private val auth = FakeAuthRepository()
     private val messages = FakeMessagesService()
     private val profiles = FakeProfileRepository()
-    private val viewModel by lazy { ProfileViewModel(auth, profiles, messages) }
+    private val viewModel by lazy { ProfileViewModel(auth, CurrentUserStore(profiles, SessionManager(MemoryTokenStorage("jwt")), CoroutineScope(UnconfinedTestDispatcher())), messages) }
 
     @Test
     fun `loads the real profile on start`() {
