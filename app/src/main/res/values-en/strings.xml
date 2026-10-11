@@ -103,4 +103,19 @@
     <!-- Main tabs -->
     <string name="tab_home">Home</string>
     <string name="tab_profile">Profile</string>
+
+    <!-- Home -->
+    <string name="home_header_subtitle">BOUTIQUE</string>
+    <string name="home_section_popular">MOST POPULAR</string>
+    <string name="home_section_collection">OUR COLLECTION</string>
+    <plurals name="home_pieces_count">
+        <item quantity="one">%d piece</item>
+        <item quantity="other">%d pieces</item>
+    </plurals>
+    <string name="home_notifications">Notifications</string>
+    <string name="home_cart">Cart</string>
+    <string name="home_loading">Loading catalog…</string>
+    <string name="home_error_title">Couldn\'t load the catalog</string>
+    <string name="home_empty_title">Catalog is empty</string>
+    <string name="home_empty_message">New pieces will appear here as the seller adds them.</string>
 </resources>
