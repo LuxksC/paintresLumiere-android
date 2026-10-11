@@ -20,11 +20,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -39,11 +41,13 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLButton
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLButtonType
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLDivider
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLInputField
+import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLOrDivider
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PaintresLumiereTheme
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLSpacing
 import com.luxkasTech.PaintresLumiere.feature.auth.components.BrandHeader
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginRoute(
@@ -52,6 +56,8 @@ fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     LoginScreen(
         state = state,
         onEmailChange = viewModel::onEmailChange,
@@ -59,6 +65,19 @@ fun LoginRoute(
         onLogin = viewModel::login,
         onForgotPassword = onForgotPasswordRequested,
         onSignUp = onSignUpRequested,
+        onGoogleSignIn = if (GoogleSignIn.isConfigured) {
+            {
+                scope.launch {
+                    when (val result = GoogleSignIn.requestIdToken(context)) {
+                        is GoogleSignIn.Result.Token -> viewModel.loginWithGoogle(result.idToken)
+                        GoogleSignIn.Result.Cancelled -> Unit
+                        GoogleSignIn.Result.Failed -> viewModel.onGoogleSignInFailed()
+                    }
+                }
+            }
+        } else {
+            null
+        },
     )
 }
 
@@ -70,6 +89,8 @@ fun LoginScreen(
     onLogin: () -> Unit,
     onForgotPassword: () -> Unit,
     onSignUp: () -> Unit,
+    /** Null hides the Google button (client ID not configured in this build). */
+    onGoogleSignIn: (() -> Unit)? = null,
 ) {
     val focusManager = LocalFocusManager.current
     val errorMessage = state.error?.asString()
@@ -143,6 +164,16 @@ fun LoginScreen(
                 modifier = Modifier.padding(top = PLSpacing.lg),
             )
 
+            if (onGoogleSignIn != null) {
+                PLOrDivider(Modifier.padding(vertical = PLSpacing.md))
+                PLButton(
+                    text = stringResource(R.string.auth_login_google),
+                    onClick = onGoogleSignIn,
+                    type = PLButtonType.Ghost,
+                    enabled = !state.isLoading,
+                )
+            }
+
             PLDivider(Modifier.padding(top = PLSpacing.lg))
             Row(
                 Modifier
@@ -172,6 +203,7 @@ private fun LoginScreenPreview() {
             onLogin = {},
             onForgotPassword = {},
             onSignUp = {},
+            onGoogleSignIn = {},
         )
     }
 }

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -6,6 +8,15 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
+
+// Google Sign-In needs the OAuth *web* client ID the backend verifies tokens against (Trello PL-77).
+// Read it from `google.webClientId` in local.properties or a Gradle property, never from source.
+// When it is blank the "Continue with Google" button is simply not shown.
+val localProperties = Properties().apply {
+    rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use(::load)
+}
+val googleWebClientId: String =
+    (localProperties.getProperty("google.webClientId") ?: providers.gradleProperty("google.webClientId").orNull).orEmpty()
 
 android {
     namespace = "com.luxkasTech.PaintresLumiere"
@@ -22,6 +33,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
         buildConfigField("String", "API_BASE_URL", "\"https://glj3lixjr7.execute-api.sa-east-1.amazonaws.com/\"")
     }
 
@@ -62,6 +74,9 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services)
+    implementation(libs.googleid)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
