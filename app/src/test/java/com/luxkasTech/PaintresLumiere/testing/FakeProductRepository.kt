@@ -32,6 +32,15 @@ class FakeProductRepository : ProductRepository {
         return categoryProducts.getOrThrow()
     }
 
+    /** Pages by cursor; when unset, the whole [products] list is a single page. */
+    var catalogPages: Map<String?, Result<com.luxkasTech.PaintresLumiere.core.network.Page<Product>>>? = null
+
+    override suspend fun getCatalogPage(cursor: String?, limit: Int): com.luxkasTech.PaintresLumiere.core.network.Page<Product> {
+        productCalls++
+        catalogPages?.let { return it.getValue(cursor).getOrThrow() }
+        return com.luxkasTech.PaintresLumiere.core.network.Page(products.getOrThrow())
+    }
+
     override suspend fun getPopularProducts(limit: Int?): List<Product> = popular.getOrThrow()
 
     override suspend fun getProductVariants(sku: String): List<ProductVariant> {

@@ -33,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,6 +85,7 @@ fun HomeRoute(
         onCartClick = onCartRequested,
         onCategoryClick = onCategorySelected,
         onQueryChange = viewModel::onQueryChange,
+        onLoadMore = viewModel::loadMore,
     )
 }
 
@@ -98,6 +100,7 @@ fun HomeScreen(
     onCartClick: () -> Unit,
     onCategoryClick: (ProductCategory) -> Unit = {},
     onQueryChange: (String) -> Unit = {},
+    onLoadMore: () -> Unit = {},
 ) {
     Box(
         Modifier
@@ -113,7 +116,7 @@ fun HomeScreen(
                 onRefresh = onRefresh,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                CatalogGrid(state, onProductClick, onNotificationsClick, onCartClick, onCategoryClick, onQueryChange)
+                CatalogGrid(state, onProductClick, onNotificationsClick, onCartClick, onCategoryClick, onQueryChange, onLoadMore)
             }
         }
     }
@@ -127,6 +130,7 @@ private fun CatalogGrid(
     onCartClick: () -> Unit,
     onCategoryClick: (ProductCategory) -> Unit,
     onQueryChange: (String) -> Unit,
+    onLoadMore: () -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -200,6 +204,15 @@ private fun CatalogGrid(
             }
             items(state.catalog, key = { it.id }) { product ->
                 PLProductCard(data = product.toCardData(), onClick = { onProductClick(product) })
+            }
+            if (state.nextCursor != null) {
+                item(span = { GridItemSpan(maxLineSpan) }, key = "loadMore") {
+                    // Reaching this item means the user scrolled to the end: fetch the next page.
+                    LaunchedEffect(state.catalog.size) { onLoadMore() }
+                    Box(Modifier.fillMaxWidth().padding(PLSpacing.md), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = PLColor.goldMid, modifier = Modifier.size(24.dp))
+                    }
+                }
             }
         }
     }
