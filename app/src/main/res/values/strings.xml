@@ -49,4 +49,13 @@
     <string name="product_color_transparent">Transparente</string>
     <string name="product_color_black">Preto</string>
     <string name="product_color_unknown">Outra cor</string>
+
+    <!-- Toasts (mirror iOS MessagesService) -->
+    <string name="toast_network_error_title">Sem conexão</string>
+    <string name="toast_network_error_subtitle">Verifique sua internet e tente novamente.</string>
+    <string name="toast_generic_error_title">Algo deu errado</string>
+    <string name="toast_generic_error_subtitle">Tente novamente em instantes.</string>
+    <string name="toast_added_to_cart_title">Adicionado ao carrinho</string>
+    <string name="toast_coming_soon_title">Em breve</string>
+    <string name="toast_coming_soon_subtitle">Esta funcionalidade está em construção.</string>
 </resources>
