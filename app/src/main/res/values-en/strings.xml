@@ -1,0 +1,8 @@
+<resources>
+    <!-- Common -->
+    <string name="common_loading">Loading…</string>
+    <string name="common_try_again">Try again</string>
+    <string name="common_back">Back</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_or">or</string>
+</resources>
