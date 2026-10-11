@@ -327,4 +327,10 @@
     <string name="card_not_confirmed">Não foi possível confirmar o pagamento agora.</string>
     <string name="card_unavailable">Pagamento por cartão ainda não está disponível nesta versão.</string>
     <string name="card_choose_another">Escolher outra forma de pagamento</string>
+    <string name="order_section_payment">Pagamento</string>
+    <string name="order_payment_none">Nenhum pagamento iniciado.</string>
+    <string name="order_payment_history">Tentativas anteriores</string>
+    <string name="order_payment_open_pix">Ver código pix</string>
+    <string name="order_payment_open_boleto">Ver carnê</string>
+    <string name="order_payment_try_another">Pagar de outra forma</string>
 </resources>
