@@ -13,7 +13,9 @@ interface ProductApi {
     suspend fun getProducts(
         @Query("category") category: String? = null,
         @Query("search") search: String? = null,
-    ): ProductsResponse<Product>
+        @Query("cursor") cursor: String? = null,
+        @Query("limit") limit: Int? = null,
+    ): CatalogPage
 
     @GET("products/popular")
     suspend fun getPopularProducts(@Query("limit") limit: Int?): ProductsResponse<Product>
