@@ -37,6 +37,23 @@ android {
         buildConfigField("String", "API_BASE_URL", "\"https://glj3lixjr7.execute-api.sa-east-1.amazonaws.com/\"")
     }
 
+    // Where data comes from. `live` talks to the API; `mock` answers every request from
+    // src/main/assets/mocks (see core/network/mock/MockRouter.kt). Pick it in Build Variants.
+    flavorDimensions += "backend"
+    productFlavors {
+        create("live") {
+            dimension = "backend"
+            isDefault = true
+            buildConfigField("boolean", "USE_MOCKS", "false")
+        }
+        create("mock") {
+            dimension = "backend"
+            applicationIdSuffix = ".mock"
+            versionNameSuffix = "-mock"
+            buildConfigField("boolean", "USE_MOCKS", "true")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
