@@ -20,6 +20,19 @@ class FakeAuthRepository : AuthRepository {
     val signUpCalls = mutableListOf<SignUpCall>()
     var signUpResult: CompletableDeferred<Unit> = CompletableDeferred(Unit)
 
+    var logoutCalls = 0
+    var deleteCalls = 0
+    var deleteResult: CompletableDeferred<Unit> = CompletableDeferred(Unit)
+
+    override suspend fun logout() {
+        logoutCalls++
+    }
+
+    override suspend fun deleteAccount() {
+        deleteCalls++
+        deleteResult.await()
+    }
+
     override suspend fun login(email: String, password: String) {
         loginCalls += email to password
         loginResult.await()

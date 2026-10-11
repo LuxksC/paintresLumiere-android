@@ -134,4 +134,17 @@
     <string name="details_buy">Buy</string>
     <string name="details_unavailable_button">Unavailable</string>
     <string name="details_add_to_cart">Add to cart</string>
+
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="profile_subtitle">YOUR ACCOUNT</string>
+    <string name="profile_menu_edit">Edit profile</string>
+    <string name="profile_menu_notifications">Notifications</string>
+    <string name="profile_menu_security">Security</string>
+    <string name="profile_menu_help">Help &amp; support</string>
+    <string name="profile_logout">Log out</string>
+    <string name="profile_delete_account">Delete account</string>
+    <string name="profile_delete_title">Delete your account?</string>
+    <string name="profile_delete_message">Your account will be deactivated and you will be signed out. This cannot be undone from the app.</string>
+    <string name="profile_delete_confirm">Delete</string>
 </resources>
