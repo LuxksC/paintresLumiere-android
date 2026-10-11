@@ -182,4 +182,11 @@
     <string name="admin_section_products_subtitle">Catálogo, estoque e imagens</string>
     <string name="admin_section_orders">Pedidos</string>
     <string name="admin_section_orders_subtitle">Status de produção e entrega</string>
+    <string name="admin_products_title">Produtos</string>
+    <string name="admin_products_search">Buscar</string>
+    <string name="admin_products_search_placeholder">Nome ou SKU</string>
+    <string name="admin_products_empty">Nenhum produto encontrado.</string>
+    <string name="admin_products_create">Novo produto</string>
+    <string name="admin_products_active_only">Mostrando apenas produtos ativos. Produtos inativos aparecerão quando o endpoint de administração da API estiver disponível.</string>
+    <string name="admin_products_row_meta">SKU %1$s · %2$d em estoque</string>
 </resources>
