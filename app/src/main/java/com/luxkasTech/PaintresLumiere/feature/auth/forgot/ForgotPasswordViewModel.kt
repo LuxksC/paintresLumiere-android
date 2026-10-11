@@ -1,15 +1,19 @@
 package com.luxkasTech.PaintresLumiere.feature.auth.forgot
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
-import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
+import com.luxkasTech.PaintresLumiere.core.network.toUiText
+import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 data class ForgotPasswordUiState(
     val email: String = "",
@@ -22,18 +26,13 @@ data class ForgotPasswordUiState(
 }
 
 /**
- * Password recovery.
- *
- * The API has no reset endpoints yet (`POST /auth/forgot-password` and
- * `POST /auth/reset-password`, tracked in the API repo). Until they exist this screen does **not**
- * pretend: it validates the email and shows the "coming soon" toast, instead of a success message
- * for an email that will never arrive. iOS currently calls `logout()` here as a placeholder — a
- * known bug that is deliberately not ported. Wiring the real call only needs to replace the body of
- * [sendResetLink] and set [ForgotPasswordUiState.linkSent].
+ * Password recovery via `POST /auth/forgot-password`. The API answers 200 whether or not the email
+ * exists (no user enumeration), so the confirmation is deliberately neutral: "if this email is
+ * registered…". The link in the email opens the reset screen through a deep link.
  */
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
-    private val messages: MessagesService,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ForgotPasswordUiState())
@@ -47,6 +46,17 @@ class ForgotPasswordViewModel @Inject constructor(
             _state.update { it.copy(emailError = UiText.Resource(R.string.auth_signup_error_email)) }
             return
         }
-        messages.showComingSoon()
+        if (_state.value.isLoading) return
+        _state.update { it.copy(isLoading = true) }
+        viewModelScope.launch {
+            try {
+                authRepository.requestPasswordReset(email)
+                _state.update { it.copy(isLoading = false, linkSent = true) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _state.update { it.copy(isLoading = false, emailError = e.toUiText()) }
+            }
+        }
     }
 }
