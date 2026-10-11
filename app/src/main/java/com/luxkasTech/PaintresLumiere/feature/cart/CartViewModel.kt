@@ -53,9 +53,6 @@ class CartViewModel @Inject constructor(
         launchCartAction { cartRepository.clear() }
     }
 
-    /** Checkout needs `POST /orders` (#45). Until then it says so. */
-    fun checkout() = messages.showComingSoon()
-
     private fun launchCartAction(block: suspend () -> Unit) {
         viewModelScope.launch {
             try {
