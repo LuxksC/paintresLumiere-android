@@ -94,4 +94,12 @@
     <string name="auth_signup_error_email">Informe um email válido.</string>
     <string name="auth_signup_error_password">A senha precisa ter pelo menos 8 caracteres.</string>
     <string name="auth_signup_error_confirm">As senhas não coincidem.</string>
+
+    <!-- Auth · Forgot password -->
+    <string name="auth_forgot_title">Redefinir senha</string>
+    <string name="auth_forgot_subtitle">Informe seu email e enviaremos um link para redefinir a senha.</string>
+    <string name="auth_forgot_submit">Enviar link</string>
+    <string name="auth_forgot_sent">Se este email estiver cadastrado, você receberá um link em instantes.</string>
+    <string name="auth_forgot_spam_hint">Não recebeu? Verifique a caixa de spam ou tente novamente.</string>
+    <string name="auth_forgot_back_to_login">Voltar para o login</string>
 </resources>
