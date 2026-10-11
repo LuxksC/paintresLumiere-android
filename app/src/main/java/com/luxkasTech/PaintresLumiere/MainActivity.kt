@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
 import com.luxkasTech.PaintresLumiere.core.messages.ToastHost
 import com.luxkasTech.PaintresLumiere.navigation.AppNavHost
@@ -28,6 +29,10 @@ class MainActivity : ComponentActivity() {
     lateinit var messages: MessagesService
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Must run before super.onCreate. The session is read synchronously when SessionManager is
+        // created, so the first Compose frame already knows whether to show Auth or Main — there
+        // is no need to hold the splash with setKeepOnScreenCondition.
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         // The app is dark-only, so system bar icons are always light regardless of system theme.
         enableEdgeToEdge(
