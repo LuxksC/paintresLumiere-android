@@ -1,13 +1,16 @@
 package com.luxkasTech.PaintresLumiere.feature.product.details
 
 import androidx.lifecycle.SavedStateHandle
+import com.luxkasTech.PaintresLumiere.core.messages.ToastType
 import com.luxkasTech.PaintresLumiere.core.network.ApiError
+import com.luxkasTech.PaintresLumiere.data.cart.CartError
 import com.luxkasTech.PaintresLumiere.data.product.ProductColor
 import com.luxkasTech.PaintresLumiere.data.product.ProductDimensions
 import com.luxkasTech.PaintresLumiere.data.product.ProductPricing
 import com.luxkasTech.PaintresLumiere.data.product.ProductStatus
 import com.luxkasTech.PaintresLumiere.data.product.ProductVariant
 import com.luxkasTech.PaintresLumiere.data.product.ProductVariantSpecifications
+import com.luxkasTech.PaintresLumiere.testing.FakeCartRepository
 import com.luxkasTech.PaintresLumiere.testing.FakeMessagesService
 import com.luxkasTech.PaintresLumiere.testing.FakeProductRepository
 import com.luxkasTech.PaintresLumiere.testing.MainDispatcherRule
@@ -15,6 +18,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
@@ -32,6 +37,7 @@ class ProductDetailsViewModelTest {
 
     private val repository = FakeProductRepository()
     private val messages = FakeMessagesService()
+    private val cart = FakeCartRepository()
 
     private fun variant(
         id: String,
@@ -56,7 +62,7 @@ class ProductDetailsViewModelTest {
 
     private fun viewModel(variants: List<ProductVariant> = listOf(gold10, gold20, silver10, black30)): ProductDetailsViewModel {
         repository.variants = Result.success(variants)
-        return ProductDetailsViewModel(SavedStateHandle(mapOf("sku" to "LUNA")), repository, messages)
+        return ProductDetailsViewModel(SavedStateHandle(mapOf("sku" to "LUNA")), repository, cart, messages)
     }
 
     @Test
@@ -159,19 +165,43 @@ class ProductDetailsViewModelTest {
     @Test
     fun `a failed request moves to the failed state and toasts`() {
         repository.variants = Result.failure(ApiError.Network(IOException()))
-        val vm = ProductDetailsViewModel(SavedStateHandle(mapOf("sku" to "LUNA")), repository, messages)
+        val vm = ProductDetailsViewModel(SavedStateHandle(mapOf("sku" to "LUNA")), repository, cart, messages)
         assertTrue(vm.state.value.loadState is DetailsLoadState.Failed)
         assertEquals(1, messages.shown.size)
     }
 
     @Test
-    fun `buy and add to cart say coming soon only when purchasable`() {
+    fun `add to cart adds the selected variant with the chosen quantity`() {
+        val vm = viewModel()
+        vm.setQuantity(3)
+        vm.addToCart()
+        assertEquals(listOf(gold10 to 3), cart.added)
+        assertEquals(ToastType.Success, messages.shown.single().type)
+    }
+
+    @Test
+    fun `buy adds and asks to open the cart`() = runTest {
         val vm = viewModel()
         vm.buyNow()
-        vm.addToCart()
-        assertEquals(2, messages.shown.size)
+        assertEquals(ProductDetailsViewModel.Event.OpenCart, vm.events.first())
+        assertEquals(1, cart.added.size)
+        assertTrue(messages.shown.isEmpty())
+    }
+
+    @Test
+    fun `nothing is added when the selection can't be bought`() {
+        val vm = viewModel()
         vm.selectColor(ProductColor.SILVER)
+        vm.addToCart()
         vm.buyNow()
-        assertEquals(2, messages.shown.size)
+        assertTrue(cart.added.isEmpty())
+    }
+
+    @Test
+    fun `stock conflicts from the cart are reported`() {
+        cart.failure = CartError.InsufficientStock(available = 1)
+        val vm = viewModel()
+        vm.addToCart()
+        assertEquals(ToastType.Warning, messages.shown.single().type)
     }
 }
