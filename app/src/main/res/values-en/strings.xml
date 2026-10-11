@@ -118,4 +118,20 @@
     <string name="home_error_title">Couldn\'t load the catalog</string>
     <string name="home_empty_title">Catalog is empty</string>
     <string name="home_empty_message">New pieces will appear here as the seller adds them.</string>
+
+    <!-- Product details -->
+    <string name="details_error_title">Couldn\'t load this product</string>
+    <string name="details_unavailable">This product is unavailable right now.</string>
+    <string name="details_section_color">COLOR</string>
+    <string name="details_section_size">SIZE</string>
+    <string name="details_section_about">ABOUT</string>
+    <string name="details_section_details">DETAILS</string>
+    <string name="details_stock_available">In stock · %d available</string>
+    <string name="details_row_category">Category</string>
+    <string name="details_row_dimensions">Dimensions</string>
+    <string name="details_row_barcode">Barcode</string>
+    <string name="details_row_sku">SKU</string>
+    <string name="details_buy">Buy</string>
+    <string name="details_unavailable_button">Unavailable</string>
+    <string name="details_add_to_cart">Add to cart</string>
 </resources>
