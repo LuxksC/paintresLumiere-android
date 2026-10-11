@@ -1,0 +1,56 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000004",
+      "name": "Sol",
+      "slug": "sol-gold-15x15",
+      "description": "Sol em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 7,
+      "category": "images",
+      "barcode": "7890000000004",
+      "status": "active",
+      "pricing": {
+        "selling_price": 39.9,
+        "discount_rate": 0.0,
+        "final_price": 39.9
+      },
+      "specifications": {
+        "color": "gold",
+        "dimensions": {
+          "width": 15,
+          "height": 15,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000005",
+      "name": "Sol",
+      "slug": "sol-bronze-15x15",
+      "description": "Sol em acrílico espelhado, cortado a laser. Acabamento bronze.",
+      "images": [],
+      "stock_quantity": 3,
+      "category": "images",
+      "barcode": "7890000000005",
+      "status": "active",
+      "pricing": {
+        "selling_price": 39.9,
+        "discount_rate": 0.0,
+        "final_price": 39.9
+      },
+      "specifications": {
+        "color": "bronze",
+        "dimensions": {
+          "width": 15,
+          "height": 15,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    }
+  ]
+}

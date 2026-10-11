@@ -1,0 +1,30 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000015",
+      "name": "Miguel",
+      "slug": "miguel-silver-25x8",
+      "description": "Miguel em acrílico espelhado, cortado a laser. Acabamento silver.",
+      "images": [],
+      "stock_quantity": 8,
+      "category": "names",
+      "barcode": "7890000000015",
+      "status": "active",
+      "pricing": {
+        "selling_price": 54.9,
+        "discount_rate": 0.0,
+        "final_price": 54.9
+      },
+      "specifications": {
+        "color": "silver",
+        "dimensions": {
+          "width": 25,
+          "height": 8,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    }
+  ]
+}
