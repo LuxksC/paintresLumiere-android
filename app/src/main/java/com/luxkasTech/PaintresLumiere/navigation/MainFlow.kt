@@ -40,6 +40,7 @@ import com.luxkasTech.PaintresLumiere.feature.admin.form.ProductFormRoute
 import com.luxkasTech.PaintresLumiere.feature.admin.group.AdminProductGroupRoute
 import com.luxkasTech.PaintresLumiere.feature.admin.products.AdminProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
+import com.luxkasTech.PaintresLumiere.feature.category.CategoryProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
@@ -54,6 +55,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object HomeDestination
 @Serializable data class ProductDetailsDestination(val sku: String)
 @Serializable data object CartDestination
+@Serializable data class CategoryProductsDestination(val category: String)
 @Serializable data object ProfileDestination
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
@@ -134,6 +136,13 @@ fun MainFlow(
                         HomeRoute(
                             onProductSelected = { sku -> navController.navigate(ProductDetailsDestination(sku)) },
                             onCartRequested = { navController.navigate(CartDestination) },
+                            onCategorySelected = { navController.navigate(CategoryProductsDestination(it.raw)) },
+                        )
+                    }
+                    composable<CategoryProductsDestination> {
+                        CategoryProductsRoute(
+                            onBack = { navController.popBackStack() },
+                            onProductSelected = { sku -> navController.navigate(ProductDetailsDestination(sku)) },
                         )
                     }
                     composable<ProductDetailsDestination> {
