@@ -14,6 +14,8 @@ class MockRouterTest {
         "PUT/products/_.json" to "updated",
         "GET/a/_/c.json" to "middle-wildcard",
         "GET/products@category=names.json" to "names-only",
+        "POST/orders/_/payment~method=pix.json" to "pix",
+        "POST/orders/_/payment.json" to "generic-payment",
     )
     private val router = MockRouter({ files[it] }, defaultDelayMs = 0)
 
@@ -54,5 +56,11 @@ class MockRouterTest {
     fun `a query-specific file wins, otherwise the plain path answers`() {
         assertEquals("names-only", router.resolve("GET", "/products", "category=names").body)
         assertEquals("list", router.resolve("GET", "/products", "category=letters").body)
+    }
+
+    @Test
+    fun `a body field can select the mock`() {
+        assertEquals("pix", router.resolve("POST", "/orders/1/payment", bodyFields = mapOf("method" to "pix")).body)
+        assertEquals("generic-payment", router.resolve("POST", "/orders/1/payment", bodyFields = mapOf("method" to "boleto")).body)
     }
 }
