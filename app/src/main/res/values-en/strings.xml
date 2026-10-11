@@ -55,4 +55,17 @@
     <string name="toast_added_to_cart_title">Added to cart</string>
     <string name="toast_coming_soon_title">Coming soon</string>
     <string name="toast_coming_soon_subtitle">This feature is under construction.</string>
+
+    <!-- Auth -->
+    <string name="auth_brand_tagline">LASER CUT STUDIO</string>
+    <string name="auth_field_email">Email address</string>
+    <string name="auth_field_email_placeholder">your@email.com</string>
+    <string name="auth_field_password">Password</string>
+    <string name="auth_login_title">Welcome back.</string>
+    <string name="auth_login_subtitle">Sign in to continue your craft.</string>
+    <string name="auth_login_password_placeholder">Your password</string>
+    <string name="auth_login_forgot_password">Forgot password?</string>
+    <string name="auth_login_submit">Login</string>
+    <string name="auth_login_no_account">Don\'t have an account?</string>
+    <string name="auth_login_create_account">Create account</string>
 </resources>

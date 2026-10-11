@@ -5,16 +5,36 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.luxkasTech.PaintresLumiere.feature.auth.login.LoginRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object LoginRoute
+data object LoginDestination
 
-/** Signed-out flow: Login, Sign up, Forgot password. */
+@Serializable
+data object SignUpDestination
+
+@Serializable
+data object ForgotPasswordDestination
+
+/**
+ * Signed-out flow: Login, Sign up, Forgot password — the Android counterpart of iOS
+ * `AuthCoordinator`. Successful sign-in/sign-up is not handled here: it starts the session and
+ * [AppNavHost] swaps to the Main flow.
+ */
 @Composable
 fun AuthFlow(navController: NavHostController = rememberNavController()) {
-    NavHost(navController = navController, startDestination = LoginRoute) {
-        composable<LoginRoute> {
+    NavHost(navController = navController, startDestination = LoginDestination) {
+        composable<LoginDestination> {
+            LoginRoute(
+                onSignUpRequested = { navController.navigate(SignUpDestination) },
+                onForgotPasswordRequested = { navController.navigate(ForgotPasswordDestination) },
+            )
+        }
+        composable<SignUpDestination> {
+            FlowPlaceholder()
+        }
+        composable<ForgotPasswordDestination> {
             FlowPlaceholder()
         }
     }

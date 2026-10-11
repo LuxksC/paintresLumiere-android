@@ -58,4 +58,17 @@
     <string name="toast_added_to_cart_title">Adicionado ao carrinho</string>
     <string name="toast_coming_soon_title">Em breve</string>
     <string name="toast_coming_soon_subtitle">Esta funcionalidade está em construção.</string>
+
+    <!-- Auth -->
+    <string name="auth_brand_tagline">LASER CUT STUDIO</string>
+    <string name="auth_field_email">Email</string>
+    <string name="auth_field_email_placeholder">seu@email.com</string>
+    <string name="auth_field_password">Senha</string>
+    <string name="auth_login_title">Bem-vindo de volta.</string>
+    <string name="auth_login_subtitle">Entre para continuar sua criação.</string>
+    <string name="auth_login_password_placeholder">Sua senha</string>
+    <string name="auth_login_forgot_password">Esqueceu a senha?</string>
+    <string name="auth_login_submit">Entrar</string>
+    <string name="auth_login_no_account">Não tem uma conta?</string>
+    <string name="auth_login_create_account">Criar conta</string>
 </resources>
