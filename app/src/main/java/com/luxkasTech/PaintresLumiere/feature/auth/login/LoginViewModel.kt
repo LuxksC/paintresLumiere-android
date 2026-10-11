@@ -2,6 +2,7 @@ package com.luxkasTech.PaintresLumiere.feature.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
@@ -37,6 +38,24 @@ class LoginViewModel @Inject constructor(
     fun onEmailChange(value: String) = _state.update { it.copy(email = value, error = null) }
 
     fun onPasswordChange(value: String) = _state.update { it.copy(password = value, error = null) }
+
+    /** Called by the screen once Credential Manager returned a Google ID token. */
+    fun loginWithGoogle(idToken: String) {
+        if (_state.value.isLoading) return
+        _state.update { it.copy(isLoading = true, error = null) }
+        viewModelScope.launch {
+            try {
+                authRepository.authenticateWithGoogle(idToken)
+            } catch (e: Exception) {
+                _state.update { it.copy(isLoading = false, error = e.toUiText()) }
+            }
+        }
+    }
+
+    /** The Google picker failed before reaching our API (no account, Play Services issue…). */
+    fun onGoogleSignInFailed() {
+        _state.update { it.copy(error = UiText.Resource(R.string.auth_login_google_failed)) }
+    }
 
     fun login() {
         val current = _state.value
