@@ -26,7 +26,10 @@ private data class MockMeta(val status: Int? = null, val delayMs: Long? = null)
  * assets/mocks/GET/products/sku/LUNA.json      → GET /products/sku/LUNA   (exact match wins)
  * assets/mocks/GET/products/sku/_.json         → GET /products/sku/{any}  (`_` = any segment)
  * assets/mocks/POST/login.json + login.meta.json
+ * assets/mocks/GET/products@category=names.json → GET /products?category=names
  * ```
+ *
+ * With a query string, `{path}@{query}` (parameters sorted by name) is tried before `{path}`.
  *
  * Candidates are tried from the most specific (no wildcard) to the least, so a specific file can
  * override the generic one. No match → 404 with an explicit message, like an unknown route.
@@ -37,9 +40,17 @@ class MockRouter(
 ) {
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun resolve(method: String, path: String): MockResponse {
+    fun resolve(method: String, path: String, query: String? = null): MockResponse {
         val segments = path.trim('/').split('/').filter { it.isNotEmpty() }
-        for (candidate in candidates(method.uppercase(), segments)) {
+        val normalizedQuery = query
+            ?.split('&')
+            ?.filter { it.isNotBlank() }
+            ?.sorted()
+            ?.joinToString("&")
+            ?.takeIf { it.isNotEmpty() }
+        val paths = candidates(method.uppercase(), segments)
+        val withQuery = normalizedQuery?.let { q -> paths.map { "$it@$q" } }.orEmpty()
+        for (candidate in withQuery + paths) {
             val body = source.read("$candidate.json") ?: continue
             val meta = source.read("$candidate.meta.json")?.let(::parseMeta) ?: MockMeta()
             return MockResponse(meta.status ?: 200, body, meta.delayMs ?: defaultDelayMs)
