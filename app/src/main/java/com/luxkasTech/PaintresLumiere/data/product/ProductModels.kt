@@ -101,3 +101,15 @@ data class ProductVariant(
     val dimensions: ProductDimensions get() = specifications.dimensions
     val sizeLabel: String get() = dimensions.compactLabel
 }
+
+/** One entry of `GET /products/categories`; [productCount] counts distinct SKUs. */
+@Serializable
+data class CategorySummary(
+    val category: ProductCategory = ProductCategory.UNKNOWN,
+    val label: String? = null,
+    val productCount: Int = 0,
+    val imageUrl: String? = null,
+)
+
+@Serializable
+data class CategoriesResponse(val categories: List<CategorySummary> = emptyList())
