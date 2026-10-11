@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
+import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
@@ -44,6 +45,7 @@ import kotlinx.serialization.Serializable
 // Destinations
 @Serializable data object HomeDestination
 @Serializable data class ProductDetailsDestination(val sku: String)
+@Serializable data object CartDestination
 @Serializable data object ProfileDestination
 
 private enum class MainTab(
@@ -103,10 +105,19 @@ fun MainFlow(navController: NavHostController = rememberNavController()) {
             NavHost(navController = navController, startDestination = HomeGraph) {
                 navigation<HomeGraph>(startDestination = HomeDestination) {
                     composable<HomeDestination> {
-                        HomeRoute(onProductSelected = { sku -> navController.navigate(ProductDetailsDestination(sku)) })
+                        HomeRoute(
+                            onProductSelected = { sku -> navController.navigate(ProductDetailsDestination(sku)) },
+                            onCartRequested = { navController.navigate(CartDestination) },
+                        )
                     }
                     composable<ProductDetailsDestination> {
                         ProductDetailsRoute(onBack = { navController.popBackStack() })
+                    }
+                    composable<CartDestination> {
+                        CartRoute(
+                            onBack = { navController.popBackStack() },
+                            onBrowseCatalog = { navController.popBackStack(HomeDestination, inclusive = false) },
+                        )
                     }
                 }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
