@@ -229,4 +229,25 @@
     <string name="home_search">Buscar</string>
     <string name="home_search_placeholder">Nome da peça ou SKU</string>
     <string name="home_search_empty">Nenhuma peça encontrada para “%1$s”.</string>
+
+    <!-- Orders -->
+    <string name="tab_orders">Pedidos</string>
+    <string name="orders_title">Pedidos</string>
+    <string name="orders_subtitle">ACOMPANHE SUAS COMPRAS</string>
+    <string name="orders_number">Pedido %1$s</string>
+    <plurals name="orders_item_count">
+        <item quantity="one">%d item</item>
+        <item quantity="many">%d itens</item>
+        <item quantity="other">%d itens</item>
+    </plurals>
+    <string name="orders_error_title">Não foi possível carregar seus pedidos</string>
+    <string name="orders_empty_title">Nenhum pedido ainda</string>
+    <string name="orders_empty_message">Quando você finalizar uma compra, ela aparece aqui com o status de produção e entrega.</string>
+    <string name="order_status_received">Recebido</string>
+    <string name="order_status_in_production">Em produção</string>
+    <string name="order_status_ready">Pronto</string>
+    <string name="order_status_shipped">Enviado</string>
+    <string name="order_status_delivered">Entregue</string>
+    <string name="order_status_cancelled">Cancelado</string>
+    <string name="order_status_unknown">Em atualização</string>
 </resources>
