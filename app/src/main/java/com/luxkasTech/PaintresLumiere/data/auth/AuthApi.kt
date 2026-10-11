@@ -11,6 +11,9 @@ interface AuthApi {
     @POST("signup")
     suspend fun signUp(@Body body: SignUpRequest): AccessTokenResponse
 
+    @POST("auth/google")
+    suspend fun authenticateWithGoogle(@Body body: GoogleAuthRequest): AccessTokenResponse
+
     @POST("logout")
     suspend fun logout()
 

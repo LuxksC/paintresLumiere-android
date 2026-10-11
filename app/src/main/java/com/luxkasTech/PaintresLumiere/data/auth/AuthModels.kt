@@ -17,3 +17,6 @@ data class SignUpRequest(
     val cpf: String? = null,
     val cnpj: String? = null,
 )
+
+@Serializable
+data class GoogleAuthRequest(val idToken: String)
