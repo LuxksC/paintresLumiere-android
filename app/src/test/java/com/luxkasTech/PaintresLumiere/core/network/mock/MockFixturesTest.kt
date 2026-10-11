@@ -89,6 +89,7 @@ class MockFixturesTest {
         apiCall { auth.logout() }
         apiCall { auth.deleteAccount() }
         assertEquals(UserType.ADMIN, apiCall { profile.getProfile() }.type)
+        assertEquals("Lucas", apiCall { profile.updateProfile(com.luxkasTech.PaintresLumiere.data.profile.UpdateProfileRequest(phone = "")) }.name)
     }
 
     @Test
@@ -130,7 +131,7 @@ class MockFixturesTest {
         // When you add a mock, exercise it above and list it here.
         val covered = setOf(
             "DELETE/products/_.json", "DELETE/users/me.json", "GET/products.json", "GET/products/popular.json", "GET/products/categories.json",
-            "GET/products/sku/_.json", "GET/products/sku/_.meta.json", "GET/profile.json", "POST/auth/google.json",
+            "GET/products/sku/_.json", "GET/products/sku/_.meta.json", "GET/profile.json", "PUT/profile.json", "POST/auth/google.json",
             "POST/login.json", "POST/logout.json", "POST/products.json", "POST/products.meta.json",
             "POST/signup.json", "POST/signup.meta.json", "PUT/products/_.json",
             "POST/orders/_/payment~method=pix.json", "POST/orders/_/payment~method=pix.meta.json",
