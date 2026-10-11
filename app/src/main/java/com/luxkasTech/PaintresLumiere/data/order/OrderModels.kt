@@ -5,6 +5,7 @@ import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.network.BigDecimalSerializer
 import com.luxkasTech.PaintresLumiere.core.network.InstantSerializer
 import com.luxkasTech.PaintresLumiere.core.network.UnknownTolerantEnumSerializer
+import com.luxkasTech.PaintresLumiere.data.payment.Payment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
@@ -85,8 +86,14 @@ data class OrderDetail(
     @SerialName("created_at") @Serializable(with = InstantSerializer::class) val createdAt: Instant,
     val items: List<OrderItem> = emptyList(),
     @SerialName("status_history") val statusHistory: List<OrderStatusEntry> = emptyList(),
+    /** Every charge attempt, oldest first (backend card PL-125: "include payment data"). */
+    val payments: List<Payment> = emptyList(),
 ) {
     val displayNumber: String get() = number ?: id.takeLast(6).uppercase()
+    val latestPayment: Payment? get() = payments.lastOrNull()
+    val isPaid: Boolean get() = payments.any { it.status.isPaid }
+    /** Payable when nothing has been paid and the order wasn't cancelled or delivered. */
+    val canPay: Boolean get() = !isPaid && status != OrderStatus.CANCELLED && status != OrderStatus.DELIVERED
 }
 
 @Serializable

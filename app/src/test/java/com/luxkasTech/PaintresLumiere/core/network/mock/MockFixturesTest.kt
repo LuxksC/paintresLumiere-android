@@ -10,6 +10,10 @@ import com.luxkasTech.PaintresLumiere.data.auth.SignUpRequest
 import com.luxkasTech.PaintresLumiere.data.order.CreateOrderRequest
 import com.luxkasTech.PaintresLumiere.data.order.OrderApi
 import com.luxkasTech.PaintresLumiere.data.order.OrderStatus
+import com.luxkasTech.PaintresLumiere.data.payment.CreatePaymentRequest
+import com.luxkasTech.PaintresLumiere.data.payment.PaymentApi
+import com.luxkasTech.PaintresLumiere.data.payment.PaymentMethod
+import com.luxkasTech.PaintresLumiere.data.payment.PaymentStatus
 import com.luxkasTech.PaintresLumiere.data.product.ProductApi
 import com.luxkasTech.PaintresLumiere.data.profile.ProfileApi
 import com.luxkasTech.PaintresLumiere.data.profile.UserType
@@ -48,6 +52,7 @@ class MockFixturesTest {
     private val profile = retrofit.create(ProfileApi::class.java)
     private val admin = retrofit.create(AdminProductApi::class.java)
     private val orders = retrofit.create(OrderApi::class.java)
+    private val payments = retrofit.create(PaymentApi::class.java)
 
     @Test
     fun `catalog mocks decode, and every listed SKU has variants`() = runTest {
@@ -109,6 +114,18 @@ class MockFixturesTest {
     }
 
     @Test
+    fun `payment mocks answer per method`() = runTest {
+        val pix = apiCall { payments.createPayment("ord-1002", CreatePaymentRequest(PaymentMethod.PIX)) }
+        assertEquals(PaymentMethod.PIX, pix.method)
+        assertTrue(!pix.pixQrCode.isNullOrBlank() && !pix.pixCopyPaste.isNullOrBlank())
+        val boleto = apiCall { payments.createPayment("ord-1002", CreatePaymentRequest(PaymentMethod.BOLETO_INSTALLMENTS, 3)) }
+        assertEquals(3, boleto.installmentCount)
+        val card = apiCall { payments.createPayment("ord-1002", CreatePaymentRequest(PaymentMethod.CREDIT_CARD, 1, "tok")) }
+        assertEquals(PaymentStatus.CONFIRMED, card.status)
+        assertEquals(PaymentStatus.PENDING, apiCall { orders.getOrder("ord-1002") }.latestPayment?.status)
+    }
+
+    @Test
     fun `every mock file is covered by this test`() {
         // When you add a mock, exercise it above and list it here.
         val covered = setOf(
@@ -116,6 +133,9 @@ class MockFixturesTest {
             "GET/products/sku/_.json", "GET/products/sku/_.meta.json", "GET/profile.json", "POST/auth/google.json",
             "POST/login.json", "POST/logout.json", "POST/products.json", "POST/products.meta.json",
             "POST/signup.json", "POST/signup.meta.json", "PUT/products/_.json",
+            "POST/orders/_/payment~method=pix.json", "POST/orders/_/payment~method=pix.meta.json",
+            "POST/orders/_/payment~method=boleto_parcelado.json", "POST/orders/_/payment~method=boleto_parcelado.meta.json",
+            "POST/orders/_/payment~method=credit_card.json", "POST/orders/_/payment~method=credit_card.meta.json",
             "GET/orders.json", "GET/orders/_.json", "GET/orders/_.meta.json", "POST/orders.json", "POST/orders.meta.json",
         )
         val files = mocksDir.walkTopDown()
