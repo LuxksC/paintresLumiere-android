@@ -28,4 +28,22 @@
     <string name="error_request_failed">Request failed.</string>
     <string name="error_decoding">Failed to parse server response.</string>
     <string name="error_unknown">An unexpected error occurred.</string>
+
+    <!-- Product enums -->
+    <string name="product_category_names">Names</string>
+    <string name="product_category_numbers">Numbers</string>
+    <string name="product_category_images">Images</string>
+    <string name="product_category_letters">Letters</string>
+    <string name="product_category_unknown">Other</string>
+    <string name="product_status_active">In stock</string>
+    <string name="product_status_inactive">Unavailable</string>
+    <string name="product_status_out_of_stock">Out of stock</string>
+    <string name="product_status_unavailable">Unavailable</string>
+    <string name="product_color_gold">Gold</string>
+    <string name="product_color_silver">Silver</string>
+    <string name="product_color_bronze">Bronze</string>
+    <string name="product_color_rose">Rose</string>
+    <string name="product_color_transparent">Transparent</string>
+    <string name="product_color_black">Black</string>
+    <string name="product_color_unknown">Other color</string>
 </resources>
