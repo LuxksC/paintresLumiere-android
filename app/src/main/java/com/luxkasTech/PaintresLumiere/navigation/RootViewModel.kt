@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
 import com.luxkasTech.PaintresLumiere.core.session.SessionManager
+import com.luxkasTech.PaintresLumiere.core.telemetry.Analytics
+import com.luxkasTech.PaintresLumiere.core.telemetry.CrashReporter
 import com.luxkasTech.PaintresLumiere.data.profile.CurrentUserStore
 import com.luxkasTech.PaintresLumiere.feature.admin.AdminSection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,11 @@ class RootViewModel @Inject constructor(
     sessionManager: SessionManager,
     private val currentUser: CurrentUserStore,
     private val messages: MessagesService,
+    private val analytics: Analytics,
+    crashReporter: CrashReporter,
 ) : ViewModel() {
+
+    fun onScreenView(screen: String) = analytics.screenView(screen)
     val isAuthenticated: StateFlow<Boolean> = sessionManager.isAuthenticated
     val isAdmin: StateFlow<Boolean> = currentUser.isAdmin
 
@@ -27,6 +33,8 @@ class RootViewModel @Inject constructor(
     fun onAdminSectionSelected(section: AdminSection) = messages.showComingSoon()
 
     init {
+        // Crash reports carry the opaque user id only.
+        currentUser.profile.onEach { crashReporter.setUserId(it?.id) }.launchIn(viewModelScope)
         // Load the profile (and so the role) whenever a session starts.
         sessionManager.isAuthenticated
             .filter { it }

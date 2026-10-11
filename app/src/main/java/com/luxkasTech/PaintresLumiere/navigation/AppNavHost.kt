@@ -35,7 +35,11 @@ fun AppNavHost(
         label = "rootFlow",
     ) { signedIn ->
         if (signedIn) {
-            MainFlow(isAdmin = isAdmin, onAdminSectionSelected = viewModel::onAdminSectionSelected)
+            MainFlow(
+                isAdmin = isAdmin,
+                onAdminSectionSelected = viewModel::onAdminSectionSelected,
+                onScreenView = viewModel::onScreenView,
+            )
         } else {
             AuthFlow()
         }

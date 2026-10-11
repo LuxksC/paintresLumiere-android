@@ -20,7 +20,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import com.luxkasTech.PaintresLumiere.core.telemetry.screenNameOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -151,11 +153,13 @@ private enum class MainTab(
 fun MainFlow(
     isAdmin: Boolean,
     onAdminSectionSelected: (AdminSection) -> Unit,
+    onScreenView: (String) -> Unit = {},
     navController: NavHostController = rememberNavController(),
 ) {
     val json = remember { Json { ignoreUnknownKeys = true; explicitNulls = false } }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
+    LaunchedEffect(destination?.route) { destination?.route?.let { onScreenView(screenNameOf(it)) } }
     // The Admin tab only exists for confirmed admins (role from GET /profile).
     val tabs = MainTab.entries.filter { it != MainTab.Admin || isAdmin }
     val showBottomBar = destination == null || tabs.any { it.isRoot(destination) }
