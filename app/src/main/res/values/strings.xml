@@ -19,4 +19,8 @@
     <string name="ds_badge_draft">Rascunho</string>
     <string name="ds_badge_processing">Processando</string>
     <string name="ds_badge_error">Erro</string>
+    <string name="ds_product_card_price_discounted_a11y">%1$s, antes %2$s</string>
+    <string name="ds_stepper_decrease">Diminuir quantidade</string>
+    <string name="ds_stepper_increase">Aumentar quantidade</string>
+    <string name="ds_page_indicator_a11y">Imagem %1$d de %2$d</string>
 </resources>
