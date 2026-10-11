@@ -102,4 +102,8 @@
     <string name="auth_forgot_sent">Se este email estiver cadastrado, você receberá um link em instantes.</string>
     <string name="auth_forgot_spam_hint">Não recebeu? Verifique a caixa de spam ou tente novamente.</string>
     <string name="auth_forgot_back_to_login">Voltar para o login</string>
+
+    <!-- Main tabs -->
+    <string name="tab_home">Início</string>
+    <string name="tab_profile">Perfil</string>
 </resources>
