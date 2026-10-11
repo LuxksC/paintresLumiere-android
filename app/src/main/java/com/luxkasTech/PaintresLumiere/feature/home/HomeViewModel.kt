@@ -3,6 +3,7 @@ package com.luxkasTech.PaintresLumiere.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luxkasTech.PaintresLumiere.core.common.UiText
+import com.luxkasTech.PaintresLumiere.core.common.matchesSearch
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.cart.CartRepository
@@ -40,7 +41,13 @@ data class HomeUiState(
     val error: UiText? = null,
     /** Units in the cart, for the badge on the cart icon. */
     val cartCount: Int = 0,
+    val query: String = "",
 ) {
+    val isSearching: Boolean get() = query.isNotBlank()
+
+    /** Local search by name or SKU, ignoring case and accents (iOS: `localizedStandardContains`). */
+    val searchResults: List<Product> get() = catalog.filter { matchesSearch(query, it.name, it.sku) }
+
     val showsFullScreenError: Boolean get() = error != null && catalog.isEmpty()
     val isEmpty: Boolean get() = !isLoading && error == null && catalog.isEmpty()
 }
@@ -82,6 +89,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onNotificationsClick() = messages.showComingSoon()
+
+    fun onQueryChange(value: String) = _state.update { it.copy(query = value) }
 
     private fun load() {
         viewModelScope.launch {
