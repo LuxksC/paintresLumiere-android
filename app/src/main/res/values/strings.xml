@@ -71,4 +71,27 @@
     <string name="auth_login_submit">Entrar</string>
     <string name="auth_login_no_account">Não tem uma conta?</string>
     <string name="auth_login_create_account">Criar conta</string>
+
+    <!-- Auth · Sign up -->
+    <string name="auth_signup_title">Criar conta</string>
+    <string name="auth_signup_subtitle">Junte-se à Paintres Lumière e comece a criar.</string>
+    <string name="auth_signup_required_hint">* campos obrigatórios</string>
+    <string name="auth_signup_field_name">Nome *</string>
+    <string name="auth_signup_field_name_placeholder">Seu nome completo</string>
+    <string name="auth_signup_field_email">Email *</string>
+    <string name="auth_signup_field_password">Senha *</string>
+    <string name="auth_signup_field_password_placeholder">Mín. 8 caracteres</string>
+    <string name="auth_signup_field_confirm">Confirmar senha *</string>
+    <string name="auth_signup_field_confirm_placeholder">Repita a senha</string>
+    <string name="auth_signup_optional_header">INFORMAÇÕES OPCIONAIS</string>
+    <string name="auth_signup_field_cpf">CPF</string>
+    <string name="auth_signup_field_cnpj">CNPJ</string>
+    <string name="auth_signup_field_phone">Telefone</string>
+    <string name="auth_signup_submit">Criar conta</string>
+    <string name="auth_signup_have_account">Já tem uma conta?</string>
+    <string name="auth_signup_sign_in">Entrar</string>
+    <string name="auth_signup_error_name">O nome precisa ter pelo menos 2 caracteres.</string>
+    <string name="auth_signup_error_email">Informe um email válido.</string>
+    <string name="auth_signup_error_password">A senha precisa ter pelo menos 8 caracteres.</string>
+    <string name="auth_signup_error_confirm">As senhas não coincidem.</string>
 </resources>
