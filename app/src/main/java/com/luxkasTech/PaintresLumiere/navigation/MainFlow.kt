@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
+import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import kotlinx.serialization.Serializable
 
 // Tab graphs
@@ -40,6 +41,7 @@ import kotlinx.serialization.Serializable
 
 // Destinations
 @Serializable data object HomeDestination
+@Serializable data class ProductDetailsDestination(val sku: String)
 @Serializable data object ProfileDestination
 
 private enum class MainTab(
@@ -98,7 +100,10 @@ fun MainFlow(navController: NavHostController = rememberNavController()) {
         Box(Modifier.padding(bottom = padding.calculateBottomPadding())) {
             NavHost(navController = navController, startDestination = HomeGraph) {
                 navigation<HomeGraph>(startDestination = HomeDestination) {
-                    composable<HomeDestination> { FlowPlaceholder() }
+                    composable<HomeDestination> {
+                        HomeRoute(onProductSelected = { sku -> navController.navigate(ProductDetailsDestination(sku)) })
+                    }
+                    composable<ProductDetailsDestination> { FlowPlaceholder() }
                 }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
                     composable<ProfileDestination> { FlowPlaceholder() }
