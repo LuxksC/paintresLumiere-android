@@ -43,6 +43,15 @@ android {
         compose = true
         buildConfig = true
     }
+    androidResources {
+        // Generates the per-app language list (Android 13+ "App languages" setting) from the
+        // values-*/ folders, with resources.properties declaring PT-BR as the base locale.
+        generateLocaleConfig = true
+    }
+    lint {
+        // A string present in PT-BR but missing in English must fail the build.
+        error += "MissingTranslation"
+    }
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
