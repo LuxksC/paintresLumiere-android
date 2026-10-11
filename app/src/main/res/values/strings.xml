@@ -369,4 +369,12 @@
     <string name="help_privacy">Política de privacidade</string>
     <string name="help_version">Versão %1$s (%2$d)</string>
     <string name="help_no_app">Nenhum app disponível para abrir este link.</string>
+    <string name="admin_stock_label">Estoque</string>
+    <string name="admin_stock_failed">Não foi possível ajustar o estoque</string>
+    <string name="admin_image_add">Imagem</string>
+    <string name="admin_image_uploaded">Imagem enviada</string>
+    <string name="admin_image_uploaded_detail">Ela aparece no produto em alguns instantes.</string>
+    <string name="admin_image_failed">Não foi possível enviar a imagem</string>
+    <string name="admin_image_invalid_type">Use PNG, JPEG, HEIC ou WebP.</string>
+    <string name="admin_image_too_large">A imagem precisa ter no máximo 4 MB.</string>
 </resources>
