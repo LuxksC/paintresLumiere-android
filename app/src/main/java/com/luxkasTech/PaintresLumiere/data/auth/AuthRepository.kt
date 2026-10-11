@@ -29,6 +29,9 @@ interface AuthRepository {
 
     suspend fun requestPasswordReset(email: String)
 
+    /** 401/400 when the current password is wrong. */
+    suspend fun changePassword(currentPassword: String, newPassword: String)
+
     suspend fun resetPassword(token: String, newPassword: String)
 
     /** Best effort server logout; the local session always ends, even offline. */
@@ -75,6 +78,9 @@ class DefaultAuthRepository @Inject constructor(
     }
 
     override suspend fun requestPasswordReset(email: String) = apiCall { api.forgotPassword(ForgotPasswordRequest(email.trim())) }
+
+    override suspend fun changePassword(currentPassword: String, newPassword: String) =
+        apiCall { api.changePassword(ChangePasswordRequest(currentPassword, newPassword)) }
 
     override suspend fun resetPassword(token: String, newPassword: String) =
         apiCall { api.resetPassword(ResetPasswordRequest(token, newPassword)) }
