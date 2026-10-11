@@ -46,4 +46,13 @@
     <string name="product_color_transparent">Transparent</string>
     <string name="product_color_black">Black</string>
     <string name="product_color_unknown">Other color</string>
+
+    <!-- Toasts -->
+    <string name="toast_network_error_title">Connection lost</string>
+    <string name="toast_network_error_subtitle">Check your internet and try again.</string>
+    <string name="toast_generic_error_title">Something went wrong</string>
+    <string name="toast_generic_error_subtitle">Please try again in a moment.</string>
+    <string name="toast_added_to_cart_title">Added to cart</string>
+    <string name="toast_coming_soon_title">Coming soon</string>
+    <string name="toast_coming_soon_subtitle">This feature is under construction.</string>
 </resources>
