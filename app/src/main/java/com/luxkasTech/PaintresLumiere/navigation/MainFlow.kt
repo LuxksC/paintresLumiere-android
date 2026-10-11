@@ -52,6 +52,7 @@ import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.orders.OrdersRoute
 import com.luxkasTech.PaintresLumiere.data.payment.Payment
 import com.luxkasTech.PaintresLumiere.data.payment.PaymentMethod
+import com.luxkasTech.PaintresLumiere.feature.payment.BoletoPaymentRoute
 import com.luxkasTech.PaintresLumiere.feature.payment.PaymentMethodRoute
 import com.luxkasTech.PaintresLumiere.feature.payment.PixPaymentRoute
 import kotlinx.serialization.json.Json
@@ -80,6 +81,7 @@ import kotlinx.serialization.Serializable
 
 /** [payment] is the charge as JSON — it carries the QR / boleto data the screen shows immediately. */
 @Serializable data class PixPaymentDestination(val orderId: String, val payment: String)
+@Serializable data class BoletoPaymentDestination(val orderId: String, val payment: String)
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
 @Serializable data class AdminProductGroupDestination(val sku: String)
@@ -232,12 +234,20 @@ fun MainFlow(
                             onChargeCreated = { orderId, payment ->
                                 val target: Any = when (payment.method) {
                                     PaymentMethod.PIX -> PixPaymentDestination(orderId, json.encodeToString(Payment.serializer(), payment))
-                                    // Boleto screen lands in #50; until then the order shows the charge.
+                                    PaymentMethod.BOLETO_INSTALLMENTS -> BoletoPaymentDestination(orderId, json.encodeToString(Payment.serializer(), payment))
                                     else -> OrderDetailDestination(orderId)
                                 }
                                 navController.navigate(target) { popUpTo<PaymentMethodDestination> { inclusive = true } }
                             },
                             onCardRequested = { _, _ -> },
+                        )
+                    }
+                    composable<BoletoPaymentDestination> {
+                        BoletoPaymentRoute(
+                            onBack = { navController.popBackStack() },
+                            onViewOrder = { id ->
+                                navController.navigate(OrderDetailDestination(id)) { popUpTo<BoletoPaymentDestination> { inclusive = true } }
+                            },
                         )
                     }
                     composable<PixPaymentDestination> {
