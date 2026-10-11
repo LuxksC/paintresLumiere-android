@@ -1,5 +1,6 @@
 package com.luxkasTech.PaintresLumiere.core.network
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -7,7 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonEncoder
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonUnquotedLiteral
 import kotlinx.serialization.json.jsonPrimitive
 import java.math.BigDecimal
 
@@ -25,9 +26,12 @@ object BigDecimalSerializer : KSerializer<BigDecimal> {
             BigDecimal(decoder.decodeString())
         }
 
+    // JsonPrimitive(Number) goes through a double-like path and drops the scale (19.90 → 19.9);
+    // writing the literal keeps the exact value, e.g. for the persisted cart.
+    @OptIn(ExperimentalSerializationApi::class)
     override fun serialize(encoder: Encoder, value: BigDecimal) {
         if (encoder is JsonEncoder) {
-            encoder.encodeJsonElement(JsonPrimitive(value))
+            encoder.encodeJsonElement(JsonUnquotedLiteral(value.toPlainString()))
         } else {
             encoder.encodeString(value.toPlainString())
         }
