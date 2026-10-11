@@ -255,4 +255,17 @@
     <string name="order_step_done">done</string>
     <string name="order_step_current">current step</string>
     <string name="order_step_upcoming">upcoming</string>
+
+    <!-- Checkout -->
+    <string name="checkout_title">Checkout</string>
+    <string name="checkout_notes">Notes</string>
+    <string name="checkout_notes_placeholder">E.g. deliver to the downtown store</string>
+    <string name="checkout_place_order">Place order</string>
+    <string name="checkout_server_total_hint">The final amount is confirmed by the server when the order is created.</string>
+    <string name="checkout_error_stock">An item ran out of stock. Adjust your cart and try again.</string>
+    <string name="checkout_back_to_cart">Back to cart</string>
+    <string name="confirmation_title">Order received!</string>
+    <string name="confirmation_next_steps">We\'ll keep you posted at every step: production, shipping and delivery. Follow it in the Orders tab.</string>
+    <string name="confirmation_view_order">View order</string>
+    <string name="confirmation_back_to_catalog">Back to catalog</string>
 </resources>
