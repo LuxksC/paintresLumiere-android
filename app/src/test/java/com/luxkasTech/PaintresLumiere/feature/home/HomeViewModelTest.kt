@@ -4,6 +4,8 @@ import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.network.ApiError
 import com.luxkasTech.PaintresLumiere.data.cart.Cart
+import com.luxkasTech.PaintresLumiere.data.product.CategorySummary
+import com.luxkasTech.PaintresLumiere.data.product.ProductCategory
 import com.luxkasTech.PaintresLumiere.testing.FakeCartRepository
 import com.luxkasTech.PaintresLumiere.testing.FakeMessagesService
 import com.luxkasTech.PaintresLumiere.testing.testCartItem
@@ -100,5 +102,22 @@ class HomeViewModelTest {
         assertEquals(0, viewModel.state.value.cartCount)
         cart.set(Cart(listOf(testCartItem("1", quantity = 2), testCartItem("2", quantity = 1))))
         assertEquals(3, viewModel.state.value.cartCount)
+    }
+
+    @Test
+    fun `categories are loaded when the endpoint answers`() {
+        repository.categories = Result.success(listOf(CategorySummary(ProductCategory.NAMES, "Nomes", 3)))
+        assertEquals(listOf(ProductCategory.NAMES), viewModel().state.value.categories.map { it.category })
+    }
+
+    @Test
+    fun `missing categories endpoint falls back silently to the collection`() {
+        repository.products = Result.success(listOf(testProduct("1")))
+        repository.categories = Result.failure(ApiError.Http(404, null))
+        val state = viewModel().state.value
+        assertTrue(state.categories.isEmpty())
+        assertEquals(1, state.catalog.size)
+        assertFalse(state.showsFullScreenError)
+        assertTrue(messages.shown.isEmpty())
     }
 }
