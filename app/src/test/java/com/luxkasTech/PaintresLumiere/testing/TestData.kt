@@ -1,6 +1,7 @@
 package com.luxkasTech.PaintresLumiere.testing
 
 import com.luxkasTech.PaintresLumiere.core.session.TokenStorage
+import com.luxkasTech.PaintresLumiere.data.cart.CartItem
 import com.luxkasTech.PaintresLumiere.data.product.ProductColor
 import com.luxkasTech.PaintresLumiere.data.product.ProductDimensions
 import com.luxkasTech.PaintresLumiere.data.product.ProductPricing
@@ -33,3 +34,22 @@ class MemoryTokenStorage(var value: String? = null) : TokenStorage {
     override fun write(token: String) { value = token }
     override fun clear() { value = null }
 }
+
+fun testCartItem(
+    id: String,
+    quantity: Int = 1,
+    stock: Int = 5,
+    status: ProductStatus = ProductStatus.ACTIVE,
+) = CartItem(
+    id = id,
+    productId = "variant-$id",
+    name = "Luna $id",
+    slug = "luna-$id",
+    color = ProductColor.GOLD,
+    sizeLabel = "10cm",
+    unitPrice = BigDecimal("10.00"),
+    finalUnitPrice = BigDecimal("10.00"),
+    stockQuantity = stock,
+    status = status,
+    quantity = quantity,
+)

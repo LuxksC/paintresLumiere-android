@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
+import com.luxkasTech.PaintresLumiere.data.cart.CartRepository
 import com.luxkasTech.PaintresLumiere.data.product.Product
 import com.luxkasTech.PaintresLumiere.data.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +13,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.Collator
@@ -27,6 +30,8 @@ data class HomeUiState(
     val isRefreshing: Boolean = false,
     /** Set when the catalog failed and there is nothing to show. */
     val error: UiText? = null,
+    /** Units in the cart, for the badge on the cart icon. */
+    val cartCount: Int = 0,
 ) {
     val showsFullScreenError: Boolean get() = error != null && catalog.isEmpty()
     val isEmpty: Boolean get() = !isLoading && error == null && catalog.isEmpty()
@@ -42,6 +47,7 @@ data class HomeUiState(
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val productRepository: ProductRepository,
+    cartRepository: CartRepository,
     private val messages: MessagesService,
 ) : ViewModel() {
 
@@ -52,6 +58,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         load()
+        cartRepository.cart
+            .onEach { cart -> _state.update { it.copy(cartCount = cart.itemCount) } }
+            .launchIn(viewModelScope)
     }
 
     fun refresh() {
@@ -65,8 +74,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onNotificationsClick() = messages.showComingSoon()
-
-    fun onCartClick() = messages.showComingSoon()
 
     private fun load() {
         viewModelScope.launch {
