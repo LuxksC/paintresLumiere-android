@@ -100,6 +100,9 @@ class MockFixturesTest {
         assertTrue(apiCall { admin.create(ProductUpsertRequest(name = "X")) }.id.isNotBlank())
         apiCall { admin.update("any-id", ProductUpsertRequest(name = "Y")) }
         apiCall { admin.delete("any-id") }
+        assertTrue(apiCall { admin.updateStock("any-id", com.luxkasTech.PaintresLumiere.data.admin.StockUpdateRequest(delta = 1)) }.id.isNotBlank())
+        val part = okhttp3.MultipartBody.Part.createFormData("file", "a.png", okhttp3.RequestBody.Companion.run { byteArrayOf(1).toRequestBody() })
+        assertTrue(apiCall { admin.uploadImage("any-id", part) }.image.isNotBlank())
     }
 
     @Test
@@ -136,7 +139,7 @@ class MockFixturesTest {
             "DELETE/products/_.json", "DELETE/users/me.json", "GET/products.json", "GET/products/popular.json", "GET/products/categories.json",
             "GET/products/sku/_.json", "GET/products/sku/_.meta.json", "GET/profile.json", "PUT/profile.json", "PUT/profile/password.json", "POST/auth/google.json",
             "POST/login.json", "POST/auth/forgot-password.json", "POST/auth/reset-password.json", "POST/logout.json", "POST/products.json", "POST/products.meta.json",
-            "POST/signup.json", "POST/signup.meta.json", "PUT/products/_.json",
+            "POST/signup.json", "POST/signup.meta.json", "PUT/products/_.json", "PATCH/products/_/stock.json", "POST/products/_/images.json",
             "POST/orders/_/payment~method=pix.json", "POST/orders/_/payment~method=pix.meta.json",
             "POST/orders/_/payment~method=boleto_parcelado.json", "POST/orders/_/payment~method=boleto_parcelado.meta.json",
             "POST/orders/_/payment~method=credit_card.json", "POST/orders/_/payment~method=credit_card.meta.json",

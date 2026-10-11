@@ -1,0 +1,26 @@
+{
+  "id": "00000000-0000-4000-8000-000000000001",
+  "name": "Luna",
+  "slug": "luna-gold-20x8",
+  "description": "Luna em acrílico espelhado, cortado a laser. Acabamento gold.",
+  "images": [],
+  "stock_quantity": 12,
+  "category": "names",
+  "barcode": "7890000000001",
+  "status": "active",
+  "pricing": {
+    "selling_price": 49.9,
+    "discount_rate": 0.15,
+    "final_price": 42.41
+  },
+  "specifications": {
+    "color": "gold",
+    "dimensions": {
+      "width": 20,
+      "height": 8,
+      "length": null,
+      "thickness": 3,
+      "unit": "cm"
+    }
+  }
+}
