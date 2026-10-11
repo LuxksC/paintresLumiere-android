@@ -293,4 +293,13 @@
     <string name="payment_status_failed">Declined</string>
     <string name="payment_status_unknown">Updating</string>
     <string name="confirmation_pay_now">Pay now</string>
+    <string name="payment_due">Due %1$s</string>
+    <string name="payment_check_now">I\'ve paid — check</string>
+    <string name="payment_paid_title">Payment confirmed!</string>
+    <string name="payment_paid_message">Your order is moving to production. Follow every step in the Orders tab.</string>
+    <string name="pix_qr_a11y">Pix QR code</string>
+    <string name="pix_copy">Copy pix code</string>
+    <string name="pix_copied">Code copied</string>
+    <string name="pix_share">Share code</string>
+    <string name="pix_instructions">Pay in your bank app. Confirmation arrives in moments and this screen updates by itself — you can also leave and follow it on the order.</string>
 </resources>
