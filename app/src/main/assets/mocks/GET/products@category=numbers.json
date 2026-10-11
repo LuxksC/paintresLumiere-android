@@ -1,0 +1,22 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000007",
+      "sku": "NUM-0",
+      "name": "Número 0",
+      "slug": "num-0",
+      "description": "Número 0 em acrílico espelhado, cortado a laser. Acabamento black.",
+      "images": [],
+      "stock_quantity": 26,
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.1,
+        "final_price": 17.91
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    }
+  ]
+}

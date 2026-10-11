@@ -54,7 +54,12 @@ class MockFixturesTest {
             assertTrue("SKU ${product.sku} has no variants mock", variants.isNotEmpty())
         }
         assertTrue(apiCall { products.getPopularProducts(5) }.products.isNotEmpty())
-        assertTrue(apiCall { products.getCategories() }.categories.isNotEmpty())
+        val categories = apiCall { products.getCategories() }.categories
+        assertTrue(categories.isNotEmpty())
+        categories.forEach { summary ->
+            val inCategory = apiCall { products.getProducts(category = summary.category.raw) }.products
+            assertEquals("count for ${summary.category}", summary.productCount, inCategory.size)
+        }
     }
 
     @Test
@@ -97,6 +102,7 @@ class MockFixturesTest {
             .filter { it.isFile && it.extension == "json" }
             .map { it.relativeTo(mocksDir).invariantSeparatorsPath }
             .filterNot { it.startsWith("GET/products/sku/") && it != "GET/products/sku/_.json" && it != "GET/products/sku/_.meta.json" }
+            .filterNot { it.startsWith("GET/products@category=") } // exercised through the categories loop
             .toSet()
         assertEquals("Register new mocks in MockFixturesTest", emptySet<String>(), files - covered)
     }
