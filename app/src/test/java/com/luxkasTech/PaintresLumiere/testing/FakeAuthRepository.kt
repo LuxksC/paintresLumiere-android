@@ -43,6 +43,14 @@ class FakeAuthRepository : AuthRepository {
         passwordResetResult.getOrThrow()
     }
 
+    val passwordChanges = mutableListOf<Pair<String, String>>()
+    var changePasswordResult: Result<Unit> = Result.success(Unit)
+
+    override suspend fun changePassword(currentPassword: String, newPassword: String) {
+        passwordChanges += currentPassword to newPassword
+        changePasswordResult.getOrThrow()
+    }
+
     var logoutCalls = 0
     var deleteCalls = 0
     var deleteResult: CompletableDeferred<Unit> = CompletableDeferred(Unit)
