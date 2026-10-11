@@ -25,7 +25,8 @@ class CartViewModelTest {
 
     private val cart = FakeCartRepository(Cart(listOf(testCartItem("1", quantity = 2))))
     private val messages = FakeMessagesService()
-    private val viewModel = CartViewModel(cart, messages)
+    // Lazy: the ViewModel launches stateIn on creation, which needs the Main dispatcher rule active.
+    private val viewModel by lazy { CartViewModel(cart, messages) }
 
     @Test
     fun `state mirrors the shared cart`() = runTest {
