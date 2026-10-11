@@ -2,8 +2,12 @@ package com.luxkasTech.PaintresLumiere.feature.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
+import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
+import com.luxkasTech.PaintresLumiere.data.profile.ProfileRepository
+import com.luxkasTech.PaintresLumiere.data.profile.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +18,10 @@ import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 data class ProfileUiState(
+    val profile: UserProfile? = null,
+    val isProfileLoading: Boolean = true,
+    /** Never show stale or placeholder identity as if it were real — an error is shown instead. */
+    val profileError: UiText? = null,
     val isLoading: Boolean = false,
     val confirmingDelete: Boolean = false,
 )
@@ -25,11 +33,30 @@ data class ProfileUiState(
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository,
     private val messages: MessagesService,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileUiState())
     val state: StateFlow<ProfileUiState> = _state.asStateFlow()
+
+    init {
+        loadProfile()
+    }
+
+    fun loadProfile() {
+        _state.update { it.copy(isProfileLoading = true, profileError = null) }
+        viewModelScope.launch {
+            try {
+                val profile = profileRepository.getProfile()
+                _state.update { it.copy(profile = profile, isProfileLoading = false) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _state.update { it.copy(profile = null, isProfileLoading = false, profileError = e.toUiText()) }
+            }
+        }
+    }
 
     fun logout() {
         if (_state.value.isLoading) return
