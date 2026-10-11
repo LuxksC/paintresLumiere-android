@@ -332,4 +332,10 @@
     <string name="edit_profile_document_hint">CPF or CNPJ is required to pay with pix and boleto.</string>
     <string name="edit_profile_email">Email: %1$s (can\'t be changed here)</string>
     <string name="edit_profile_saved">Profile updated</string>
+    <string name="reset_title">New password</string>
+    <string name="reset_subtitle">Choose a new password for your account.</string>
+    <string name="reset_new_password">New password</string>
+    <string name="reset_submit">Save new password</string>
+    <string name="reset_done">Password changed. Sign in with the new password.</string>
+    <string name="reset_invalid_link">Invalid or expired link. Request a new one from “Forgot password?”.</string>
 </resources>

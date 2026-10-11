@@ -28,6 +28,21 @@ class FakeAuthRepository : AuthRepository {
         googleResult.await()
     }
 
+    val resetRequests = mutableListOf<String>()
+    var resetRequestResult: Result<Unit> = Result.success(Unit)
+    val passwordResets = mutableListOf<Pair<String, String>>()
+    var passwordResetResult: Result<Unit> = Result.success(Unit)
+
+    override suspend fun requestPasswordReset(email: String) {
+        resetRequests += email
+        resetRequestResult.getOrThrow()
+    }
+
+    override suspend fun resetPassword(token: String, newPassword: String) {
+        passwordResets += token to newPassword
+        passwordResetResult.getOrThrow()
+    }
+
     var logoutCalls = 0
     var deleteCalls = 0
     var deleteResult: CompletableDeferred<Unit> = CompletableDeferred(Unit)
