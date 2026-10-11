@@ -1,0 +1,22 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000009",
+      "sku": "LETRA-A",
+      "name": "Letra A",
+      "slug": "letra-a",
+      "description": "Letra A em acrílico espelhado, cortado a laser. Acabamento gold.",
+      "images": [],
+      "stock_quantity": 24,
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.0,
+        "final_price": 19.9
+      },
+      "specifications": {
+        "thickness": 3
+      }
+    }
+  ]
+}
