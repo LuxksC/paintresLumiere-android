@@ -45,6 +45,7 @@ import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
 import com.luxkasTech.PaintresLumiere.feature.category.CategoryProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.orders.OrdersRoute
+import com.luxkasTech.PaintresLumiere.feature.orders.detail.OrderDetailRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
 import kotlinx.serialization.Serializable
@@ -62,6 +63,7 @@ import kotlinx.serialization.Serializable
 @Serializable data class CategoryProductsDestination(val category: String)
 @Serializable data object ProfileDestination
 @Serializable data object OrdersDestination
+@Serializable data class OrderDetailDestination(val orderId: String)
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
 @Serializable data class AdminProductGroupDestination(val sku: String)
@@ -168,9 +170,12 @@ fun MainFlow(
                 navigation<OrdersGraph>(startDestination = OrdersDestination) {
                     composable<OrdersDestination> {
                         OrdersRoute(
-                            onOrderSelected = { /* Order detail lands in #47. */ },
+                            onOrderSelected = { id -> navController.navigate(OrderDetailDestination(id)) },
                             onBrowseCatalog = { navController.navigateToTab(HomeGraph) },
                         )
+                    }
+                    composable<OrderDetailDestination> {
+                        OrderDetailRoute(onBack = { navController.popBackStack() })
                     }
                 }
                 navigation<AdminGraph>(startDestination = AdminDestination) {

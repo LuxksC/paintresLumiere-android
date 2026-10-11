@@ -250,4 +250,14 @@
     <string name="order_status_delivered">Entregue</string>
     <string name="order_status_cancelled">Cancelado</string>
     <string name="order_status_unknown">Em atualização</string>
+    <string name="order_section_tracking">Rastreio</string>
+    <string name="order_section_items">Itens</string>
+    <string name="order_section_summary">Resumo</string>
+    <string name="order_section_notes">Observações</string>
+    <string name="order_placed_on">Feito em %1$s</string>
+    <string name="order_item_quantity">%1$d × %2$s</string>
+    <string name="order_shipping">Frete</string>
+    <string name="order_step_done">concluído</string>
+    <string name="order_step_current">etapa atual</string>
+    <string name="order_step_upcoming">próxima etapa</string>
 </resources>
