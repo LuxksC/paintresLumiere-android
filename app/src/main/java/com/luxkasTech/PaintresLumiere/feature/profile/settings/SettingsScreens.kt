@@ -185,7 +185,8 @@ fun HelpRoute(onBack: () -> Unit) {
             }
         }
         Text(
-            stringResource(R.string.help_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+            stringResource(R.string.help_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE) +
+                if (BuildConfig.ENVIRONMENT != "production") " · ${BuildConfig.ENVIRONMENT}" else "",
             style = PLFont.caption,
             color = PLColor.textDisabled,
         )

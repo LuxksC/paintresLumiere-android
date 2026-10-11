@@ -85,6 +85,17 @@ in *Build Variants*. Both install side by side (`.mock` application id suffix).
   ships, nothing in the app changes.
 - `MockFixturesTest` decodes every mock with the real models; register new files there.
 
+## Environments
+
+| Build type | `BuildConfig.ENVIRONMENT` | API URL property | App id |
+|---|---|---|---|
+| `debug` | `dev` | `api.url.debug` | base |
+| `staging` | `staging` | `api.url.staging` | `.staging` |
+| `release` | `production` | `api.url.release` | base |
+
+Set the properties in `local.properties` or as Gradle properties in CI; without them every build
+type uses the current deployment. Combined with the `live`/`mock` flavors.
+
 ## Strings
 
 - **PT-BR is the base language** (`values/strings.xml`); English lives in `values-en/` (iOS AD-007).
