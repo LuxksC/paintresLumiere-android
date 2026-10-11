@@ -37,4 +37,32 @@ class AdminProductGroupViewModelTest {
         assertNull(vm.state.value.pendingDelete)
         assertEquals(2, products.variantRequests.size)
     }
+
+    @Test
+    fun `stock is adjusted optimistically and reverted on failure`() {
+        val v1 = vm.state.value.variants.first()
+        admin.failure = com.luxkasTech.PaintresLumiere.core.network.ApiError.Http(500, null)
+        vm.adjustStock(v1, 1)
+        assertEquals(v1.stockQuantity, vm.state.value.variants.first().stockQuantity)
+        admin.failure = null
+        vm.adjustStock(v1, 1)
+        assertEquals(listOf("v1" to 1), admin.stockAdjustments)
+    }
+
+    @Test
+    fun `stock never goes below zero`() {
+        val empty = vm.state.value.variants.first().copy(stockQuantity = 0)
+        vm.adjustStock(empty, -1)
+        assertTrue(admin.stockAdjustments.isEmpty())
+    }
+
+    @Test
+    fun `images are checked for type and size before uploading`() {
+        vm.uploadImage("v1", ByteArray(10), "image/gif")
+        vm.uploadImage("v1", ByteArray(4 * 1024 * 1024 + 1), "image/png")
+        assertTrue(admin.uploads.isEmpty())
+        vm.uploadImage("v1", ByteArray(10), "image/png")
+        assertEquals(listOf("v1" to "image/png"), admin.uploads)
+        assertNull(vm.state.value.uploadingVariantId)
+    }
 }
