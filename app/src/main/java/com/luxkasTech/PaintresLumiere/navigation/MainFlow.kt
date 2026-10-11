@@ -49,6 +49,7 @@ import com.luxkasTech.PaintresLumiere.feature.checkout.OrderConfirmationScreen
 import com.luxkasTech.PaintresLumiere.feature.category.CategoryProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.orders.OrdersRoute
+import com.luxkasTech.PaintresLumiere.feature.payment.PaymentMethodRoute
 import com.luxkasTech.PaintresLumiere.feature.orders.detail.OrderDetailRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
@@ -70,6 +71,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object ProfileDestination
 @Serializable data object OrdersDestination
 @Serializable data class OrderDetailDestination(val orderId: String)
+@Serializable data class PaymentMethodDestination(val orderId: String)
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
 @Serializable data class AdminProductGroupDestination(val sku: String)
@@ -191,6 +193,11 @@ fun MainFlow(
                         OrderConfirmationScreen(
                             orderNumber = args.number,
                             total = args.total,
+                            onPayNow = {
+                                navController.navigate(PaymentMethodDestination(args.orderId)) {
+                                    popUpTo<OrderConfirmationDestination> { inclusive = true }
+                                }
+                            },
                             onViewOrder = {
                                 navController.navigate(OrderDetailDestination(args.orderId)) {
                                     popUpTo<OrderConfirmationDestination> { inclusive = true }
@@ -209,6 +216,18 @@ fun MainFlow(
                     }
                     composable<OrderDetailDestination> {
                         OrderDetailRoute(onBack = { navController.popBackStack() })
+                    }
+                    composable<PaymentMethodDestination> {
+                        PaymentMethodRoute(
+                            onBack = { navController.popBackStack() },
+                            // Pending pix/boleto screens land in #49/#50; until then the order shows the charge.
+                            onChargeCreated = { orderId, _ ->
+                                navController.navigate(OrderDetailDestination(orderId)) {
+                                    popUpTo<PaymentMethodDestination> { inclusive = true }
+                                }
+                            },
+                            onCardRequested = { _, _ -> },
+                        )
                     }
                 }
                 navigation<AdminGraph>(startDestination = AdminDestination) {

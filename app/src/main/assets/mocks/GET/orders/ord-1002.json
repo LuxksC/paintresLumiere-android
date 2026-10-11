@@ -28,5 +28,17 @@
       "created_at": "2026-10-11T12:00:00Z",
       "note": null
     }
+  ],
+  "payments": [
+    {
+      "id": "pay-pix-1",
+      "method": "pix",
+      "status": "pendente",
+      "amount": 84.83,
+      "due_date": "2026-10-12T23:59:59Z",
+      "pix_qr_code": "iVBORw0KGgoAAAANSUhEUgAAASYAAAEmAQAAAADnvwB3AAADFUlEQVR4nO2aUarjSAxFj18Z8lneQZai7KyZnclL6QU0lD8DCrc/VPbMQEOn4cGziy5CcBJ9SEi6urqVSfz+vD7eMIK/Vl9nhRpAkQNRPaoXKaDI1QwAi7N6/7aVSQIknwEstgnsufC6e5HUTu39O0fNwEqjNEqzqJKUGYyq/uVZvf9Tq+fdnwts07w9XncH2B4n8OszrW4NqpfGawEovXS/3K/PsZIceE4PWGdMjZn1uSA5VfFlfn2W1Y6rzX75Aq6PqyhPQ42oUrN8LpKa5Y+Xj7EZUCTJJS8NsByOOVPKADFKUT2qorqaqVnp7wQW1Ueo1Ww9eYYDSDrCpI5Rq1BdUlYpWFRFTeYjktqd1fv3Y9xj8Z3USUdmB8mj5Sv2eBNtOuxkV57V+z+ymlmLfK6aWV93n5Y1sBnm5D8n9/53R/LYkScfJAUGmUSo169VeXK50sj52CtWHtWzdAeIMar+m8GSGFs9m/T6u1XmzqiCXCHJKs38RtUQtarSOqNTM6qCzsaDcfox9ocUBJIGlGZqgI0QYyOwfegrn6OK6snors9XP6i6NWaI7Vv5/iiNXP/1/Rswp2R3Xu/ftFqfC8Gan2cI1nmbpvs/QMBrepzZ+3dO6gDZg4muYCmx7n16/X6USrNgx1XsgNmoLvn1+Sr6d3AcG4eKxE7nhtitrMOpPCkcQO0kljF0gD1luRen6BH12K1shH5sVpKWV+XQLynQyaOHfP0Y9b+7Kjp/c2oXkIfg5NoL1VLcABJmM9hhMIf9lip2pJVcjaRz148xV0WCrlOVfXzkl2Pgah/9vTH7znjcEYywd8izE7sI0HVyonq/MR+jH9lnPZYcNUE1R8kIXK7XZM9gYFmf7NLr9fvxg22apmmu/lx4LusMM8Y2qdm0DLM/miS2B9XZNZyAaVlTX30tp/b+jTMDE3lfvJqY2zJhNzH/WGCdQF/i12djTpeqqopU5OWYlV2EvDquHlZW2vpaUvewW+O52E1O9evXKsctVezz4rjvyH1kCL4KuVwAuTxy/Nsqb9KvHuP097+dQ1j9BNusFdYUct0nAAAAAElFTkSuQmCC",
+      "pix_copy_paste": "00020126580014br.gov.bcb.pix0136mock-0000-4000-8000-paintreslumiere5204000053039865406084.835802BR5915PAINTRES LUMIERE6009SAO PAULO62070503***6304ABCD",
+      "created_at": "2026-10-11T12:05:00Z"
+    }
   ]
 }
