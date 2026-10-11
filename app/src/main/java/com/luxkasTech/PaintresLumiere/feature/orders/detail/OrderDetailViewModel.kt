@@ -35,8 +35,14 @@ class OrderDetailViewModel @Inject constructor(
     private val _state = MutableStateFlow(OrderDetailUiState())
     val state: StateFlow<OrderDetailUiState> = _state.asStateFlow()
 
+    private var loadedOnce = false
+
     init {
         load()
+    }
+
+    fun onResume() {
+        if (loadedOnce && !_state.value.isLoading) load()
     }
 
     /** The status changes on the admin side, so pull-to-refresh matters here. */
@@ -59,6 +65,8 @@ class OrderDetailViewModel @Inject constructor(
                 throw e
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, isRefreshing = false, error = e.toUiText()) }
+            } finally {
+                loadedOnce = true
             }
         }
     }

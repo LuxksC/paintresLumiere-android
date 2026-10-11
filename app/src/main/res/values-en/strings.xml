@@ -322,4 +322,10 @@
     <string name="card_not_confirmed">Couldn\'t confirm the payment right now.</string>
     <string name="card_unavailable">Card payment is not available in this version yet.</string>
     <string name="card_choose_another">Choose another payment method</string>
+    <string name="order_section_payment">Payment</string>
+    <string name="order_payment_none">No payment started.</string>
+    <string name="order_payment_history">Previous attempts</string>
+    <string name="order_payment_open_pix">View pix code</string>
+    <string name="order_payment_open_boleto">View carnê</string>
+    <string name="order_payment_try_another">Pay another way</string>
 </resources>
