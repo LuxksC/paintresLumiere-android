@@ -1,44 +1,42 @@
 package com.luxkasTech.PaintresLumiere.navigation
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import kotlinx.serialization.Serializable
-
-/** Placeholder start destination until the Auth and Main graphs land. */
-@Serializable
-data object StartRoute
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 /**
- * Root of the navigation graph — the Android counterpart of the iOS `AppCoordinator`.
+ * Root of the app — the Android counterpart of the iOS `AppCoordinator`.
+ *
+ * It swaps between the Auth flow and the Main flow purely from [RootViewModel.isAuthenticated].
+ * Each flow owns its own NavController, so switching flows throws the previous back stack away:
+ * after login, Back from Home leaves the app instead of returning to Login, and after logout there
+ * is no way back into the signed-in screens.
  *
  * Rule: screens never navigate by themselves. A screen exposes callbacks named after the event
- * (`onProductSelected(sku)`, `onLoginSucceeded()`), and only this graph decides where each event
- * leads.
+ * (`onProductSelected(sku)`, `onSignUpRequested()`), and only the flow graphs decide where each
+ * event leads. Signing in and out never navigates explicitly either — it changes the session, and
+ * this composable reacts.
  */
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    viewModel: RootViewModel = hiltViewModel(),
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = StartRoute,
+    val isAuthenticated by viewModel.isAuthenticated.collectAsStateWithLifecycle()
+    Crossfade(
+        targetState = isAuthenticated,
+        animationSpec = tween(300),
         modifier = modifier,
-    ) {
-        composable<StartRoute> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background),
-            )
+        label = "rootFlow",
+    ) { signedIn ->
+        if (signedIn) {
+            MainFlow()
+        } else {
+            AuthFlow()
         }
     }
 }
