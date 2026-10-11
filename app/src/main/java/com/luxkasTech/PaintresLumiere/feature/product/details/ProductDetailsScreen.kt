@@ -33,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,9 +76,17 @@ import java.math.BigDecimal
 @Composable
 fun ProductDetailsRoute(
     onBack: () -> Unit,
+    onCartRequested: () -> Unit,
     viewModel: ProductDetailsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(viewModel) {
+        viewModel.events.collect { event ->
+            when (event) {
+                ProductDetailsViewModel.Event.OpenCart -> onCartRequested()
+            }
+        }
+    }
     ProductDetailsScreen(
         state = state,
         actions = ProductDetailsActions(
