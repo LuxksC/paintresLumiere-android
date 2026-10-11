@@ -3,6 +3,11 @@ package com.luxkasTech.PaintresLumiere.di
 import com.luxkasTech.PaintresLumiere.BuildConfig
 import com.luxkasTech.PaintresLumiere.core.network.AuthInterceptor
 import com.luxkasTech.PaintresLumiere.core.network.UnauthorizedInterceptor
+import com.luxkasTech.PaintresLumiere.core.network.mock.AssetMockSource
+import com.luxkasTech.PaintresLumiere.core.network.mock.MockInterceptor
+import com.luxkasTech.PaintresLumiere.core.network.mock.MockRouter
+import dagger.hilt.android.qualifiers.ApplicationContext
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +37,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
+        @ApplicationContext context: Context,
         authInterceptor: AuthInterceptor,
         unauthorizedInterceptor: UnauthorizedInterceptor,
     ): OkHttpClient =
@@ -49,6 +55,11 @@ object NetworkModule {
                             redactHeader("Authorization")
                         },
                     )
+                }
+                // `mock` flavor: answer from assets/mocks instead of the network. Added last so the
+                // whole chain above (auth, 401 handling, logging) behaves exactly as in `live`.
+                if (BuildConfig.USE_MOCKS) {
+                    addInterceptor(MockInterceptor(MockRouter(AssetMockSource(context))))
                 }
             }
             .build()
