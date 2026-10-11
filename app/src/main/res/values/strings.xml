@@ -154,4 +154,23 @@
     <string name="profile_avatar">Foto de perfil</string>
     <string name="auth_login_google">Continuar com Google</string>
     <string name="auth_login_google_failed">Não foi possível entrar com o Google. Tente novamente.</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Carrinho</string>
+    <string name="cart_clear">Esvaziar</string>
+    <string name="cart_clear_title">Esvaziar o carrinho?</string>
+    <string name="cart_clear_confirm">Esvaziar</string>
+    <string name="cart_remove_item">Remover %1$s</string>
+    <string name="cart_flag_unavailable">Indisponível — remova para finalizar a compra</string>
+    <string name="cart_flag_stock">Só %1$d em estoque — ajuste a quantidade</string>
+    <string name="cart_subtotal">Subtotal</string>
+    <string name="cart_discount">Descontos</string>
+    <string name="cart_total">Total</string>
+    <string name="cart_checkout">Finalizar compra</string>
+    <string name="cart_empty_title">Seu carrinho está vazio</string>
+    <string name="cart_empty_message">Explore o catálogo e adicione as peças que quiser revender.</string>
+    <string name="cart_browse">Ver catálogo</string>
+    <string name="cart_icon_a11y_count">Carrinho, %1$d itens</string>
+    <string name="cart_error_stock_title">Estoque insuficiente</string>
+    <string name="cart_error_stock_message">Disponível para adicionar: %1$d</string>
 </resources>
