@@ -106,4 +106,20 @@
     <!-- Main tabs -->
     <string name="tab_home">Início</string>
     <string name="tab_profile">Perfil</string>
+
+    <!-- Home -->
+    <string name="home_header_subtitle">BOUTIQUE</string>
+    <string name="home_section_popular">MAIS POPULARES</string>
+    <string name="home_section_collection">NOSSA COLEÇÃO</string>
+    <plurals name="home_pieces_count">
+        <item quantity="one">%d peça</item>
+        <item quantity="many">%d peças</item>
+        <item quantity="other">%d peças</item>
+    </plurals>
+    <string name="home_notifications">Notificações</string>
+    <string name="home_cart">Carrinho</string>
+    <string name="home_loading">Carregando catálogo…</string>
+    <string name="home_error_title">Não foi possível carregar o catálogo</string>
+    <string name="home_empty_title">O catálogo está vazio</string>
+    <string name="home_empty_message">Novas peças aparecerão aqui assim que forem cadastradas.</string>
 </resources>
