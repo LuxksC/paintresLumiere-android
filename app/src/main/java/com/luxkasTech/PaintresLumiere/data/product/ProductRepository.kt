@@ -7,6 +7,9 @@ import javax.inject.Singleton
 /** Catalog access — the Android counterpart of iOS `ProductServiceProtocol`. Throws `ApiError`. */
 interface ProductRepository {
     suspend fun getProducts(): List<Product>
+
+    /** Catalog filtered by category on the server (`GET /products?category=`). */
+    suspend fun getProductsInCategory(category: ProductCategory): List<Product>
     suspend fun getPopularProducts(limit: Int?): List<Product>
     suspend fun getProductVariants(sku: String): List<ProductVariant>
 
@@ -19,6 +22,8 @@ class DefaultProductRepository @Inject constructor(
     private val api: ProductApi,
 ) : ProductRepository {
     override suspend fun getProducts() = apiCall { api.getProducts().products }
+    override suspend fun getProductsInCategory(category: ProductCategory) =
+        apiCall { api.getProducts(category = category.raw).products }
     override suspend fun getPopularProducts(limit: Int?) = apiCall { api.getPopularProducts(limit).products }
     override suspend fun getProductVariants(sku: String) = apiCall { api.getProductBySku(sku).products }
     override suspend fun getCategories() = apiCall {
