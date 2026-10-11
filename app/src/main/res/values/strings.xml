@@ -333,4 +333,8 @@
     <string name="order_payment_open_pix">Ver código pix</string>
     <string name="order_payment_open_boleto">Ver carnê</string>
     <string name="order_payment_try_another">Pagar de outra forma</string>
+    <string name="edit_profile_lastname">Sobrenome</string>
+    <string name="edit_profile_document_hint">CPF ou CNPJ é obrigatório para pagar com pix e boleto.</string>
+    <string name="edit_profile_email">Email: %1$s (não pode ser alterado aqui)</string>
+    <string name="edit_profile_saved">Perfil atualizado</string>
 </resources>
