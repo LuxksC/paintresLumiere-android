@@ -1,0 +1,52 @@
+{
+  "id": "ord-0987",
+  "number": "PL-0987",
+  "status": "entregue",
+  "subtotal_amount": 239.4,
+  "discount_amount": 0.0,
+  "shipping_amount": 0,
+  "total_amount": 239.4,
+  "notes": null,
+  "created_at": "2026-09-21T18:02:00Z",
+  "items": [
+    {
+      "id": "item-5",
+      "product_id": "00000000-0000-4000-8000-000000000005",
+      "product_name": "Sol",
+      "product_sku": "SOL",
+      "product_color": "bronze",
+      "product_dimensions": "15 × 15cm",
+      "unit_price": 39.9,
+      "discount_rate": 0.0,
+      "quantity": 6,
+      "line_total": 239.4
+    }
+  ],
+  "status_history": [
+    {
+      "status": "recebido",
+      "created_at": "2026-09-21T18:02:00Z",
+      "note": null
+    },
+    {
+      "status": "em_producao",
+      "created_at": "2026-09-22T10:00:00Z",
+      "note": null
+    },
+    {
+      "status": "pronto",
+      "created_at": "2026-09-24T16:30:00Z",
+      "note": null
+    },
+    {
+      "status": "enviado",
+      "created_at": "2026-09-25T11:15:00Z",
+      "note": "Correios — código BR123456789BR."
+    },
+    {
+      "status": "entregue",
+      "created_at": "2026-09-29T14:40:00Z",
+      "note": null
+    }
+  ]
+}
