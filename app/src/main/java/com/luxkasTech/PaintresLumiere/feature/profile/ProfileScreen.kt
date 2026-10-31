@@ -52,6 +52,7 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLRadius
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLSpacing
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PaintresLumiereTheme
+import com.luxkasTech.PaintresLumiere.data.profile.UserProfile
 
 @Composable
 fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
@@ -64,6 +65,7 @@ fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
             onDeleteAccount = viewModel::requestDeleteAccount,
             onConfirmDelete = viewModel::confirmDeleteAccount,
             onDismissDelete = viewModel::dismissDeleteAccount,
+            onRetryProfile = viewModel::loadProfile,
         ),
     )
 }
@@ -74,6 +76,7 @@ data class ProfileActions(
     val onDeleteAccount: () -> Unit = {},
     val onConfirmDelete: () -> Unit = {},
     val onDismissDelete: () -> Unit = {},
+    val onRetryProfile: () -> Unit = {},
 )
 
 @Composable
@@ -99,6 +102,9 @@ fun ProfileScreen(state: ProfileUiState, actions: ProfileActions) {
                 color = PLColor.textMuted,
             )
         }
+        PLDivider(Modifier.padding(vertical = PLSpacing.lg))
+
+        ProfileIdentity(state.profile, state.isProfileLoading, state.profileError, actions.onRetryProfile)
         PLDivider(Modifier.padding(vertical = PLSpacing.lg))
 
         SettingsMenu(actions.onMenuItemClick)
@@ -184,6 +190,12 @@ private fun SettingsMenu(onClick: (ProfileMenuItem) -> Unit) {
 @Composable
 private fun ProfileScreenPreview() {
     PaintresLumiereTheme {
-        ProfileScreen(ProfileUiState(), ProfileActions())
+        ProfileScreen(
+            ProfileUiState(
+                profile = UserProfile(id = "1", name = "Lucas", lastname = "Castro", email = "lucas@exemplo.com"),
+                isProfileLoading = false,
+            ),
+            ProfileActions(),
+        )
     }
 }
