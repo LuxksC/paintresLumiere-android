@@ -71,6 +71,20 @@ com.luxkasTech.PaintresLumiere
 - The catalog returns **one row per variant**: the same SKU spans several rows by color/dimension.
 - Never show a raw HTTP status to the user; map through `ApiError`.
 
+## Mock data source (`mock` flavor)
+
+The app runs against the real API (`live` flavor) or against JSON files (`mock` flavor) — pick it
+in *Build Variants*. Both install side by side (`.mock` application id suffix).
+
+- `core/network/mock/MockInterceptor` sits at the end of the OkHttp chain and answers from
+  `assets/mocks/{METHOD}/{path}.json` (`_` = any segment, `.meta.json` for status/latency). The
+  response goes through the **same Retrofit + kotlinx.serialization + `ApiError` path** as the
+  real API — there is no second decoding code path to keep in sync.
+- **A feature whose endpoint doesn't exist yet is built against a mock first**: agree the payload
+  shape (it is the contract proposal for the API), add the JSON, build the screen. When the API
+  ships, nothing in the app changes.
+- `MockFixturesTest` decodes every mock with the real models; register new files there.
+
 ## Strings
 
 - **PT-BR is the base language** (`values/strings.xml`); English lives in `values-en/` (iOS AD-007).
