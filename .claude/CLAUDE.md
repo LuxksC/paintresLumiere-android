@@ -80,8 +80,8 @@ com.luxkasTech.PaintresLumiere
 
 ## Workflow
 
-- Branch: `GH-{issue}/{type}/claude/{short_description}`; commit subject:
-  `GH-{issue} {type}: {imperative description}` (English).
+- Branch: `GH-{issue}/{type}/claude/{short_description}`; commit messages follow the root
+  `CLAUDE.md`: a single line `{type}(GH-{issue}): {short description}` (English).
 - PR descriptions in **PT-BR**, linking the issue with `Closes #N`.
 - Work is delivered as **stacked PRs** with `gh stack` (see the iOS repo's
   `.claude/skills/gh-stack/SKILL.md`). Never commit to `main`.
