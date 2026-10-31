@@ -328,4 +328,8 @@
     <string name="order_payment_open_pix">View pix code</string>
     <string name="order_payment_open_boleto">View carnê</string>
     <string name="order_payment_try_another">Pay another way</string>
+    <string name="edit_profile_lastname">Last name</string>
+    <string name="edit_profile_document_hint">CPF or CNPJ is required to pay with pix and boleto.</string>
+    <string name="edit_profile_email">Email: %1$s (can\'t be changed here)</string>
+    <string name="edit_profile_saved">Profile updated</string>
 </resources>
