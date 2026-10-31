@@ -86,6 +86,8 @@ class MockFixturesTest {
         assertEquals("mock-access-token", apiCall { auth.login(LoginRequest("a@b.c", "x")) }.accessToken)
         assertTrue(apiCall { auth.signUp(SignUpRequest("A", "a@b.c", "12345678")) }.accessToken.isNotBlank())
         assertTrue(apiCall { auth.authenticateWithGoogle(GoogleAuthRequest("t")) }.accessToken.isNotBlank())
+        apiCall { auth.forgotPassword(com.luxkasTech.PaintresLumiere.data.auth.ForgotPasswordRequest("a@b.c")) }
+        apiCall { auth.resetPassword(com.luxkasTech.PaintresLumiere.data.auth.ResetPasswordRequest("t", "Senha123")) }
         apiCall { auth.logout() }
         apiCall { auth.deleteAccount() }
         assertEquals(UserType.ADMIN, apiCall { profile.getProfile() }.type)
@@ -132,7 +134,7 @@ class MockFixturesTest {
         val covered = setOf(
             "DELETE/products/_.json", "DELETE/users/me.json", "GET/products.json", "GET/products/popular.json", "GET/products/categories.json",
             "GET/products/sku/_.json", "GET/products/sku/_.meta.json", "GET/profile.json", "PUT/profile.json", "POST/auth/google.json",
-            "POST/login.json", "POST/logout.json", "POST/products.json", "POST/products.meta.json",
+            "POST/login.json", "POST/auth/forgot-password.json", "POST/auth/reset-password.json", "POST/logout.json", "POST/products.json", "POST/products.meta.json",
             "POST/signup.json", "POST/signup.meta.json", "PUT/products/_.json",
             "POST/orders/_/payment~method=pix.json", "POST/orders/_/payment~method=pix.meta.json",
             "POST/orders/_/payment~method=boleto_parcelado.json", "POST/orders/_/payment~method=boleto_parcelado.meta.json",

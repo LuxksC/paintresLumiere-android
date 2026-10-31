@@ -14,6 +14,14 @@ interface AuthApi {
     @POST("auth/google")
     suspend fun authenticateWithGoogle(@Body body: GoogleAuthRequest): AccessTokenResponse
 
+    /** Backend card PL-96 (not live yet). Always 200, whether the email exists or not. */
+    @POST("auth/forgot-password")
+    suspend fun forgotPassword(@Body body: ForgotPasswordRequest)
+
+    /** Backend card PL-97 (not live yet). Doesn't sign in — the user logs in with the new password. */
+    @POST("auth/reset-password")
+    suspend fun resetPassword(@Body body: ResetPasswordRequest)
+
     @POST("logout")
     suspend fun logout()
 
