@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.luxkasTech.PaintresLumiere.feature.auth.forgot.ForgotPasswordRoute
 import com.luxkasTech.PaintresLumiere.feature.auth.login.LoginRoute
 import com.luxkasTech.PaintresLumiere.feature.auth.signup.SignUpRoute
 import kotlinx.serialization.Serializable
@@ -36,7 +37,7 @@ fun AuthFlow(navController: NavHostController = rememberNavController()) {
             SignUpRoute(onBack = { navController.popBackStack() })
         }
         composable<ForgotPasswordDestination> {
-            FlowPlaceholder()
+            ForgotPasswordRoute(onFinished = { navController.popBackStack() })
         }
     }
 }
