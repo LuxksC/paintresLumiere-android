@@ -220,4 +220,5 @@
     <string name="admin_form_error_price">Enter a price greater than zero.</string>
     <string name="admin_form_error_discount">Use a value between 0 and 100.</string>
     <string name="admin_form_error_stock">Enter a whole number.</string>
+    <string name="home_section_categories">CATEGORIES</string>
 </resources>
