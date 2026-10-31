@@ -75,6 +75,9 @@ com.luxkasTech.PaintresLumiere
 
 - **PT-BR is the base language** (`values/strings.xml`); English lives in `values-en/` (iOS AD-007).
 - No hardcoded user-facing text in composables.
+- String keys follow `feature_screen_element` (e.g. `auth_login_title`); drop `screen` when the
+  feature has a single screen (`cart_subtotal`). Text shared across features uses `common_`.
+- Every new PT-BR string needs its English translation: lint fails on `MissingTranslation`.
 
 ---
 
