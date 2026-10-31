@@ -3,7 +3,10 @@ package com.luxkasTech.PaintresLumiere.feature.home
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.network.ApiError
+import com.luxkasTech.PaintresLumiere.data.cart.Cart
+import com.luxkasTech.PaintresLumiere.testing.FakeCartRepository
 import com.luxkasTech.PaintresLumiere.testing.FakeMessagesService
+import com.luxkasTech.PaintresLumiere.testing.testCartItem
 import com.luxkasTech.PaintresLumiere.testing.FakeProductRepository
 import com.luxkasTech.PaintresLumiere.testing.MainDispatcherRule
 import com.luxkasTech.PaintresLumiere.testing.testProduct
@@ -22,7 +25,9 @@ class HomeViewModelTest {
     private val repository = FakeProductRepository()
     private val messages = FakeMessagesService()
 
-    private fun viewModel() = HomeViewModel(repository, messages)
+    private val cart = FakeCartRepository()
+
+    private fun viewModel() = HomeViewModel(repository, cart, messages)
 
     @Test
     fun `loads catalog sorted by name, ignoring case and accents`() {
@@ -84,10 +89,16 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `cart and notifications are coming soon`() {
+    fun `notifications are coming soon`() {
+        viewModel().onNotificationsClick()
+        assertEquals(1, messages.shown.size)
+    }
+
+    @Test
+    fun `cart badge follows the cart`() {
         val viewModel = viewModel()
-        viewModel.onCartClick()
-        viewModel.onNotificationsClick()
-        assertEquals(2, messages.shown.size)
+        assertEquals(0, viewModel.state.value.cartCount)
+        cart.set(Cart(listOf(testCartItem("1", quantity = 2), testCartItem("2", quantity = 1))))
+        assertEquals(3, viewModel.state.value.cartCount)
     }
 }
