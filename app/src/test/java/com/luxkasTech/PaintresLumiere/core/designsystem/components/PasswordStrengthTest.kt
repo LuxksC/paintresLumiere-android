@@ -37,4 +37,11 @@ class PasswordStrengthTest {
     fun `non ASCII letters count as symbols, like the iOS regex`() {
         assertEquals(PasswordStrength.Moderate, PasswordStrength.evaluate("açúcarzz"))
     }
+
+    @Test
+    fun `length counts user-perceived characters, like Swift's String count`() {
+        // 4 emoji are 8 UTF-16 code units but only 4 characters on iOS.
+        assertEquals(PasswordStrength.Weak, PasswordStrength.evaluate("😀😀😀😀"))
+        assertEquals(PasswordStrength.Moderate, PasswordStrength.evaluate("😀😀😀😀abcd"))
+    }
 }
