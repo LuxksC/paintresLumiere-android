@@ -222,4 +222,7 @@
     <string name="admin_form_error_stock">Enter a whole number.</string>
     <string name="home_section_categories">CATEGORIES</string>
     <string name="category_empty">No pieces in this category yet.</string>
+    <string name="home_search">Search</string>
+    <string name="home_search_placeholder">Piece name or SKU</string>
+    <string name="home_search_empty">No pieces found for “%1$s”.</string>
 </resources>
