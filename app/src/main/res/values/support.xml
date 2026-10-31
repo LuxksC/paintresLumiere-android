@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Support channels and legal links shown on Profile → Help. Fill in before publishing (the
+         Play Store requires a privacy policy URL). Empty values hide the corresponding rows. -->
+    <string name="support_email" translatable="false"></string>
+    <string name="support_whatsapp" translatable="false"></string>
+    <string name="support_terms_url" translatable="false"></string>
+    <string name="support_privacy_url" translatable="false"></string>
+</resources>
