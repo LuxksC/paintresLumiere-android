@@ -45,5 +45,20 @@
       "created_at": "2026-10-09T09:05:00Z",
       "note": "Corte a laser iniciado."
     }
+  ],
+  "payments": [
+    {
+      "id": "pay-bol-0",
+      "method": "boleto_parcelado",
+      "status": "confirmado",
+      "amount": 348.76,
+      "installment_count": 3,
+      "installment_amount": 116.25,
+      "paid_installments": 1,
+      "due_date": "2026-10-18T23:59:59Z",
+      "boleto_url": "https://sandbox.asaas.com/b/pdf/mock-carne",
+      "boleto_digitable_line": "23793.38128 60000.000003 00000.000400 1 99990000002828",
+      "created_at": "2026-10-11T12:05:00Z"
+    }
   ]
 }

@@ -37,6 +37,7 @@ import com.luxkasTech.PaintresLumiere.data.order.OrderStatus
 fun OrderConfirmationScreen(
     orderNumber: String,
     total: String,
+    onPayNow: () -> Unit,
     onViewOrder: () -> Unit,
     onBackToCatalog: () -> Unit,
 ) {
@@ -62,7 +63,8 @@ fun OrderConfirmationScreen(
         Text(total, style = PLFont.body, color = PLColor.textSecondary)
         OrderStatusBadge(OrderStatus.RECEIVED)
         Text(stringResource(R.string.confirmation_next_steps), style = PLFont.body, color = PLColor.textMuted, textAlign = TextAlign.Center)
-        PLButton(stringResource(R.string.confirmation_view_order), onClick = onViewOrder, modifier = Modifier.padding(top = PLSpacing.md))
+        PLButton(stringResource(R.string.confirmation_pay_now), onClick = onPayNow, modifier = Modifier.padding(top = PLSpacing.md))
+        PLButton(stringResource(R.string.confirmation_view_order), onClick = onViewOrder, type = PLButtonType.Secondary)
         PLButton(stringResource(R.string.confirmation_back_to_catalog), onClick = onBackToCatalog, type = PLButtonType.Ghost)
     }
 }

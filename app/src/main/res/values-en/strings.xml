@@ -268,4 +268,29 @@
     <string name="confirmation_next_steps">We\'ll keep you posted at every step: production, shipping and delivery. Follow it in the Orders tab.</string>
     <string name="confirmation_view_order">View order</string>
     <string name="confirmation_back_to_catalog">Back to catalog</string>
+
+    <!-- Payment -->
+    <string name="payment_title">Payment</string>
+    <string name="payment_method_pix">Pix</string>
+    <string name="payment_method_boleto">Installment boleto (carnê)</string>
+    <string name="payment_method_card">Credit card</string>
+    <string name="payment_method_unknown">Other</string>
+    <string name="payment_method_pix_description">Approved in minutes, via QR code or copy-and-paste.</string>
+    <string name="payment_method_boleto_description">Split into monthly boletos. Production starts after the first payment.</string>
+    <string name="payment_method_card_description">Approved instantly, in full or in installments.</string>
+    <string name="payment_installments">Installments</string>
+    <string name="payment_installment_option">%1$d× %2$s</string>
+    <string name="payment_confirm_pix">Generate pix</string>
+    <string name="payment_confirm_boleto">Generate carnê</string>
+    <string name="payment_confirm_card">Continue to card</string>
+    <string name="payment_not_payable">This order is already paid or can no longer be paid.</string>
+    <string name="payment_status_pending">Awaiting payment</string>
+    <string name="payment_status_confirmed">Paid</string>
+    <string name="payment_status_received">Paid</string>
+    <string name="payment_status_overdue">Overdue</string>
+    <string name="payment_status_refunded">Refunded</string>
+    <string name="payment_status_cancelled">Cancelled</string>
+    <string name="payment_status_failed">Declined</string>
+    <string name="payment_status_unknown">Updating</string>
+    <string name="confirmation_pay_now">Pay now</string>
 </resources>
