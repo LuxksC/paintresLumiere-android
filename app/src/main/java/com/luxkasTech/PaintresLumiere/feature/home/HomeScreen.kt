@@ -68,6 +68,7 @@ import java.math.BigDecimal
 fun HomeRoute(
     onProductSelected: (sku: String) -> Unit,
     onCartRequested: () -> Unit,
+    onCategorySelected: (ProductCategory) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -78,7 +79,7 @@ fun HomeRoute(
         onRetry = viewModel::retry,
         onNotificationsClick = viewModel::onNotificationsClick,
         onCartClick = onCartRequested,
-        onCategoryClick = viewModel::onCategoryClick,
+        onCategoryClick = onCategorySelected,
     )
 }
 
