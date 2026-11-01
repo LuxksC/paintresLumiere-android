@@ -73,6 +73,9 @@ fun PLProductCard(
     val a11yPrice = data.originalPrice?.let {
         stringResource(R.string.ds_product_card_price_discounted_a11y, data.finalPrice.brlFormatted(), it.brlFormatted())
     } ?: data.finalPrice.brlFormatted()
+    // The custom description replaces the children's text for TalkBack, so it must also carry the
+    // unavailable label; otherwise a sold-out product is announced as buyable.
+    val a11yDescription = listOfNotNull(data.name, a11yPrice, data.unavailableLabel).joinToString(", ")
 
     Column(
         verticalArrangement = Arrangement.spacedBy(PLSpacing.sm),
@@ -82,7 +85,7 @@ fun PLProductCard(
             .background(PLColor.backgroundElevated)
             .border(1.dp, PLColor.borderSubtle, shape)
             .clickable(interactionSource = interactionSource, indication = null, role = Role.Button, onClick = onClick)
-            .semantics(mergeDescendants = true) { contentDescription = "${data.name}, $a11yPrice" }
+            .semantics(mergeDescendants = true) { contentDescription = a11yDescription }
             .padding(PLSpacing.sm),
     ) {
         val imageShape = RoundedCornerShape(PLRadius.card - 2.dp)
