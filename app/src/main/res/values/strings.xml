@@ -307,4 +307,11 @@
     <string name="pix_copied">Código copiado</string>
     <string name="pix_share">Compartilhar código</string>
     <string name="pix_instructions">Pague no app do seu banco. A confirmação chega em instantes e esta tela atualiza sozinha — você também pode sair e acompanhar pelo pedido.</string>
+    <string name="boleto_first_due">Primeira parcela vence em %1$s</string>
+    <string name="boleto_paid_progress">%1$d de %2$d parcelas pagas</string>
+    <string name="boleto_open">Abrir carnê</string>
+    <string name="boleto_share">Compartilhar link</string>
+    <string name="boleto_copy_line">Copiar linha digitável</string>
+    <string name="boleto_line_copied">Linha digitável copiada</string>
+    <string name="boleto_instructions">A produção começa assim que a primeira parcela for paga. A compensação do boleto pode levar até 3 dias úteis — esta tela e o pedido atualizam sozinhos.</string>
 </resources>
