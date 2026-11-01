@@ -226,4 +226,7 @@
     <string name="admin_form_error_stock">Informe um número inteiro.</string>
     <string name="home_section_categories">CATEGORIAS</string>
     <string name="category_empty">Nenhuma peça nesta categoria por enquanto.</string>
+    <string name="home_search">Buscar</string>
+    <string name="home_search_placeholder">Nome da peça ou SKU</string>
+    <string name="home_search_empty">Nenhuma peça encontrada para “%1$s”.</string>
 </resources>
