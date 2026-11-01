@@ -1,5 +1,6 @@
 package com.luxkasTech.PaintresLumiere.data.auth
 
+import com.luxkasTech.PaintresLumiere.core.network.ApiError
 import com.luxkasTech.PaintresLumiere.core.network.apiCall
 import com.luxkasTech.PaintresLumiere.core.session.SessionManager
 import javax.inject.Inject
@@ -22,6 +23,12 @@ interface AuthRepository {
         cpf: String?,
         cnpj: String?,
     )
+
+    /** Best effort server logout; the local session always ends, even offline. */
+    suspend fun logout()
+
+    /** Soft-deletes the account (`DELETE /users/me`) and ends the session. Throws on failure. */
+    suspend fun deleteAccount()
 }
 
 @Singleton
@@ -53,5 +60,20 @@ class DefaultAuthRepository @Inject constructor(
         )
         val response = apiCall { api.signUp(request) }
         session.startSession(response.accessToken)
+    }
+
+    override suspend fun logout() {
+        try {
+            apiCall { api.logout() }
+        } catch (e: ApiError) {
+            // The JWT is stateless server-side; failing to notify the API must not keep the user in.
+        } finally {
+            session.endSession()
+        }
+    }
+
+    override suspend fun deleteAccount() {
+        apiCall { api.deleteAccount() }
+        session.endSession()
     }
 }
