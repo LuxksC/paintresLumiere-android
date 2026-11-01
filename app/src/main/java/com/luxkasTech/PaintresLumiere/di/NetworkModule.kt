@@ -2,6 +2,7 @@ package com.luxkasTech.PaintresLumiere.di
 
 import com.luxkasTech.PaintresLumiere.BuildConfig
 import com.luxkasTech.PaintresLumiere.core.network.AuthInterceptor
+import com.luxkasTech.PaintresLumiere.core.network.DebugLoggingInterceptor
 import com.luxkasTech.PaintresLumiere.core.network.UnauthorizedInterceptor
 import com.luxkasTech.PaintresLumiere.core.network.mock.AssetMockSource
 import com.luxkasTech.PaintresLumiere.core.network.mock.MockInterceptor
@@ -15,7 +16,6 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
@@ -49,12 +49,7 @@ object NetworkModule {
             .addInterceptor(unauthorizedInterceptor)
             .apply {
                 if (BuildConfig.DEBUG) {
-                    addInterceptor(
-                        HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BODY
-                            redactHeader("Authorization")
-                        },
-                    )
+                    addInterceptor(DebugLoggingInterceptor())
                 }
                 // `mock` flavor: answer from assets/mocks instead of the network. Added last so the
                 // whole chain above (auth, 401 handling, logging) behaves exactly as in `live`.
