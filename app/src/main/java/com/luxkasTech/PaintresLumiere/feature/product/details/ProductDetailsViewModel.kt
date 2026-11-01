@@ -3,16 +3,23 @@ package com.luxkasTech.PaintresLumiere.feature.product.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
+import com.luxkasTech.PaintresLumiere.core.messages.ToastType
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
+import com.luxkasTech.PaintresLumiere.data.cart.CartError
+import com.luxkasTech.PaintresLumiere.data.cart.CartRepository
 import com.luxkasTech.PaintresLumiere.data.product.ProductColor
 import com.luxkasTech.PaintresLumiere.data.product.ProductRepository
 import com.luxkasTech.PaintresLumiere.data.product.ProductVariant
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -68,8 +75,17 @@ data class ProductDetailsUiState(
 class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val productRepository: ProductRepository,
+    private val cartRepository: CartRepository,
     private val messages: MessagesService,
 ) : ViewModel() {
+
+    /** One-shot navigation requests for the route. */
+    sealed interface Event {
+        data object OpenCart : Event
+    }
+
+    private val _events = Channel<Event>(Channel.BUFFERED)
+    val events: Flow<Event> = _events.receiveAsFlow()
 
     val sku: String = checkNotNull(savedStateHandle[SKU_ARG]) { "ProductDetails opened without a SKU" }
 
@@ -99,13 +115,36 @@ class ProductDetailsViewModel @Inject constructor(
         _state.update { it.copy(quantity = value.coerceIn(1, it.maxQuantity.coerceAtLeast(1))) }
     }
 
-    /** Cart and checkout are Phase 3 — until then both actions say so instead of faking success. */
-    fun buyNow() {
-        if (_state.value.canPurchase) messages.showComingSoon()
-    }
+    /** Adds the selected variant and goes straight to the cart (checkout starts from there). */
+    fun buyNow() = addSelectedVariant(openCart = true)
 
-    fun addToCart() {
-        if (_state.value.canPurchase) messages.showComingSoon()
+    fun addToCart() = addSelectedVariant(openCart = false)
+
+    private fun addSelectedVariant(openCart: Boolean) {
+        val current = _state.value
+        val variant = current.selectedVariant
+        if (!current.canPurchase || variant == null) return
+        viewModelScope.launch {
+            try {
+                // The cart line points at the selected variant row, never at the SKU.
+                cartRepository.addItem(variant, current.quantity.coerceAtLeast(1))
+                if (openCart) {
+                    _events.send(Event.OpenCart)
+                } else {
+                    messages.showAddedToCart(variant.name)
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: CartError.InsufficientStock) {
+                messages.show(
+                    UiText.Resource(R.string.cart_error_stock_title),
+                    UiText.Resource(R.string.cart_error_stock_message, e.available),
+                    ToastType.Warning,
+                )
+            } catch (e: Exception) {
+                messages.showGenericError()
+            }
+        }
     }
 
     private fun load() {
