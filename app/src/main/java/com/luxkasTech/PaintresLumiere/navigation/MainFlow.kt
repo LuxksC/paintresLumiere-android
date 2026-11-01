@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -49,7 +50,11 @@ import com.luxkasTech.PaintresLumiere.feature.checkout.OrderConfirmationScreen
 import com.luxkasTech.PaintresLumiere.feature.category.CategoryProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.orders.OrdersRoute
+import com.luxkasTech.PaintresLumiere.data.payment.Payment
+import com.luxkasTech.PaintresLumiere.data.payment.PaymentMethod
 import com.luxkasTech.PaintresLumiere.feature.payment.PaymentMethodRoute
+import com.luxkasTech.PaintresLumiere.feature.payment.PixPaymentRoute
+import kotlinx.serialization.json.Json
 import com.luxkasTech.PaintresLumiere.feature.orders.detail.OrderDetailRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
@@ -72,6 +77,9 @@ import kotlinx.serialization.Serializable
 @Serializable data object OrdersDestination
 @Serializable data class OrderDetailDestination(val orderId: String)
 @Serializable data class PaymentMethodDestination(val orderId: String)
+
+/** [payment] is the charge as JSON — it carries the QR / boleto data the screen shows immediately. */
+@Serializable data class PixPaymentDestination(val orderId: String, val payment: String)
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
 @Serializable data class AdminProductGroupDestination(val sku: String)
@@ -132,6 +140,7 @@ fun MainFlow(
     onAdminSectionSelected: (AdminSection) -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
+    val json = remember { Json { ignoreUnknownKeys = true; explicitNulls = false } }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
     // The Admin tab only exists for confirmed admins (role from GET /profile).
@@ -220,13 +229,23 @@ fun MainFlow(
                     composable<PaymentMethodDestination> {
                         PaymentMethodRoute(
                             onBack = { navController.popBackStack() },
-                            // Pending pix/boleto screens land in #49/#50; until then the order shows the charge.
-                            onChargeCreated = { orderId, _ ->
-                                navController.navigate(OrderDetailDestination(orderId)) {
-                                    popUpTo<PaymentMethodDestination> { inclusive = true }
+                            onChargeCreated = { orderId, payment ->
+                                val target: Any = when (payment.method) {
+                                    PaymentMethod.PIX -> PixPaymentDestination(orderId, json.encodeToString(Payment.serializer(), payment))
+                                    // Boleto screen lands in #50; until then the order shows the charge.
+                                    else -> OrderDetailDestination(orderId)
                                 }
+                                navController.navigate(target) { popUpTo<PaymentMethodDestination> { inclusive = true } }
                             },
                             onCardRequested = { _, _ -> },
+                        )
+                    }
+                    composable<PixPaymentDestination> {
+                        PixPaymentRoute(
+                            onBack = { navController.popBackStack() },
+                            onViewOrder = { id ->
+                                navController.navigate(OrderDetailDestination(id)) { popUpTo<PixPaymentDestination> { inclusive = true } }
+                            },
                         )
                     }
                 }
