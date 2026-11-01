@@ -122,4 +122,20 @@
     <string name="home_error_title">Não foi possível carregar o catálogo</string>
     <string name="home_empty_title">O catálogo está vazio</string>
     <string name="home_empty_message">Novas peças aparecerão aqui assim que forem cadastradas.</string>
+
+    <!-- Product details -->
+    <string name="details_error_title">Não foi possível carregar este produto</string>
+    <string name="details_unavailable">Este produto não está disponível no momento.</string>
+    <string name="details_section_color">COR</string>
+    <string name="details_section_size">TAMANHO</string>
+    <string name="details_section_about">SOBRE</string>
+    <string name="details_section_details">DETALHES</string>
+    <string name="details_stock_available">Em estoque · %d disponíveis</string>
+    <string name="details_row_category">Categoria</string>
+    <string name="details_row_dimensions">Dimensões</string>
+    <string name="details_row_barcode">Código de barras</string>
+    <string name="details_row_sku">SKU</string>
+    <string name="details_buy">Comprar</string>
+    <string name="details_unavailable_button">Indisponível</string>
+    <string name="details_add_to_cart">Adicionar ao carrinho</string>
 </resources>
