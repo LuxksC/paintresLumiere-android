@@ -12,6 +12,21 @@ import java.util.Locale
 @Serializable
 data class ProductsResponse<T>(val products: List<T> = emptyList())
 
+/**
+ * `GET /products` response. Today the API answers `{ products: [...] }` with everything; the agreed
+ * pagination (backend card PL-22) changes it to `{ data, nextCursor, total }`. Accepting both keeps
+ * the app working across the switch.
+ */
+@Serializable
+data class CatalogPage(
+    val data: List<Product>? = null,
+    val products: List<Product>? = null,
+    val nextCursor: String? = null,
+    val total: Int? = null,
+) {
+    val items: List<Product> get() = data ?: products.orEmpty()
+}
+
 @Serializable
 data class ProductPricing(
     @SerialName("selling_price") @Serializable(with = BigDecimalSerializer::class) val sellingPrice: BigDecimal,

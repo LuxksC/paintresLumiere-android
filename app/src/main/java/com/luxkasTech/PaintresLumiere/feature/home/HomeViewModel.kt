@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.common.matchesSearch
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
+import com.luxkasTech.PaintresLumiere.core.network.Page
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.cart.CartRepository
 import com.luxkasTech.PaintresLumiere.data.product.CategorySummary
@@ -42,6 +43,9 @@ data class HomeUiState(
     /** Units in the cart, for the badge on the cart icon. */
     val cartCount: Int = 0,
     val query: String = "",
+    /** Cursor of the next catalog page; null when everything is loaded. */
+    val nextCursor: String? = null,
+    val isLoadingMore: Boolean = false,
 ) {
     val isSearching: Boolean get() = query.isNotBlank()
 
@@ -95,7 +99,7 @@ class HomeViewModel @Inject constructor(
     private fun load() {
         viewModelScope.launch {
             val popular = async { runCatching { productRepository.getPopularProducts(POPULAR_LIMIT) } }
-            val catalog = async { runCatching { productRepository.getProducts() } }
+            val catalog = async { runCatching { productRepository.getCatalogPage(cursor = null) } }
             val categories = async { runCatching { productRepository.getCategories() } }
             val catalogResult = catalog.await()
             val popularResult = popular.await()
@@ -106,7 +110,8 @@ class HomeViewModel @Inject constructor(
 
             _state.update { current ->
                 current.copy(
-                    catalog = catalogResult.getOrNull()?.sortedWith(compareBy(collator) { it.name }) ?: current.catalog,
+                    catalog = catalogResult.getOrNull()?.let(::orderFirstPage) ?: current.catalog,
+                    nextCursor = catalogResult.getOrNull()?.nextCursor ?: if (catalogResult.isSuccess) null else current.nextCursor,
                     popular = popularResult.getOrNull() ?: current.popular,
                     categories = categoriesResult.getOrNull() ?: current.categories,
                     isLoading = false,
@@ -117,6 +122,31 @@ class HomeViewModel @Inject constructor(
             if (catalogResult.isFailure) messages.showNetworkError()
         }
     }
+
+    /** Loads the next catalog page when the grid reaches its end. */
+    fun loadMore() {
+        val cursor = _state.value.nextCursor ?: return
+        if (_state.value.isLoadingMore) return
+        _state.update { it.copy(isLoadingMore = true) }
+        viewModelScope.launch {
+            try {
+                val page = productRepository.getCatalogPage(cursor)
+                _state.update { it.copy(catalog = it.catalog + page.data, nextCursor = page.nextCursor, isLoadingMore = false) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // Keep the cursor: reaching the end again retries.
+                _state.update { it.copy(isLoadingMore = false) }
+            }
+        }
+    }
+
+    /**
+     * An unpaginated response is the whole catalog, sorted by name like iOS. A paginated one keeps
+     * the server order — sorting page by page would reshuffle the grid as pages arrive.
+     */
+    private fun orderFirstPage(page: Page<Product>): List<Product> =
+        if (page.nextCursor == null) page.data.sortedWith(compareBy(collator) { it.name }) else page.data
 
     companion object {
         const val POPULAR_LIMIT = 5
