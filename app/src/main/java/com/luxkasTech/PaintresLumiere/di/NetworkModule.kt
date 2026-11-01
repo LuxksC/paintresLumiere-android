@@ -2,6 +2,7 @@ package com.luxkasTech.PaintresLumiere.di
 
 import com.luxkasTech.PaintresLumiere.BuildConfig
 import com.luxkasTech.PaintresLumiere.core.network.AuthInterceptor
+import com.luxkasTech.PaintresLumiere.core.network.UnauthorizedInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,12 +31,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient =
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        unauthorizedInterceptor: UnauthorizedInterceptor,
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor(authInterceptor)
+            .addInterceptor(unauthorizedInterceptor)
             .apply {
                 if (BuildConfig.DEBUG) {
                     addInterceptor(
