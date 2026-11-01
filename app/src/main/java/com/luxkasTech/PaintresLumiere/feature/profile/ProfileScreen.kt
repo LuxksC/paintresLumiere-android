@@ -55,12 +55,17 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PaintresLumiereThe
 import com.luxkasTech.PaintresLumiere.data.profile.UserProfile
 
 @Composable
-fun ProfileRoute(viewModel: ProfileViewModel = hiltViewModel()) {
+fun ProfileRoute(
+    onEditProfile: () -> Unit,
+    viewModel: ProfileViewModel = hiltViewModel(),
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     ProfileScreen(
         state = state,
         actions = ProfileActions(
-            onMenuItemClick = viewModel::onMenuItemClick,
+            onMenuItemClick = { item ->
+                if (item == ProfileMenuItem.EditProfile) onEditProfile() else viewModel.onMenuItemClick(item)
+            },
             onLogout = viewModel::logout,
             onDeleteAccount = viewModel::requestDeleteAccount,
             onConfirmDelete = viewModel::confirmDeleteAccount,
