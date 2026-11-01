@@ -105,6 +105,7 @@ class MockFixturesTest {
         }
         val created = apiCall { orders.createOrder(CreateOrderRequest()) }
         assertEquals(OrderStatus.RECEIVED, created.status)
+        assertEquals(created.id, apiCall { orders.getOrder(created.id) }.id)
     }
 
     @Test
