@@ -36,6 +36,7 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
 import com.luxkasTech.PaintresLumiere.feature.admin.AdminHomeRoute
 import com.luxkasTech.PaintresLumiere.feature.admin.AdminSection
+import com.luxkasTech.PaintresLumiere.feature.admin.products.AdminProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
@@ -53,6 +54,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object CartDestination
 @Serializable data object ProfileDestination
 @Serializable data object AdminDestination
+@Serializable data object AdminProductsDestination
 
 private enum class MainTab(
     val graph: Any,
@@ -144,7 +146,23 @@ fun MainFlow(
                     }
                 }
                 navigation<AdminGraph>(startDestination = AdminDestination) {
-                    composable<AdminDestination> { AdminHomeRoute(onSectionSelected = onAdminSectionSelected) }
+                    composable<AdminDestination> {
+                        AdminHomeRoute(
+                            onSectionSelected = { section ->
+                                when (section) {
+                                    AdminSection.Products -> navController.navigate(AdminProductsDestination)
+                                    else -> onAdminSectionSelected(section)
+                                }
+                            },
+                        )
+                    }
+                    composable<AdminProductsDestination> {
+                        AdminProductsRoute(
+                            onBack = { navController.popBackStack() },
+                            onProductSelected = { onAdminSectionSelected(AdminSection.Products) },
+                            onCreateProduct = { onAdminSectionSelected(AdminSection.Products) },
+                        )
+                    }
                 }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
                     composable<ProfileDestination> { ProfileRoute() }
