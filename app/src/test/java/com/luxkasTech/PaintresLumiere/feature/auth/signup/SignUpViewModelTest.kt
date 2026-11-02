@@ -52,6 +52,24 @@ class SignUpViewModelTest {
     }
 
     @Test
+    fun `an empty confirmation blocks submission`() {
+        fillValidForm()
+        viewModel.onConfirmPasswordChange("")
+        assertFalse(viewModel.state.value.canSubmit)
+        viewModel.createAccount()
+        assertTrue(repository.signUpCalls.isEmpty())
+        assertEquals(UiText.Resource(R.string.auth_signup_error_confirm), viewModel.state.value.confirmPasswordError)
+    }
+
+    @Test
+    fun `a second tap while the request is running does not sign up twice`() {
+        fillValidForm()
+        viewModel.createAccount()
+        viewModel.createAccount()
+        assertEquals(1, repository.signUpCalls.size)
+    }
+
+    @Test
     fun `validation flags every invalid field`() {
         viewModel.onNameChange("L")
         viewModel.onEmailChange("nope")
@@ -61,7 +79,8 @@ class SignUpViewModelTest {
         assertNotNull(s.nameError)
         assertNotNull(s.emailError)
         assertNotNull(s.passwordError)
-        assertNull(s.confirmPasswordError)
+        // The confirmation was never typed, and it is required.
+        assertNotNull(s.confirmPasswordError)
     }
 
     @Test

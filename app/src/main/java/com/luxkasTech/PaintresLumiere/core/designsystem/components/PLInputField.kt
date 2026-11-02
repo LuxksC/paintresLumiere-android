@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luxkasTech.PaintresLumiere.R
@@ -113,7 +114,15 @@ fun PLInputField(
                 decorationBox = { inner ->
                     Box(contentAlignment = Alignment.CenterStart) {
                         if (value.isEmpty()) {
-                            Text(placeholder, style = PLFont.body, color = PLColor.textDisabled)
+                            // Single line like the field itself (and like a SwiftUI placeholder): a long mask
+                            // hint in a half-width field is truncated instead of wrapping.
+                            Text(
+                                placeholder,
+                                style = PLFont.body,
+                                color = PLColor.textDisabled,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
                         }
                         inner()
                     }
