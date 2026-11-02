@@ -8,6 +8,7 @@ import com.luxkasTech.PaintresLumiere.core.network.ApiError
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,9 +32,13 @@ data class SignUpUiState(
     val confirmPasswordError: UiText? = null,
     val generalError: UiText? = null,
 ) {
-    val passwordsMatch: Boolean get() = confirmPassword.isEmpty() || password == confirmPassword
+    /**
+     * The confirmation is required, as issue #14 asks. iOS treats an empty confirmation as a
+     * match, which lets an account be created without ever confirming the password.
+     */
+    val passwordsMatch: Boolean get() = password == confirmPassword
 
-    /** Same rule as iOS `SignUpViewModel.canSubmit`. */
+    /** Same rule as iOS `SignUpViewModel.canSubmit`, except that the confirmation is required. */
     val canSubmit: Boolean
         get() = name.trim().length >= MIN_NAME && email.contains('@') && password.length >= MIN_PASSWORD &&
             passwordsMatch && !isLoading
@@ -62,7 +67,7 @@ class SignUpViewModel @Inject constructor(
     fun onCnpjChange(value: String) = _state.update { it.copy(cnpj = value) }
 
     fun createAccount() {
-        if (!validate()) return
+        if (_state.value.isLoading || !validate()) return
         val s = _state.value
         _state.update { it.copy(isLoading = true, generalError = null) }
         viewModelScope.launch {
@@ -71,6 +76,8 @@ class SignUpViewModel @Inject constructor(
             } catch (e: ApiError.Conflict) {
                 // Email, CPF or CNPJ already registered — the server message says which.
                 _state.update { it.copy(isLoading = false, emailError = e.toUiText()) }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, generalError = e.toUiText()) }
             }
