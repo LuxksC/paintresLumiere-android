@@ -6,6 +6,8 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Decodes an API enum without ever throwing on a value the app doesn't know yet — it falls back to
@@ -25,7 +27,12 @@ open class UnknownTolerantEnumSerializer<T : Enum<T>>(
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(serialName, PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): T {
-        val raw = decoder.decodeString()
+        // A `null` or non-string value is just another unknown value: it must not fail the list either.
+        val raw = if (decoder is JsonDecoder) {
+            (decoder.decodeJsonElement() as? JsonPrimitive)?.takeIf { it.isString }?.content
+        } else {
+            decoder.decodeString()
+        }
         return values.firstOrNull { it != unknown && rawValue(it) == raw } ?: unknown
     }
 
