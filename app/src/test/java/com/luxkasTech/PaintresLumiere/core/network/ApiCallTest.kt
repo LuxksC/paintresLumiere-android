@@ -89,6 +89,14 @@ class ApiCallTest {
     }
 
     @Test
+    fun `a null or non string error field leaves the message empty`() = runTest {
+        for (body in listOf("""{"error":null}""", """{"error":42}""", """{"error":"  "}""")) {
+            val error = failureFor(MockResponse().setResponseCode(409).setBody(body)) as ApiError.Conflict
+            assertNull(body, error.serverMessage)
+        }
+    }
+
+    @Test
     fun `a malformed success body maps to Decoding`() = runTest {
         assertTrue(failureFor(MockResponse().setBody("""{"nope":1}""")) is ApiError.Decoding)
     }
