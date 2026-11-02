@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -80,6 +81,7 @@ private class LastShown {
 @Composable
 private fun Toast(message: ToastMessage, onDismiss: () -> Unit) {
     var dragOffset by remember(message.id) { mutableFloatStateOf(0f) }
+    val dismissThresholdPx = with(LocalDensity.current) { DismissDragThreshold.toPx() }
     val shape = RoundedCornerShape(PLRadius.card)
     Row(
         horizontalArrangement = Arrangement.spacedBy(PLSpacing.md),
@@ -89,7 +91,7 @@ private fun Toast(message: ToastMessage, onDismiss: () -> Unit) {
             .draggable(
                 orientation = Orientation.Vertical,
                 state = rememberDraggableState { dragOffset += it },
-                onDragStopped = { if (dragOffset < -120f) onDismiss() else dragOffset = 0f },
+                onDragStopped = { if (dragOffset < -dismissThresholdPx) onDismiss() else dragOffset = 0f },
             )
             .shadow(12.dp, shape)
             .background(message.type.background, shape)
@@ -111,6 +113,9 @@ private fun Toast(message: ToastMessage, onDismiss: () -> Unit) {
         }
     }
 }
+
+/** Upward drag that dismisses the toast — the same 40pt as iOS `ToastView`. */
+private val DismissDragThreshold = 40.dp
 
 private val ToastType.foreground: Color
     get() = when (this) {
