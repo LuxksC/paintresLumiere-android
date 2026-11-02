@@ -13,6 +13,7 @@ class MockRouterTest {
         "GET/products/sku/_.meta.json" to """{"status":404,"delayMs":5}""",
         "PUT/products/_.json" to "updated",
         "GET/a/_/c.json" to "middle-wildcard",
+        "GET/products@category=names.json" to "names-only",
     )
     private val router = MockRouter({ files[it] }, defaultDelayMs = 0)
 
@@ -47,5 +48,11 @@ class MockRouterTest {
         val response = router.resolve("GET", "/nope")
         assertEquals(404, response.status)
         assertTrue(response.body.contains("No mock for GET /nope"))
+    }
+
+    @Test
+    fun `a query-specific file wins, otherwise the plain path answers`() {
+        assertEquals("names-only", router.resolve("GET", "/products", "category=names").body)
+        assertEquals("list", router.resolve("GET", "/products", "category=letters").body)
     }
 }
