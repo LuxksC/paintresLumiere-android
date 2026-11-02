@@ -91,4 +91,12 @@
     <string name="auth_signup_error_email">Please enter a valid email address.</string>
     <string name="auth_signup_error_password">Password must be at least 8 characters.</string>
     <string name="auth_signup_error_confirm">Passwords do not match.</string>
+
+    <!-- Auth · Forgot password -->
+    <string name="auth_forgot_title">Reset password</string>
+    <string name="auth_forgot_subtitle">Enter your email and we\'ll send you a reset link.</string>
+    <string name="auth_forgot_submit">Send reset link</string>
+    <string name="auth_forgot_sent">If this email is registered, you will receive a reset link shortly.</string>
+    <string name="auth_forgot_spam_hint">Didn\'t receive it? Check your spam folder or try again.</string>
+    <string name="auth_forgot_back_to_login">Back to sign in</string>
 </resources>
