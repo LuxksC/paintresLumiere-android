@@ -1,5 +1,6 @@
 package com.luxkasTech.PaintresLumiere.testing
 
+import com.luxkasTech.PaintresLumiere.data.product.CategorySummary
 import com.luxkasTech.PaintresLumiere.data.product.Product
 import com.luxkasTech.PaintresLumiere.data.product.ProductPricing
 import com.luxkasTech.PaintresLumiere.data.product.ProductRepository
@@ -13,6 +14,9 @@ class FakeProductRepository : ProductRepository {
     var variants: Result<List<ProductVariant>> = Result.success(emptyList())
     var productCalls = 0
     val variantRequests = mutableListOf<String>()
+    var categories: Result<List<CategorySummary>> = Result.success(emptyList())
+
+    override suspend fun getCategories(): List<CategorySummary> = categories.getOrThrow()
 
     override suspend fun getProducts(): List<Product> {
         productCalls++
