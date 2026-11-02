@@ -24,6 +24,9 @@ interface AuthRepository {
         cnpj: String?,
     )
 
+    /** Exchanges a Google ID token for the app's JWT (`POST /auth/google`); creates the account if new. */
+    suspend fun authenticateWithGoogle(idToken: String)
+
     /** Best effort server logout; the local session always ends, even offline. */
     suspend fun logout()
 
@@ -59,6 +62,11 @@ class DefaultAuthRepository @Inject constructor(
             cnpj = cnpj?.takeIf { it.isNotBlank() },
         )
         val response = apiCall { api.signUp(request) }
+        session.startSession(response.accessToken)
+    }
+
+    override suspend fun authenticateWithGoogle(idToken: String) {
+        val response = apiCall { api.authenticateWithGoogle(GoogleAuthRequest(idToken)) }
         session.startSession(response.accessToken)
     }
 

@@ -20,6 +20,14 @@ class FakeAuthRepository : AuthRepository {
     val signUpCalls = mutableListOf<SignUpCall>()
     var signUpResult: CompletableDeferred<Unit> = CompletableDeferred(Unit)
 
+    val googleTokens = mutableListOf<String>()
+    var googleResult: CompletableDeferred<Unit> = CompletableDeferred(Unit)
+
+    override suspend fun authenticateWithGoogle(idToken: String) {
+        googleTokens += idToken
+        googleResult.await()
+    }
+
     var logoutCalls = 0
     var deleteCalls = 0
     var deleteResult: CompletableDeferred<Unit> = CompletableDeferred(Unit)
