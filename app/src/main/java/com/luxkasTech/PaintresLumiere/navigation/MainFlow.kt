@@ -60,6 +60,7 @@ import kotlinx.serialization.json.Json
 import com.luxkasTech.PaintresLumiere.feature.orders.detail.OrderDetailRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
+import com.luxkasTech.PaintresLumiere.feature.profile.edit.EditProfileRoute
 import kotlinx.serialization.Serializable
 
 // Tab graphs
@@ -76,6 +77,7 @@ import kotlinx.serialization.Serializable
 @Serializable data class OrderConfirmationDestination(val orderId: String, val number: String, val total: String)
 @Serializable data class CategoryProductsDestination(val category: String)
 @Serializable data object ProfileDestination
+@Serializable data object EditProfileDestination
 @Serializable data object OrdersDestination
 @Serializable data class OrderDetailDestination(val orderId: String)
 @Serializable data class PaymentMethodDestination(val orderId: String)
@@ -315,7 +317,12 @@ fun MainFlow(
                     }
                 }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
-                    composable<ProfileDestination> { ProfileRoute() }
+                    composable<ProfileDestination> {
+                        ProfileRoute(onEditProfile = { navController.navigate(EditProfileDestination) })
+                    }
+                    composable<EditProfileDestination> {
+                        EditProfileRoute(onFinished = { navController.popBackStack() })
+                    }
                 }
             }
         }
