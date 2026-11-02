@@ -27,6 +27,10 @@ interface AuthRepository {
     /** Exchanges a Google ID token for the app's JWT (`POST /auth/google`); creates the account if new. */
     suspend fun authenticateWithGoogle(idToken: String)
 
+    suspend fun requestPasswordReset(email: String)
+
+    suspend fun resetPassword(token: String, newPassword: String)
+
     /** Best effort server logout; the local session always ends, even offline. */
     suspend fun logout()
 
@@ -69,6 +73,11 @@ class DefaultAuthRepository @Inject constructor(
         val response = apiCall { api.authenticateWithGoogle(GoogleAuthRequest(idToken)) }
         session.startSession(response.accessToken)
     }
+
+    override suspend fun requestPasswordReset(email: String) = apiCall { api.forgotPassword(ForgotPasswordRequest(email.trim())) }
+
+    override suspend fun resetPassword(token: String, newPassword: String) =
+        apiCall { api.resetPassword(ResetPasswordRequest(token, newPassword)) }
 
     override suspend fun logout() {
         try {
