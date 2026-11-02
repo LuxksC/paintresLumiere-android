@@ -8,7 +8,7 @@
     </style>
 
     <!-- Launch screen (androidx.core:core-splashscreen): brand background + logo, then hands over
-         to Theme.PaintresLumiere. Same backport on Android 6–11, native API on 12+. -->
+         to Theme.PaintresLumiere. Backport on Android 7–11 (minSdk 24), native API on 12+. -->
     <style name="Theme.PaintresLumiere.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/background_primary</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
