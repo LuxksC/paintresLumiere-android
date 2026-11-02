@@ -27,6 +27,7 @@ fun AppNavHost(
     viewModel: RootViewModel = hiltViewModel(),
 ) {
     val isAuthenticated by viewModel.isAuthenticated.collectAsStateWithLifecycle()
+    val isAdmin by viewModel.isAdmin.collectAsStateWithLifecycle()
     Crossfade(
         targetState = isAuthenticated,
         animationSpec = tween(300),
@@ -34,7 +35,7 @@ fun AppNavHost(
         label = "rootFlow",
     ) { signedIn ->
         if (signedIn) {
-            MainFlow()
+            MainFlow(isAdmin = isAdmin, onAdminSectionSelected = viewModel::onAdminSectionSelected)
         } else {
             AuthFlow()
         }
