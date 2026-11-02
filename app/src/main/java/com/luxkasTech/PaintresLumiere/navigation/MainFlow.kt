@@ -33,6 +33,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
@@ -41,7 +42,10 @@ import com.luxkasTech.PaintresLumiere.feature.admin.AdminSection
 import com.luxkasTech.PaintresLumiere.feature.admin.form.ProductFormRoute
 import com.luxkasTech.PaintresLumiere.feature.admin.group.AdminProductGroupRoute
 import com.luxkasTech.PaintresLumiere.feature.admin.products.AdminProductsRoute
+import com.luxkasTech.PaintresLumiere.core.designsystem.format.brlFormatted
 import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
+import com.luxkasTech.PaintresLumiere.feature.checkout.CheckoutRoute
+import com.luxkasTech.PaintresLumiere.feature.checkout.OrderConfirmationScreen
 import com.luxkasTech.PaintresLumiere.feature.category.CategoryProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
 import com.luxkasTech.PaintresLumiere.feature.orders.OrdersRoute
@@ -60,6 +64,8 @@ import kotlinx.serialization.Serializable
 @Serializable data object HomeDestination
 @Serializable data class ProductDetailsDestination(val sku: String)
 @Serializable data object CartDestination
+@Serializable data object CheckoutDestination
+@Serializable data class OrderConfirmationDestination(val orderId: String, val number: String, val total: String)
 @Serializable data class CategoryProductsDestination(val category: String)
 @Serializable data object ProfileDestination
 @Serializable data object OrdersDestination
@@ -164,6 +170,33 @@ fun MainFlow(
                         CartRoute(
                             onBack = { navController.popBackStack() },
                             onBrowseCatalog = { navController.popBackStack(HomeDestination, inclusive = false) },
+                            onCheckoutRequested = { navController.navigate(CheckoutDestination) },
+                        )
+                    }
+                    composable<CheckoutDestination> {
+                        CheckoutRoute(
+                            onBack = { navController.popBackStack() },
+                            onOrderPlaced = { order ->
+                                navController.navigate(
+                                    OrderConfirmationDestination(order.id, order.displayNumber, order.totalAmount.brlFormatted()),
+                                ) {
+                                    // Cart and checkout leave the stack: Back can never resubmit the order.
+                                    popUpTo<CartDestination> { inclusive = true }
+                                }
+                            },
+                        )
+                    }
+                    composable<OrderConfirmationDestination> { entry ->
+                        val args = entry.toRoute<OrderConfirmationDestination>()
+                        OrderConfirmationScreen(
+                            orderNumber = args.number,
+                            total = args.total,
+                            onViewOrder = {
+                                navController.navigate(OrderDetailDestination(args.orderId)) {
+                                    popUpTo<OrderConfirmationDestination> { inclusive = true }
+                                }
+                            },
+                            onBackToCatalog = { navController.popBackStack(HomeDestination, inclusive = false) },
                         )
                     }
                 }
