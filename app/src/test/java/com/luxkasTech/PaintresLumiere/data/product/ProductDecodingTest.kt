@@ -54,6 +54,23 @@ class ProductDecodingTest {
     }
 
     @Test
+    fun `null or non string enum values degrade to UNKNOWN without failing the list`() {
+        val broken = variant("1", "names", "active", "gold")
+            .replace("\"category\": \"names\"", "\"category\": null")
+            .replace("\"status\": \"active\"", "\"status\": 7")
+            .replace("\"color\": \"gold\"", "\"color\": {}")
+        val response = json.decodeFromString<ProductsResponse<ProductVariant>>(
+            """{"products":[$broken,${variant("2", "letters", "active", "gold")}]}""",
+        )
+        assertEquals(2, response.products.size)
+        val unknown = response.products[0]
+        assertEquals(ProductCategory.UNKNOWN, unknown.category)
+        assertEquals(ProductStatus.UNKNOWN, unknown.status)
+        assertEquals(ProductColor.UNKNOWN, unknown.color)
+        assertEquals(ProductColor.GOLD, response.products[1].color)
+    }
+
+    @Test
     fun `an empty string never matches the UNKNOWN sentinel as a known value`() {
         val v = json.decodeFromString<ProductVariant>(variant("1", "", "", ""))
         assertEquals(ProductStatus.UNKNOWN, v.status)
