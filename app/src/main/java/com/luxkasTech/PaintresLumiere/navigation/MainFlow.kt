@@ -4,6 +4,8 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ReceiptLong
+import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -42,6 +44,7 @@ import com.luxkasTech.PaintresLumiere.feature.admin.products.AdminProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
 import com.luxkasTech.PaintresLumiere.feature.category.CategoryProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
+import com.luxkasTech.PaintresLumiere.feature.orders.OrdersRoute
 import com.luxkasTech.PaintresLumiere.feature.product.details.ProductDetailsRoute
 import com.luxkasTech.PaintresLumiere.feature.profile.ProfileRoute
 import kotlinx.serialization.Serializable
@@ -49,6 +52,7 @@ import kotlinx.serialization.Serializable
 // Tab graphs
 @Serializable data object HomeGraph
 @Serializable data object ProfileGraph
+@Serializable data object OrdersGraph
 @Serializable data object AdminGraph
 
 // Destinations
@@ -57,6 +61,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object CartDestination
 @Serializable data class CategoryProductsDestination(val category: String)
 @Serializable data object ProfileDestination
+@Serializable data object OrdersDestination
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
 @Serializable data class AdminProductGroupDestination(val sku: String)
@@ -79,6 +84,14 @@ private enum class MainTab(
         R.string.tab_home,
         Icons.Outlined.Home,
         Icons.Filled.Home,
+    ),
+    Orders(
+        OrdersGraph,
+        { d -> d.hierarchy.any { it.hasRoute<OrdersGraph>() } },
+        { d -> d.hasRoute<OrdersDestination>() },
+        R.string.tab_orders,
+        Icons.AutoMirrored.Outlined.ReceiptLong,
+        Icons.AutoMirrored.Filled.ReceiptLong,
     ),
     Admin(
         AdminGraph,
@@ -119,13 +132,7 @@ fun MainFlow(
         containerColor = PLColor.backgroundPrimary,
         bottomBar = {
             if (showBottomBar) {
-                MainBottomBar(tabs, destination) { tab ->
-                    navController.navigate(tab.graph) {
-                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                }
+                MainBottomBar(tabs, destination) { tab -> navController.navigateToTab(tab.graph) }
             }
         },
     ) { padding ->
@@ -155,6 +162,14 @@ fun MainFlow(
                         CartRoute(
                             onBack = { navController.popBackStack() },
                             onBrowseCatalog = { navController.popBackStack(HomeDestination, inclusive = false) },
+                        )
+                    }
+                }
+                navigation<OrdersGraph>(startDestination = OrdersDestination) {
+                    composable<OrdersDestination> {
+                        OrdersRoute(
+                            onOrderSelected = { /* Order detail lands in #47. */ },
+                            onBrowseCatalog = { navController.navigateToTab(HomeGraph) },
                         )
                     }
                 }
@@ -192,6 +207,15 @@ fun MainFlow(
                 }
             }
         }
+    }
+}
+
+/** Switches tab keeping each tab's back stack (saved and restored). */
+private fun NavHostController.navigateToTab(graph: Any) {
+    navigate(graph) {
+        popUpTo(this@navigateToTab.graph.findStartDestination().id) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 
