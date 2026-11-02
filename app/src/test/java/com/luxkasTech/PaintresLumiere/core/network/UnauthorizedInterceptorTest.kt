@@ -68,6 +68,22 @@ class UnauthorizedInterceptorTest {
     }
 
     @Test
+    fun `a late 401 for a replaced token keeps the new session`() {
+        val session = SessionManager(MemoryStorage("old-jwt"))
+        val client = OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(session))
+            .addInterceptor(UnauthorizedInterceptor(session))
+            // The user signs in again while the old request is still in flight.
+            .addInterceptor { chain -> session.startSession("new-jwt"); chain.proceed(chain.request()) }
+            .build()
+        server.enqueue(MockResponse().setResponseCode(401))
+        get(client)
+        assertEquals("Bearer old-jwt", server.takeRequest().getHeader("Authorization"))
+        assertTrue(session.isAuthenticated.value)
+        assertEquals("new-jwt", session.accessToken())
+    }
+
+    @Test
     fun `other errors keep the session`() {
         val session = SessionManager(MemoryStorage("jwt"))
         server.enqueue(MockResponse().setResponseCode(500))
