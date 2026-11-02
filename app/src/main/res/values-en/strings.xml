@@ -150,4 +150,23 @@
     <string name="profile_avatar">Profile picture</string>
     <string name="auth_login_google">Continue with Google</string>
     <string name="auth_login_google_failed">Google sign-in failed. Please try again.</string>
+
+    <!-- Cart -->
+    <string name="cart_title">Cart</string>
+    <string name="cart_clear">Clear</string>
+    <string name="cart_clear_title">Clear the cart?</string>
+    <string name="cart_clear_confirm">Clear</string>
+    <string name="cart_remove_item">Remove %1$s</string>
+    <string name="cart_flag_unavailable">Unavailable — remove it to check out</string>
+    <string name="cart_flag_stock">Only %1$d in stock — adjust the quantity</string>
+    <string name="cart_subtotal">Subtotal</string>
+    <string name="cart_discount">Discounts</string>
+    <string name="cart_total">Total</string>
+    <string name="cart_checkout">Checkout</string>
+    <string name="cart_empty_title">Your cart is empty</string>
+    <string name="cart_empty_message">Browse the catalog and add the pieces you want to resell.</string>
+    <string name="cart_browse">Browse catalog</string>
+    <string name="cart_icon_a11y_count">Cart, %1$d items</string>
+    <string name="cart_error_stock_title">Not enough stock</string>
+    <string name="cart_error_stock_message">Available to add: %1$d</string>
 </resources>
