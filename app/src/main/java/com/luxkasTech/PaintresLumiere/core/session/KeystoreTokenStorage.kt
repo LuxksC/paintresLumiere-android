@@ -9,6 +9,7 @@ import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.security.GeneralSecurityException
 import java.security.KeyStore
+import java.security.ProviderException
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -39,27 +40,45 @@ class KeystoreTokenStorage @Inject constructor(
         val stored = prefs.getString(KEY_TOKEN, null) ?: return null
         return try {
             val bytes = Base64.decode(stored, Base64.NO_WRAP)
+            require(bytes.size > IV_LENGTH) { "payload shorter than the IV" }
             val iv = bytes.copyOfRange(0, IV_LENGTH)
             val cipherText = bytes.copyOfRange(IV_LENGTH, bytes.size)
             val cipher = Cipher.getInstance(TRANSFORMATION)
             cipher.init(Cipher.DECRYPT_MODE, getOrCreateKey(), GCMParameterSpec(TAG_LENGTH_BITS, iv))
             String(cipher.doFinal(cipherText), Charsets.UTF_8)
         } catch (e: GeneralSecurityException) {
-            Log.w(TAG, "Stored token could not be decrypted; clearing session", e)
-            clear()
-            null
+            discard("Stored token could not be decrypted", e)
+        } catch (e: ProviderException) {
+            // The Keystore reports some hardware/key failures as this unchecked exception.
+            discard("Keystore failed while decrypting the stored token", e)
         } catch (e: IllegalArgumentException) {
-            Log.w(TAG, "Stored token is malformed; clearing session", e)
-            clear()
-            null
+            discard("Stored token is malformed", e)
         }
     }
 
+    /**
+     * Like the iOS Keychain save, a failure here is not fatal: [SessionManager] keeps the token in
+     * memory, so the user stays signed in until the app is closed and simply logs in again next time.
+     */
     override fun write(token: String) {
-        val cipher = Cipher.getInstance(TRANSFORMATION)
-        cipher.init(Cipher.ENCRYPT_MODE, getOrCreateKey())
-        val payload = cipher.iv + cipher.doFinal(token.toByteArray(Charsets.UTF_8))
-        prefs.edit().putString(KEY_TOKEN, Base64.encodeToString(payload, Base64.NO_WRAP)).apply()
+        try {
+            val cipher = Cipher.getInstance(TRANSFORMATION)
+            cipher.init(Cipher.ENCRYPT_MODE, getOrCreateKey())
+            val payload = cipher.iv + cipher.doFinal(token.toByteArray(Charsets.UTF_8))
+            prefs.edit().putString(KEY_TOKEN, Base64.encodeToString(payload, Base64.NO_WRAP)).apply()
+        } catch (e: GeneralSecurityException) {
+            Log.w(TAG, "Token could not be encrypted; it will not survive an app restart", e)
+            clear()
+        } catch (e: ProviderException) {
+            Log.w(TAG, "Keystore failed while encrypting the token; it will not survive an app restart", e)
+            clear()
+        }
+    }
+
+    private fun discard(reason: String, e: Exception): String? {
+        Log.w(TAG, "$reason; clearing session", e)
+        clear()
+        return null
     }
 
     override fun clear() {
