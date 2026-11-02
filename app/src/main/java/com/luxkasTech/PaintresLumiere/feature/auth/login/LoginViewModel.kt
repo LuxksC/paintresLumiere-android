@@ -6,6 +6,7 @@ import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,6 +47,8 @@ class LoginViewModel @Inject constructor(
             try {
                 authRepository.login(current.email, current.password)
                 // Keep the loading state: the screen is about to be replaced by the Main flow.
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.toUiText()) }
             }
