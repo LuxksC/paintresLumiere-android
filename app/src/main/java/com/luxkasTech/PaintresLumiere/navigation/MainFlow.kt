@@ -36,6 +36,8 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
 import com.luxkasTech.PaintresLumiere.feature.admin.AdminHomeRoute
 import com.luxkasTech.PaintresLumiere.feature.admin.AdminSection
+import com.luxkasTech.PaintresLumiere.feature.admin.form.ProductFormRoute
+import com.luxkasTech.PaintresLumiere.feature.admin.group.AdminProductGroupRoute
 import com.luxkasTech.PaintresLumiere.feature.admin.products.AdminProductsRoute
 import com.luxkasTech.PaintresLumiere.feature.cart.CartRoute
 import com.luxkasTech.PaintresLumiere.feature.home.HomeRoute
@@ -55,6 +57,8 @@ import kotlinx.serialization.Serializable
 @Serializable data object ProfileDestination
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
+@Serializable data class AdminProductGroupDestination(val sku: String)
+@Serializable data class AdminProductFormDestination(val sku: String? = null, val variantId: String? = null)
 
 private enum class MainTab(
     val graph: Any,
@@ -159,9 +163,19 @@ fun MainFlow(
                     composable<AdminProductsDestination> {
                         AdminProductsRoute(
                             onBack = { navController.popBackStack() },
-                            onProductSelected = { onAdminSectionSelected(AdminSection.Products) },
-                            onCreateProduct = { onAdminSectionSelected(AdminSection.Products) },
+                            onProductSelected = { sku -> navController.navigate(AdminProductGroupDestination(sku)) },
+                            onCreateProduct = { navController.navigate(AdminProductFormDestination()) },
                         )
+                    }
+                    composable<AdminProductGroupDestination> {
+                        AdminProductGroupRoute(
+                            onBack = { navController.popBackStack() },
+                            onEditVariant = { sku, id -> navController.navigate(AdminProductFormDestination(sku, id)) },
+                            onAddVariant = { sku -> navController.navigate(AdminProductFormDestination(sku)) },
+                        )
+                    }
+                    composable<AdminProductFormDestination> {
+                        ProductFormRoute(onFinished = { navController.popBackStack() })
                     }
                 }
                 navigation<ProfileGraph>(startDestination = ProfileDestination) {
