@@ -42,8 +42,10 @@ internal fun HttpException.toApiError(): ApiError {
     }
 }
 
+/** Like iOS `APIErrorBody`, only a non-blank string `error` counts; `null` or a number is no message. */
 internal fun parseErrorMessage(body: String): String? = try {
-    errorBodyJson.parseToJsonElement(body).jsonObject["error"]?.jsonPrimitive?.content
+    errorBodyJson.parseToJsonElement(body).jsonObject["error"]?.jsonPrimitive
+        ?.takeIf { it.isString }?.content?.takeIf { it.isNotBlank() }
 } catch (e: SerializationException) {
     null
 } catch (e: IllegalArgumentException) {
