@@ -1,0 +1,31 @@
+{
+  "id": "cart-1",
+  "items": [
+    {
+      "id": "ci-1",
+      "productId": "00000000-0000-4000-8000-000000000001",
+      "quantity": 2,
+      "product": {
+        "name": "Luna",
+        "sku": "LUNA",
+        "slug": "luna-gold-20x8",
+        "color": "gold",
+        "dimensions": {
+          "width": 20,
+          "height": 8,
+          "thickness": 3,
+          "unit": "cm"
+        },
+        "image": null,
+        "sellingPrice": 49.9,
+        "discountRate": 0.15,
+        "finalPrice": 42.42,
+        "stockQuantity": 12,
+        "status": "active"
+      }
+    }
+  ],
+  "subtotal": 99.8,
+  "discountTotal": 14.96,
+  "total": 84.84
+}
