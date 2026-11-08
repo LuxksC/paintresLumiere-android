@@ -68,7 +68,9 @@ com.luxkasTech.PaintresLumiere
 
 - Every enum decoded from the API **must tolerate unknown values** (fallback to `UNKNOWN`) — one
   new category or color on the backend must never take down a whole list (iOS AD-005).
-- The catalog returns **one row per variant**: the same SKU spans several rows by color/dimension.
+- `GET /products` and `GET /products/popular` return **one row per SKU** (the API deduplicates,
+  keeping the oldest variant of each group); `GET /products/sku/{sku}` returns **one row per
+  variant** (the same SKU spans several rows by color/dimension).
 - Never show a raw HTTP status to the user; map through `ApiError`.
 
 ## Strings
