@@ -17,7 +17,7 @@ class MockInterceptor(private val router: MockRouter) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val mock = router.resolve(request.method, request.url.encodedPath)
+        val mock = router.resolve(request.method, request.url.encodedPath, request.url.query)
         if (mock.delayMs > 0) Thread.sleep(mock.delayMs)
         return Response.Builder()
             .request(request)
