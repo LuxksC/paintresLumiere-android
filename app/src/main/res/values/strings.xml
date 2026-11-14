@@ -152,4 +152,6 @@
     <string name="profile_delete_message">Sua conta será desativada e você sairá do app. Esta ação não pode ser desfeita pelo app.</string>
     <string name="profile_delete_confirm">Excluir</string>
     <string name="profile_avatar">Foto de perfil</string>
+    <string name="auth_login_google">Continuar com Google</string>
+    <string name="auth_login_google_failed">Não foi possível entrar com o Google. Tente novamente.</string>
 </resources>
