@@ -15,6 +15,16 @@ plugins {
 val localProperties = Properties().apply {
     rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use(::load)
 }
+/**
+ * API base URL per environment (iOS card PL-168, backend card PL-208). Override in
+ * local.properties / CI with `api.url.debug`, `api.url.staging`, `api.url.release`; until the
+ * backend splits pre-release and production, all three fall back to the current deployment.
+ */
+val defaultApiUrl = "https://glj3lixjr7.execute-api.sa-east-1.amazonaws.com/"
+fun apiUrlFor(buildType: String): String =
+    (localProperties.getProperty("api.url.$buildType") ?: providers.gradleProperty("api.url.$buildType").orNull ?: defaultApiUrl)
+        .let { if (it.endsWith("/")) it else "$it/" }
+
 val googleWebClientId: String =
     (localProperties.getProperty("google.webClientId") ?: providers.gradleProperty("google.webClientId").orNull).orEmpty()
 
@@ -34,7 +44,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GOOGLE_WEB_CLIENT_ID", "\"$googleWebClientId\"")
-        buildConfigField("String", "API_BASE_URL", "\"https://glj3lixjr7.execute-api.sa-east-1.amazonaws.com/\"")
     }
 
     // Where data comes from. `live` talks to the API; `mock` answers every request from
@@ -55,7 +64,22 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "API_BASE_URL", "\"${apiUrlFor("debug")}\"")
+            buildConfigField("String", "ENVIRONMENT", "\"dev\"")
+        }
+        // Release-like build pointed at the pre-release backend, installable next to production.
+        create("staging") {
+            initWith(getByName("debug"))
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+            matchingFallbacks += "debug"
+            buildConfigField("String", "API_BASE_URL", "\"${apiUrlFor("staging")}\"")
+            buildConfigField("String", "ENVIRONMENT", "\"staging\"")
+        }
         release {
+            buildConfigField("String", "API_BASE_URL", "\"${apiUrlFor("release")}\"")
+            buildConfigField("String", "ENVIRONMENT", "\"production\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
