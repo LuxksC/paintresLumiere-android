@@ -147,4 +147,5 @@
     <string name="profile_delete_title">Delete your account?</string>
     <string name="profile_delete_message">Your account will be deactivated and you will be signed out. This cannot be undone from the app.</string>
     <string name="profile_delete_confirm">Delete</string>
+    <string name="profile_avatar">Profile picture</string>
 </resources>
