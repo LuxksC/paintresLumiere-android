@@ -21,7 +21,8 @@ import java.io.IOException
 import java.math.BigDecimal
 
 /**
- * The variant logic is the densest piece of the app — same scenarios as iOS card #102.
+ * The variant logic is the densest piece of the app — same scenarios as iOS card #102, except
+ * that every color stays selectable (see [ProductDetailsUiState.enabledColors]).
  *
  * Fixture: GOLD in 10 and 20, SILVER only in 10 (stock 0), BLACK only in 30.
  */
@@ -60,9 +61,10 @@ class ProductDetailsViewModelTest {
     }
 
     @Test
-    fun `requests the SKU from the route`() {
-        viewModel()
+    fun `requests the SKU from the route and shows it`() {
+        val vm = viewModel()
         assertEquals(listOf("LUNA"), repository.variantRequests)
+        assertEquals("LUNA", vm.state.value.sku)
     }
 
     @Test
@@ -91,16 +93,35 @@ class ProductDetailsViewModelTest {
     }
 
     @Test
-    fun `selected size only enables colors that exist for it`() {
+    fun `every color stays enabled whatever the selected size`() {
         val state = viewModel().state.value
-        assertEquals(setOf(ProductColor.GOLD, ProductColor.SILVER), state.enabledColors)
+        assertEquals(setOf(ProductColor.GOLD, ProductColor.SILVER, ProductColor.BLACK), state.enabledColors)
     }
 
     @Test
-    fun `a disabled color cannot be selected`() {
+    fun `a color without the selected size moves the size to one it has`() {
         val vm = viewModel()
-        vm.selectColor(ProductColor.BLACK) // no 10cm black
-        assertEquals(ProductColor.GOLD, vm.state.value.selectedColor)
+        vm.selectColor(ProductColor.BLACK) // no 10cm black; 30cm exists only in black
+        val state = vm.state.value
+        assertEquals(black30, state.selectedVariant)
+        assertEquals(setOf("30cm"), state.enabledSizes)
+        assertTrue(state.canPurchase)
+    }
+
+    @Test
+    fun `the moved size prefers a variant in stock`() {
+        val silver20 = variant("s20", ProductColor.SILVER, 20.0, 0, ProductStatus.OUT_OF_STOCK)
+        val silver30 = variant("s30", ProductColor.SILVER, 30.0, 3)
+        val vm = viewModel(listOf(gold10, silver20, silver30))
+        vm.selectColor(ProductColor.SILVER)
+        assertEquals(silver30, vm.state.value.selectedVariant)
+    }
+
+    @Test
+    fun `a size the selected color lacks cannot be selected`() {
+        val vm = viewModel()
+        vm.selectSize("30cm") // no 30cm gold
+        assertEquals(gold10, vm.state.value.selectedVariant)
     }
 
     @Test
@@ -112,6 +133,8 @@ class ProductDetailsViewModelTest {
         assertEquals(silver10, state.selectedVariant)
         assertEquals(0, state.quantity)
         assertFalse(state.canPurchase)
+        vm.setQuantity(3)
+        assertEquals(0, vm.state.value.quantity)
     }
 
     @Test
