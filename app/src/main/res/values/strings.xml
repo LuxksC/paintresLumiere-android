@@ -298,4 +298,13 @@
     <string name="payment_status_failed">Recusado</string>
     <string name="payment_status_unknown">Em atualização</string>
     <string name="confirmation_pay_now">Pagar agora</string>
+    <string name="payment_due">Vence em %1$s</string>
+    <string name="payment_check_now">Já paguei — verificar</string>
+    <string name="payment_paid_title">Pagamento confirmado!</string>
+    <string name="payment_paid_message">Seu pedido segue para a produção. Acompanhe cada etapa pela aba Pedidos.</string>
+    <string name="pix_qr_a11y">QR code do pix</string>
+    <string name="pix_copy">Copiar código pix</string>
+    <string name="pix_copied">Código copiado</string>
+    <string name="pix_share">Compartilhar código</string>
+    <string name="pix_instructions">Pague no app do seu banco. A confirmação chega em instantes e esta tela atualiza sozinha — você também pode sair e acompanhar pelo pedido.</string>
 </resources>
