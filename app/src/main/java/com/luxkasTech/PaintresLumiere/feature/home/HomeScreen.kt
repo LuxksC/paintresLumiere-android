@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -39,6 +40,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +52,7 @@ import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLButton
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLCategoryCard
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLDivider
+import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLInputField
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLProductCard
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
@@ -80,6 +83,7 @@ fun HomeRoute(
         onNotificationsClick = viewModel::onNotificationsClick,
         onCartClick = onCartRequested,
         onCategoryClick = onCategorySelected,
+        onQueryChange = viewModel::onQueryChange,
     )
 }
 
@@ -93,6 +97,7 @@ fun HomeScreen(
     onNotificationsClick: () -> Unit,
     onCartClick: () -> Unit,
     onCategoryClick: (ProductCategory) -> Unit = {},
+    onQueryChange: (String) -> Unit = {},
 ) {
     Box(
         Modifier
@@ -108,7 +113,7 @@ fun HomeScreen(
                 onRefresh = onRefresh,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                CatalogGrid(state, onProductClick, onNotificationsClick, onCartClick, onCategoryClick)
+                CatalogGrid(state, onProductClick, onNotificationsClick, onCartClick, onCategoryClick, onQueryChange)
             }
         }
     }
@@ -121,6 +126,7 @@ private fun CatalogGrid(
     onNotificationsClick: () -> Unit,
     onCartClick: () -> Unit,
     onCategoryClick: (ProductCategory) -> Unit,
+    onQueryChange: (String) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -133,7 +139,31 @@ private fun CatalogGrid(
             Column {
                 HomeHeader(state.cartCount, onNotificationsClick, onCartClick)
                 PLDivider(Modifier.padding(top = PLSpacing.md))
+                PLInputField(
+                    label = stringResource(R.string.home_search),
+                    value = state.query,
+                    onValueChange = onQueryChange,
+                    placeholder = stringResource(R.string.home_search_placeholder),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    modifier = Modifier.padding(top = PLSpacing.md),
+                )
             }
+        }
+        if (state.isSearching) {
+            if (state.searchResults.isEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }, key = "noResults") {
+                    Text(
+                        stringResource(R.string.home_search_empty, state.query.trim()),
+                        style = PLFont.body,
+                        color = PLColor.textMuted,
+                        modifier = Modifier.padding(vertical = PLSpacing.xl),
+                    )
+                }
+            }
+            items(state.searchResults, key = { "search-${it.id}" }) { product ->
+                PLProductCard(data = product.toCardData(), onClick = { onProductClick(product) })
+            }
+            return@LazyVerticalGrid
         }
         if (state.popular.isNotEmpty()) {
             item(span = { GridItemSpan(maxLineSpan) }, key = "popular") {
