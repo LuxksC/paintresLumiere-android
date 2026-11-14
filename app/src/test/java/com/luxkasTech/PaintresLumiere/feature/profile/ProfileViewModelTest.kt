@@ -40,6 +40,15 @@ class ProfileViewModelTest {
     }
 
     @Test
+    fun `confirming twice while the delete is running deletes once`() {
+        auth.deleteResult = CompletableDeferred()
+        viewModel.requestDeleteAccount()
+        viewModel.confirmDeleteAccount()
+        viewModel.confirmDeleteAccount()
+        assertEquals(1, auth.deleteCalls)
+    }
+
+    @Test
     fun `dismissing the dialog does not delete`() {
         viewModel.requestDeleteAccount()
         viewModel.dismissDeleteAccount()

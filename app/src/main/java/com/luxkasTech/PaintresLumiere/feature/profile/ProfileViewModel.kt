@@ -42,6 +42,7 @@ class ProfileViewModel @Inject constructor(
     fun dismissDeleteAccount() = _state.update { it.copy(confirmingDelete = false) }
 
     fun confirmDeleteAccount() {
+        if (_state.value.isLoading) return
         _state.update { it.copy(confirmingDelete = false, isLoading = true) }
         viewModelScope.launch {
             try {
