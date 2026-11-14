@@ -302,4 +302,11 @@
     <string name="pix_copied">Code copied</string>
     <string name="pix_share">Share code</string>
     <string name="pix_instructions">Pay in your bank app. Confirmation arrives in moments and this screen updates by itself — you can also leave and follow it on the order.</string>
+    <string name="boleto_first_due">First installment due %1$s</string>
+    <string name="boleto_paid_progress">%1$d of %2$d installments paid</string>
+    <string name="boleto_open">Open carnê</string>
+    <string name="boleto_share">Share link</string>
+    <string name="boleto_copy_line">Copy payment line</string>
+    <string name="boleto_line_copied">Payment line copied</string>
+    <string name="boleto_instructions">Production starts as soon as the first installment is paid. Boleto clearing can take up to 3 business days — this screen and the order update by themselves.</string>
 </resources>
