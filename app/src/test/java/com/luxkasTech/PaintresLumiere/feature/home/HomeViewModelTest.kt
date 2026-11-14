@@ -120,4 +120,17 @@ class HomeViewModelTest {
         assertFalse(state.showsFullScreenError)
         assertTrue(messages.shown.isEmpty())
     }
+
+    @Test
+    fun `search filters the loaded catalog by name or SKU ignoring accents`() {
+        repository.products = Result.success(listOf(testProduct("1", "Coração"), testProduct("2", "Sol")))
+        val viewModel = viewModel()
+        viewModel.onQueryChange("coracao")
+        assertTrue(viewModel.state.value.isSearching)
+        assertEquals(listOf("Coração"), viewModel.state.value.searchResults.map { it.name })
+        viewModel.onQueryChange("sku-2")
+        assertEquals(listOf("Sol"), viewModel.state.value.searchResults.map { it.name })
+        viewModel.onQueryChange(" ")
+        assertFalse(viewModel.state.value.isSearching)
+    }
 }
