@@ -27,7 +27,10 @@ interface AuthRepository {
     /** Best effort server logout; the local session always ends, even offline. */
     suspend fun logout()
 
-    /** Soft-deletes the account (`DELETE /users/me`) and ends the session. Throws on failure. */
+    /**
+     * Soft-deletes the account (`DELETE /users/me`) and ends the session. An account that is already
+     * deleted (404) counts as success. Throws on any other failure.
+     */
     suspend fun deleteAccount()
 }
 
@@ -73,7 +76,12 @@ class DefaultAuthRepository @Inject constructor(
     }
 
     override suspend fun deleteAccount() {
-        apiCall { api.deleteAccount() }
+        try {
+            apiCall { api.deleteAccount() }
+        } catch (e: ApiError.Http) {
+            // 404 means the account is already gone (e.g. a retry after a lost response).
+            if (e.statusCode != 404) throw e
+        }
         session.endSession()
     }
 }
