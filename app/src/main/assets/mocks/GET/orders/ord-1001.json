@@ -1,0 +1,49 @@
+{
+  "id": "ord-1001",
+  "number": "PL-1001",
+  "status": "em_producao",
+  "subtotal_amount": 398.6,
+  "discount_amount": 49.84,
+  "shipping_amount": 0,
+  "total_amount": 348.76,
+  "notes": "Entregar na loja do centro.",
+  "created_at": "2026-10-08T13:20:00Z",
+  "items": [
+    {
+      "id": "item-1",
+      "product_id": "00000000-0000-4000-8000-000000000001",
+      "product_name": "Luna",
+      "product_sku": "LUNA",
+      "product_color": "gold",
+      "product_dimensions": "20 × 8cm",
+      "unit_price": 49.9,
+      "discount_rate": 0.15,
+      "quantity": 4,
+      "line_total": 169.66
+    },
+    {
+      "id": "item-4",
+      "product_id": "00000000-0000-4000-8000-000000000004",
+      "product_name": "Número 0",
+      "product_sku": "NUM-0",
+      "product_color": "black",
+      "product_dimensions": "8 × 12cm",
+      "unit_price": 19.9,
+      "discount_rate": 0.1,
+      "quantity": 10,
+      "line_total": 179.1
+    }
+  ],
+  "status_history": [
+    {
+      "status": "recebido",
+      "created_at": "2026-10-08T13:20:00Z",
+      "note": null
+    },
+    {
+      "status": "em_producao",
+      "created_at": "2026-10-09T09:05:00Z",
+      "note": "Corte a laser iniciado."
+    }
+  ]
+}

@@ -225,4 +225,24 @@
     <string name="home_search">Search</string>
     <string name="home_search_placeholder">Piece name or SKU</string>
     <string name="home_search_empty">No pieces found for “%1$s”.</string>
+
+    <!-- Orders -->
+    <string name="tab_orders">Orders</string>
+    <string name="orders_title">Orders</string>
+    <string name="orders_subtitle">TRACK YOUR PURCHASES</string>
+    <string name="orders_number">Order %1$s</string>
+    <plurals name="orders_item_count">
+        <item quantity="one">%d item</item>
+        <item quantity="other">%d items</item>
+    </plurals>
+    <string name="orders_error_title">Couldn\'t load your orders</string>
+    <string name="orders_empty_title">No orders yet</string>
+    <string name="orders_empty_message">When you check out, your order shows up here with its production and delivery status.</string>
+    <string name="order_status_received">Received</string>
+    <string name="order_status_in_production">In production</string>
+    <string name="order_status_ready">Ready</string>
+    <string name="order_status_shipped">Shipped</string>
+    <string name="order_status_delivered">Delivered</string>
+    <string name="order_status_cancelled">Cancelled</string>
+    <string name="order_status_unknown">Updating</string>
 </resources>
