@@ -27,9 +27,11 @@ sealed interface DetailsLoadState {
 /**
  * Product details state. The backend returns **one row per variant** (same SKU, different color
  * and/or dimensions), so the selectors are derived from the variant list and a color/size pair
- * with no matching variant is never selectable. Same rules as iOS `ProductDetailsViewModel`.
+ * with no matching variant is never selectable. Same rules as iOS `ProductDetailsViewModel`,
+ * except that every color stays selectable (see [enabledColors]).
  */
 data class ProductDetailsUiState(
+    val sku: String = "",
     val loadState: DetailsLoadState = DetailsLoadState.Loading,
     val variants: List<ProductVariant> = emptyList(),
     val selectedColor: ProductColor? = null,
@@ -46,10 +48,13 @@ data class ProductDetailsUiState(
     val availableSizes: List<String>
         get() = variants.map { it.sizeLabel }.distinct()
 
-    /** Colors that have a variant for the selected size. */
+    /**
+     * Every color stays selectable: picking one whose variants don't include the selected size
+     * moves the size too (see [ProductDetailsViewModel.selectColor]). Narrowing colors by size as
+     * well would make a variant unreachable when its color and size each exist only in it.
+     */
     val enabledColors: Set<ProductColor>
-        get() = selectedSize?.let { size -> variants.filter { it.sizeLabel == size }.map { it.color }.toSet() }
-            ?: availableColors.toSet()
+        get() = availableColors.toSet()
 
     /** Sizes that have a variant for the selected color. */
     val enabledSizes: Set<String>
@@ -73,7 +78,7 @@ class ProductDetailsViewModel @Inject constructor(
 
     val sku: String = checkNotNull(savedStateHandle[SKU_ARG]) { "ProductDetails opened without a SKU" }
 
-    private val _state = MutableStateFlow(ProductDetailsUiState())
+    private val _state = MutableStateFlow(ProductDetailsUiState(sku = sku))
     val state: StateFlow<ProductDetailsUiState> = _state.asStateFlow()
 
     init {
@@ -87,7 +92,12 @@ class ProductDetailsViewModel @Inject constructor(
 
     fun selectColor(color: ProductColor) {
         if (color !in _state.value.enabledColors) return
-        _state.update { it.copy(selectedColor = color).clampQuantity() }
+        _state.update { state ->
+            val ofColor = state.variants.filter { it.color == color }
+            val size = state.selectedSize?.takeIf { size -> ofColor.any { it.sizeLabel == size } }
+                ?: (ofColor.firstOrNull { it.stockQuantity > 0 } ?: ofColor.first()).sizeLabel
+            state.copy(selectedColor = color, selectedSize = size).clampQuantity()
+        }
     }
 
     fun selectSize(size: String) {
@@ -96,7 +106,7 @@ class ProductDetailsViewModel @Inject constructor(
     }
 
     fun setQuantity(value: Int) {
-        _state.update { it.copy(quantity = value.coerceIn(1, it.maxQuantity.coerceAtLeast(1))) }
+        _state.update { it.copy(quantity = value).clampQuantity() }
     }
 
     /** Cart and checkout are Phase 3 — until then both actions say so instead of faking success. */

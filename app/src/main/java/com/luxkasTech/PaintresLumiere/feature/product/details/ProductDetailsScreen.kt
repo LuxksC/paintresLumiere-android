@@ -159,7 +159,7 @@ private fun LoadedContent(
                 VariantSelectors(state, actions)
             }
             DescriptionAndStock(variant)
-            DetailsList(variant)
+            DetailsList(state.sku, variant)
         }
     }
 }
@@ -285,7 +285,7 @@ private fun DescriptionAndStock(variant: ProductVariant) {
 }
 
 @Composable
-private fun DetailsList(variant: ProductVariant) {
+private fun DetailsList(sku: String, variant: ProductVariant) {
     Column(verticalArrangement = Arrangement.spacedBy(PLSpacing.sm)) {
         SectionLabel(stringResource(R.string.details_section_details), null)
         Column {
@@ -297,7 +297,7 @@ private fun DetailsList(variant: ProductVariant) {
                 DetailRow(stringResource(R.string.details_row_barcode), it)
             }
             HorizontalDivider(color = PLColor.borderSubtle)
-            DetailRow(stringResource(R.string.details_row_sku), variant.slug)
+            DetailRow(stringResource(R.string.details_row_sku), sku)
         }
     }
 }
@@ -405,7 +405,7 @@ private fun ProductDetailsPreview() {
     )
     PaintresLumiereTheme {
         ProductDetailsScreen(
-            ProductDetailsUiState(DetailsLoadState.Loaded, variants, ProductColor.GOLD, "10 × 10cm", 1),
+            ProductDetailsUiState("NAME-LUNA", DetailsLoadState.Loaded, variants, ProductColor.GOLD, "10 × 10cm", 1),
             ProductDetailsActions(),
         )
     }
@@ -416,7 +416,7 @@ private fun ProductDetailsPreview() {
 private fun ProductDetailsErrorPreview() {
     PaintresLumiereTheme {
         ProductDetailsScreen(
-            ProductDetailsUiState(DetailsLoadState.Failed(UiText.Raw("Sem conexão."))),
+            ProductDetailsUiState(loadState = DetailsLoadState.Failed(UiText.Raw("Sem conexão."))),
             ProductDetailsActions(),
         )
     }
