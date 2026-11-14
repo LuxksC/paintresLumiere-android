@@ -245,4 +245,14 @@
     <string name="order_status_delivered">Delivered</string>
     <string name="order_status_cancelled">Cancelled</string>
     <string name="order_status_unknown">Updating</string>
+    <string name="order_section_tracking">Tracking</string>
+    <string name="order_section_items">Items</string>
+    <string name="order_section_summary">Summary</string>
+    <string name="order_section_notes">Notes</string>
+    <string name="order_placed_on">Placed on %1$s</string>
+    <string name="order_item_quantity">%1$d × %2$s</string>
+    <string name="order_shipping">Shipping</string>
+    <string name="order_step_done">done</string>
+    <string name="order_step_current">current step</string>
+    <string name="order_step_upcoming">upcoming</string>
 </resources>
