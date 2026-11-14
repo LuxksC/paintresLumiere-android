@@ -54,12 +54,16 @@ android {
             dimension = "backend"
             isDefault = true
             buildConfigField("boolean", "USE_MOCKS", "false")
+            // Flip to true when the cart endpoints (backend PL-118..121) are live.
+            buildConfigField("boolean", "REMOTE_CART", "false")
         }
         create("mock") {
             dimension = "backend"
             applicationIdSuffix = ".mock"
             versionNameSuffix = "-mock"
             buildConfigField("boolean", "USE_MOCKS", "true")
+            // Static mocks can't remember what was added, so the mock flavor keeps the local cart.
+            buildConfigField("boolean", "REMOTE_CART", "false")
         }
     }
 
