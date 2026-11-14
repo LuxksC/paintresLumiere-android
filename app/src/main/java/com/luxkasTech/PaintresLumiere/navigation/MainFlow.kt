@@ -2,6 +2,8 @@ package com.luxkasTech.PaintresLumiere.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -19,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -98,7 +101,15 @@ fun MainFlow(navController: NavHostController = rememberNavController()) {
             }
         },
     ) { padding ->
-        Box(Modifier.padding(bottom = padding.calculateBottomPadding())) {
+        // With the bar shown, the content stops above it and the consumed inset keeps screens from
+        // padding for the navigation bar again. Pushed screens get the full height and handle the
+        // navigation bar themselves, so their footers can draw behind it.
+        val bottomPadding = PaddingValues(bottom = if (showBottomBar) padding.calculateBottomPadding() else 0.dp)
+        Box(
+            Modifier
+                .padding(bottomPadding)
+                .consumeWindowInsets(bottomPadding),
+        ) {
             NavHost(navController = navController, startDestination = HomeGraph) {
                 navigation<HomeGraph>(startDestination = HomeDestination) {
                     composable<HomeDestination> {
