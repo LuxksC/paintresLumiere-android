@@ -2,8 +2,10 @@ package com.luxkasTech.PaintresLumiere.feature.auth.login
 
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
+import com.luxkasTech.PaintresLumiere.core.messages.ToastType
 import com.luxkasTech.PaintresLumiere.core.network.ApiError
 import com.luxkasTech.PaintresLumiere.testing.FakeAuthRepository
+import com.luxkasTech.PaintresLumiere.testing.FakeMessagesService
 import com.luxkasTech.PaintresLumiere.testing.MainDispatcherRule
 import kotlinx.coroutines.CompletableDeferred
 import org.junit.Assert.assertEquals
@@ -19,7 +21,8 @@ class LoginViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val repository = FakeAuthRepository()
-    private val viewModel = LoginViewModel(repository)
+    private val messages = FakeMessagesService()
+    private val viewModel = LoginViewModel(repository, messages)
 
     @Test
     fun `cannot submit until both fields are filled`() {
@@ -74,17 +77,21 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `rejected google token surfaces the mapped error`() {
+    fun `rejected google token toasts the server message and leaves the fields alone`() {
         repository.googleResult = CompletableDeferred<Unit>().apply { completeExceptionally(ApiError.Conflict("Email linked to another Google account")) }
         viewModel.loginWithGoogle("token")
         assertFalse(viewModel.state.value.isLoading)
-        assertEquals(UiText.Raw("Email linked to another Google account"), viewModel.state.value.error)
+        assertNull(viewModel.state.value.error)
+        val toast = messages.shown.single()
+        assertEquals(UiText.Raw("Email linked to another Google account"), toast.title)
+        assertEquals(ToastType.Error, toast.type)
     }
 
     @Test
-    fun `picker failure shows a friendly error without calling the API`() {
+    fun `picker failure toasts a friendly error without calling the API`() {
         viewModel.onGoogleSignInFailed()
-        assertEquals(UiText.Resource(R.string.auth_login_google_failed), viewModel.state.value.error)
+        assertEquals(UiText.Resource(R.string.auth_login_google_failed), messages.shown.single().title)
+        assertNull(viewModel.state.value.error)
         assertTrue(repository.googleTokens.isEmpty())
     }
 }

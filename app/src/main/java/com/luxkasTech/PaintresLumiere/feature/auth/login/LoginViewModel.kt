@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
+import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
+import com.luxkasTech.PaintresLumiere.core.messages.ToastType
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +33,7 @@ data class LoginUiState(
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val messages: MessagesService,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginUiState())
@@ -40,7 +43,10 @@ class LoginViewModel @Inject constructor(
 
     fun onPasswordChange(value: String) = _state.update { it.copy(password = value, error = null) }
 
-    /** Called by the screen once Credential Manager returned a Google ID token. */
+    /**
+     * Called by the screen once Credential Manager returned a Google ID token. Google errors are
+     * toasts: they say nothing about the email and password fields, so those are never flagged.
+     */
     fun loginWithGoogle(idToken: String) {
         if (_state.value.isLoading) return
         _state.update { it.copy(isLoading = true, error = null) }
@@ -50,14 +56,15 @@ class LoginViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _state.update { it.copy(isLoading = false, error = e.toUiText()) }
+                _state.update { it.copy(isLoading = false) }
+                messages.show(e.toUiText(), type = ToastType.Error)
             }
         }
     }
 
     /** The Google picker failed before reaching our API (no account, Play Services issue…). */
     fun onGoogleSignInFailed() {
-        _state.update { it.copy(error = UiText.Resource(R.string.auth_login_google_failed)) }
+        messages.show(UiText.Resource(R.string.auth_login_google_failed), type = ToastType.Error)
     }
 
     fun login() {
