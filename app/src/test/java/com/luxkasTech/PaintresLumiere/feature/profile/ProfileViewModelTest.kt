@@ -85,6 +85,17 @@ class ProfileViewModelTest {
     }
 
     @Test
+    fun `a running delete spins only the delete button and blocks logout`() {
+        auth.deleteResult = CompletableDeferred()
+        viewModel.confirmDeleteAccount()
+        val state = viewModel.state.value
+        assertTrue(state.isDeleting)
+        assertFalse(state.isLoggingOut)
+        viewModel.logout()
+        assertEquals(0, auth.logoutCalls)
+    }
+
+    @Test
     fun `dismissing the dialog does not delete`() {
         viewModel.requestDeleteAccount()
         viewModel.dismissDeleteAccount()

@@ -22,9 +22,13 @@ data class ProfileUiState(
     val isProfileLoading: Boolean = true,
     /** Never show stale or placeholder identity as if it were real — an error is shown instead. */
     val profileError: UiText? = null,
-    val isLoading: Boolean = false,
+    val isLoggingOut: Boolean = false,
+    val isDeleting: Boolean = false,
     val confirmingDelete: Boolean = false,
-)
+) {
+    /** Either account action is running; both buttons are blocked meanwhile. */
+    val isLoading: Boolean get() = isLoggingOut || isDeleting
+}
 
 /**
  * Account actions. Logging out or deleting the account ends the session, and the root swaps to the
@@ -60,7 +64,7 @@ class ProfileViewModel @Inject constructor(
 
     fun logout() {
         if (_state.value.isLoading) return
-        _state.update { it.copy(isLoading = true) }
+        _state.update { it.copy(isLoggingOut = true) }
         viewModelScope.launch { authRepository.logout() }
     }
 
@@ -70,14 +74,14 @@ class ProfileViewModel @Inject constructor(
 
     fun confirmDeleteAccount() {
         if (_state.value.isLoading) return
-        _state.update { it.copy(confirmingDelete = false, isLoading = true) }
+        _state.update { it.copy(confirmingDelete = false, isDeleting = true) }
         viewModelScope.launch {
             try {
                 authRepository.deleteAccount()
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _state.update { it.copy(isLoading = false) }
+                _state.update { it.copy(isDeleting = false) }
                 messages.showGenericError()
             }
         }

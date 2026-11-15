@@ -114,13 +114,14 @@ fun ProfileScreen(state: ProfileUiState, actions: ProfileActions) {
             PLButton(
                 text = stringResource(R.string.profile_logout),
                 onClick = actions.onLogout,
-                type = if (state.isLoading) PLButtonType.Loading else PLButtonType.Ghost,
+                type = if (state.isLoggingOut) PLButtonType.Loading else PLButtonType.Ghost,
+                enabled = !state.isDeleting,
             )
             PLButton(
                 text = stringResource(R.string.profile_delete_account),
                 onClick = actions.onDeleteAccount,
-                type = PLButtonType.Destructive,
-                enabled = !state.isLoading,
+                type = if (state.isDeleting) PLButtonType.Loading else PLButtonType.Destructive,
+                enabled = !state.isLoggingOut,
             )
         }
         Spacer(Modifier.height(PLSpacing.xxl))
