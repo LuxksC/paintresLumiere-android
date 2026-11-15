@@ -19,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.outlined.AddPhotoAlternate
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.AlertDialog
@@ -29,7 +31,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,6 +75,24 @@ fun AdminProductGroupRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.onResume() }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var pickingFor by rememberSaveable { mutableStateOf<String?>(null) }
+    val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        val variantId = pickingFor
+        pickingFor = null
+        if (uri == null || variantId == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val picked = withContext(Dispatchers.IO) {
+                runCatching {
+                    val mime = context.contentResolver.getType(uri) ?: "image/jpeg"
+                    val bytes = context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
+                    bytes?.let { it to mime }
+                }.getOrNull()
+            }
+            picked?.let { (bytes, mime) -> viewModel.uploadImage(variantId, bytes, mime) }
+        }
+    }
     AdminProductGroupScreen(
         state = state,
         onBack = onBack,
@@ -70,6 +102,11 @@ fun AdminProductGroupRoute(
         onConfirmDelete = viewModel::confirmDelete,
         onDismissDelete = viewModel::dismissDelete,
         onAddVariant = { onAddVariant(state.sku) },
+        onAdjustStock = viewModel::adjustStock,
+        onAddImage = { variant ->
+            pickingFor = variant.id
+            picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
     )
 }
 
@@ -83,6 +120,8 @@ fun AdminProductGroupScreen(
     onConfirmDelete: () -> Unit,
     onDismissDelete: () -> Unit,
     onAddVariant: () -> Unit,
+    onAdjustStock: (ProductVariant, Int) -> Unit = { _, _ -> },
+    onAddImage: (ProductVariant) -> Unit = {},
 ) {
     Box(
         Modifier
@@ -124,7 +163,14 @@ fun AdminProductGroupScreen(
                     verticalArrangement = Arrangement.spacedBy(PLSpacing.sm),
                 ) {
                     items(state.variants, key = { it.id }) { variant ->
-                        VariantRow(variant, { onEdit(variant) }, { onDelete(variant) })
+                        VariantRow(
+                            variant = variant,
+                            isUploading = state.uploadingVariantId == variant.id,
+                            onEdit = { onEdit(variant) },
+                            onDelete = { onDelete(variant) },
+                            onAdjustStock = { delta -> onAdjustStock(variant, delta) },
+                            onAddImage = { onAddImage(variant) },
+                        )
                     }
                 }
             }
@@ -169,14 +215,23 @@ fun AdminProductGroupScreen(
 }
 
 @Composable
-private fun VariantRow(variant: ProductVariant, onEdit: () -> Unit, onDelete: () -> Unit) {
+private fun VariantRow(
+    variant: ProductVariant,
+    isUploading: Boolean,
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+    onAdjustStock: (Int) -> Unit,
+    onAddImage: () -> Unit,
+) {
     val shape = RoundedCornerShape(PLRadius.card)
-    Row(
+    Column(
         Modifier
             .fillMaxWidth()
             .background(PLColor.backgroundElevated, shape)
             .border(1.dp, PLColor.borderSubtle, shape)
             .padding(PLSpacing.sm),
+    ) {
+    Row(
         horizontalArrangement = Arrangement.spacedBy(PLSpacing.md),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -201,5 +256,25 @@ private fun VariantRow(variant: ProductVariant, onEdit: () -> Unit, onDelete: ()
         IconButton(onClick = onDelete) {
             Icon(Icons.Outlined.Delete, stringResource(R.string.admin_group_delete), tint = PLColor.error)
         }
+    }
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = PLSpacing.xs)) {
+        Text(stringResource(R.string.admin_stock_label), style = PLFont.caption, color = PLColor.textMuted)
+        IconButton(onClick = { onAdjustStock(-1) }, enabled = variant.stockQuantity > 0) {
+            Icon(Icons.Filled.Remove, stringResource(R.string.ds_stepper_decrease), tint = PLColor.textPrimary)
+        }
+        Text(variant.stockQuantity.toString(), style = PLFont.button, color = PLColor.textPrimary)
+        IconButton(onClick = { onAdjustStock(1) }) {
+            Icon(Icons.Filled.Add, stringResource(R.string.ds_stepper_increase), tint = PLColor.textPrimary)
+        }
+        Spacer(Modifier.weight(1f))
+        if (isUploading) {
+            CircularProgressIndicator(color = PLColor.goldMid, strokeWidth = 2.dp, modifier = Modifier.size(20.dp))
+        } else {
+            TextButton(onClick = onAddImage) {
+                Icon(Icons.Outlined.AddPhotoAlternate, contentDescription = null, tint = PLColor.goldMid, modifier = Modifier.size(18.dp))
+                Text(" " + stringResource(R.string.admin_image_add), style = PLFont.link, color = PLColor.goldMid)
+            }
+        }
+    }
     }
 }
