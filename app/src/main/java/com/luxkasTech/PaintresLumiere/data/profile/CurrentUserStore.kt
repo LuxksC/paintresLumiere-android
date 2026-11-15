@@ -43,4 +43,8 @@ class CurrentUserStore @Inject constructor(
 
     /** Fetches the profile and publishes it. Throws `ApiError` (and keeps the previous value). */
     suspend fun refresh(): UserProfile = profileRepository.getProfile().also { _profile.value = it }
+
+    /** Saves and publishes the updated profile returned by the API. Throws `ApiError`. */
+    suspend fun update(request: UpdateProfileRequest): UserProfile =
+        profileRepository.updateProfile(request).also { _profile.value = it }
 }
