@@ -20,7 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -58,6 +61,8 @@ fun LoginRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    // The account picker is a system sheet; a second tap while it opens must not request it again.
+    var googlePickerOpen by remember { mutableStateOf(false) }
     LoginScreen(
         state = state,
         onEmailChange = viewModel::onEmailChange,
@@ -67,11 +72,18 @@ fun LoginRoute(
         onSignUp = onSignUpRequested,
         onGoogleSignIn = if (GoogleSignIn.isConfigured) {
             {
-                scope.launch {
-                    when (val result = GoogleSignIn.requestIdToken(context)) {
-                        is GoogleSignIn.Result.Token -> viewModel.loginWithGoogle(result.idToken)
-                        GoogleSignIn.Result.Cancelled -> Unit
-                        GoogleSignIn.Result.Failed -> viewModel.onGoogleSignInFailed()
+                if (!googlePickerOpen) {
+                    googlePickerOpen = true
+                    scope.launch {
+                        try {
+                            when (val result = GoogleSignIn.requestIdToken(context)) {
+                                is GoogleSignIn.Result.Token -> viewModel.loginWithGoogle(result.idToken)
+                                GoogleSignIn.Result.Cancelled -> Unit
+                                GoogleSignIn.Result.Failed -> viewModel.onGoogleSignInFailed()
+                            }
+                        } finally {
+                            googlePickerOpen = false
+                        }
                     }
                 }
             }
