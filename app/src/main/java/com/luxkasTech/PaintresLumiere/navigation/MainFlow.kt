@@ -122,7 +122,10 @@ fun MainFlow(navController: NavHostController = rememberNavController()) {
                         )
                     }
                     composable<ProductDetailsDestination> {
-                        ProductDetailsRoute(onBack = { navController.popBackStack() })
+                        ProductDetailsRoute(
+                            onBack = { navController.popBackStack() },
+                            onCartRequested = { navController.navigate(CartDestination) },
+                        )
                     }
                     composable<CartDestination> {
                         CartRoute(
