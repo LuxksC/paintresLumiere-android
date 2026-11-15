@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
+import com.luxkasTech.PaintresLumiere.core.messages.ToastType
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
 import com.luxkasTech.PaintresLumiere.data.profile.ProfileRepository
@@ -57,7 +58,9 @@ class ProfileViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _state.update { it.copy(profile = null, isProfileLoading = false, profileError = e.toUiText()) }
+                val error = e.toUiText()
+                _state.update { it.copy(profile = null, isProfileLoading = false, profileError = error) }
+                messages.show(error, type = ToastType.Error)
             }
         }
     }

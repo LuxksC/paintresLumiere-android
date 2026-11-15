@@ -39,6 +39,9 @@ class ProfileViewModelTest {
         val state = viewModel.state.value
         assertEquals(null, state.profile)
         assertEquals(UiText.Resource(R.string.error_network), state.profileError)
+        val toast = messages.shown.single()
+        assertEquals(UiText.Resource(R.string.error_network), toast.title)
+        assertEquals(ToastType.Error, toast.type)
     }
 
     @Test
