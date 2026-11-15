@@ -45,6 +45,13 @@ class AdminProductsViewModel @Inject constructor(
         load()
     }
 
+    private var loadedOnce = false
+
+    /** Reload when coming back from the form or a deletion, so the list stays current. */
+    fun onResume() {
+        if (loadedOnce && !_state.value.isLoading) load()
+    }
+
     fun onQueryChange(value: String) = _state.update { it.copy(query = value) }
 
     fun load() {
@@ -57,6 +64,8 @@ class AdminProductsViewModel @Inject constructor(
                 throw e
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.toUiText()) }
+            } finally {
+                loadedOnce = true
             }
         }
     }
