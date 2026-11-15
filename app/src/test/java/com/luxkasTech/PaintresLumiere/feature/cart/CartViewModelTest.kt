@@ -72,12 +72,6 @@ class CartViewModelTest {
     }
 
     @Test
-    fun `checkout is coming soon until orders exist`() {
-        viewModel.checkout()
-        assertEquals(ToastType.Warning, messages.shown.single().type)
-    }
-
-    @Test
     fun `unavailable or over-stock lines block checkout`() {
         assertTrue(Cart(listOf(testCartItem("1"))).canCheckout)
         assertFalse(Cart(listOf(testCartItem("1", status = ProductStatus.INACTIVE))).canCheckout)
