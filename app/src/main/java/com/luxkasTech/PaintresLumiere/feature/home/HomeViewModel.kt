@@ -6,7 +6,9 @@ import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.cart.CartRepository
+import com.luxkasTech.PaintresLumiere.data.product.CategorySummary
 import com.luxkasTech.PaintresLumiere.data.product.Product
+import com.luxkasTech.PaintresLumiere.data.product.ProductCategory
 import com.luxkasTech.PaintresLumiere.data.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -25,6 +27,12 @@ import kotlin.coroutines.cancellation.CancellationException
 data class HomeUiState(
     val catalog: List<Product> = emptyList(),
     val popular: List<Product> = emptyList(),
+    /**
+     * Category tiles (`GET /products/categories`). Empty when the endpoint is unavailable — the
+     * Home then falls back to the flat collection grid, so the live app keeps working until the
+     * backend ships it.
+     */
+    val categories: List<CategorySummary> = emptyList(),
     /** True only for the very first load (nothing to show yet). */
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
@@ -75,13 +83,18 @@ class HomeViewModel @Inject constructor(
 
     fun onNotificationsClick() = messages.showComingSoon()
 
+    /** The per-category list lands in the next PR (#28). */
+    fun onCategoryClick(category: ProductCategory) = messages.showComingSoon()
+
     private fun load() {
         viewModelScope.launch {
             val popular = async { runCatching { productRepository.getPopularProducts(POPULAR_LIMIT) } }
             val catalog = async { runCatching { productRepository.getProducts() } }
+            val categories = async { runCatching { productRepository.getCategories() } }
             val catalogResult = catalog.await()
             val popularResult = popular.await()
-            listOfNotNull(catalogResult.exceptionOrNull(), popularResult.exceptionOrNull())
+            val categoriesResult = categories.await()
+            listOfNotNull(catalogResult.exceptionOrNull(), popularResult.exceptionOrNull(), categoriesResult.exceptionOrNull())
                 .firstOrNull { it is CancellationException }
                 ?.let { throw it }
 
@@ -89,6 +102,7 @@ class HomeViewModel @Inject constructor(
                 current.copy(
                     catalog = catalogResult.getOrNull()?.sortedWith(compareBy(collator) { it.name }) ?: current.catalog,
                     popular = popularResult.getOrNull() ?: current.popular,
+                    categories = categoriesResult.getOrNull() ?: current.categories,
                     isLoading = false,
                     isRefreshing = false,
                     error = catalogResult.exceptionOrNull()?.toUiText(),

@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLButton
+import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLCategoryCard
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLDivider
 import com.luxkasTech.PaintresLumiere.core.designsystem.components.PLProductCard
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLColor
@@ -55,6 +56,8 @@ import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLFont
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PLSpacing
 import com.luxkasTech.PaintresLumiere.core.designsystem.theme.PaintresLumiereTheme
 import com.luxkasTech.PaintresLumiere.data.product.Product
+import com.luxkasTech.PaintresLumiere.data.product.ProductCategory
+import com.luxkasTech.PaintresLumiere.feature.product.icon
 import com.luxkasTech.PaintresLumiere.data.product.ProductPricing
 import com.luxkasTech.PaintresLumiere.data.product.ProductStatus
 import com.luxkasTech.PaintresLumiere.feature.cart.CartIconWithBadge
@@ -75,6 +78,7 @@ fun HomeRoute(
         onRetry = viewModel::retry,
         onNotificationsClick = viewModel::onNotificationsClick,
         onCartClick = onCartRequested,
+        onCategoryClick = viewModel::onCategoryClick,
     )
 }
 
@@ -87,6 +91,7 @@ fun HomeScreen(
     onRetry: () -> Unit,
     onNotificationsClick: () -> Unit,
     onCartClick: () -> Unit,
+    onCategoryClick: (ProductCategory) -> Unit = {},
 ) {
     Box(
         Modifier
@@ -102,7 +107,7 @@ fun HomeScreen(
                 onRefresh = onRefresh,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                CatalogGrid(state, onProductClick, onNotificationsClick, onCartClick)
+                CatalogGrid(state, onProductClick, onNotificationsClick, onCartClick, onCategoryClick)
             }
         }
     }
@@ -114,6 +119,7 @@ private fun CatalogGrid(
     onProductClick: (Product) -> Unit,
     onNotificationsClick: () -> Unit,
     onCartClick: () -> Unit,
+    onCategoryClick: (ProductCategory) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -133,7 +139,20 @@ private fun CatalogGrid(
                 PopularSection(state.popular, onProductClick)
             }
         }
-        if (state.catalog.isEmpty()) {
+        if (state.categories.isNotEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }, key = "categoriesHeader") {
+                SectionLabel(stringResource(R.string.home_section_categories), Modifier.padding(top = PLSpacing.sm))
+            }
+            items(state.categories, key = { "category-${it.category.raw}" }) { summary ->
+                PLCategoryCard(
+                    label = stringResource(summary.category.labelRes),
+                    countLabel = pluralStringResource(R.plurals.home_pieces_count, summary.productCount, summary.productCount),
+                    imageUrl = summary.imageUrl,
+                    icon = summary.category.icon,
+                    onClick = { onCategoryClick(summary.category) },
+                )
+            }
+        } else if (state.catalog.isEmpty()) {
             item(span = { GridItemSpan(maxLineSpan) }, key = "empty") {
                 HomeEmpty()
             }
