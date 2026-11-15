@@ -5,6 +5,7 @@ import com.luxkasTech.PaintresLumiere.core.session.SessionManager
 import com.luxkasTech.PaintresLumiere.core.session.TokenStorage
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -25,15 +26,29 @@ class DefaultAuthRepositoryTest {
         var deleteError: Exception? = null
         override suspend fun login(body: LoginRequest) = error("unused")
         override suspend fun signUp(body: SignUpRequest) = error("unused")
+        val googleTokens = mutableListOf<String>()
+        override suspend fun authenticateWithGoogle(body: GoogleAuthRequest): AccessTokenResponse {
+            googleTokens += body.idToken
+            return AccessTokenResponse(accessToken = "google-jwt")
+        }
         override suspend fun logout() { logoutError?.let { throw it } }
         override suspend fun deleteAccount() { deleteError?.let { throw it } }
     }
 
     private val api = FakeAuthApi()
-    private val session = SessionManager(MemoryStorage("jwt"))
+    private val storage = MemoryStorage("jwt")
+    private val session = SessionManager(storage)
     private val repository = DefaultAuthRepository(api, session)
 
     private fun httpError(code: Int) = HttpException(Response.error<Unit>(code, "".toResponseBody()))
+
+    @Test
+    fun `a google id token is exchanged for the app session`() = runTest {
+        repository.authenticateWithGoogle("google-id-token")
+        assertEquals(listOf("google-id-token"), api.googleTokens)
+        assertEquals("google-jwt", storage.value)
+        assertTrue(session.isAuthenticated.value)
+    }
 
     @Test
     fun `logout ends the session even when the API is unreachable`() = runTest {

@@ -47,6 +47,8 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 authRepository.authenticateWithGoogle(idToken)
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _state.update { it.copy(isLoading = false, error = e.toUiText()) }
             }
