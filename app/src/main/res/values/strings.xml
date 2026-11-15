@@ -337,4 +337,10 @@
     <string name="edit_profile_document_hint">CPF ou CNPJ é obrigatório para pagar com pix e boleto.</string>
     <string name="edit_profile_email">Email: %1$s (não pode ser alterado aqui)</string>
     <string name="edit_profile_saved">Perfil atualizado</string>
+    <string name="reset_title">Nova senha</string>
+    <string name="reset_subtitle">Escolha uma senha nova para a sua conta.</string>
+    <string name="reset_new_password">Nova senha</string>
+    <string name="reset_submit">Salvar nova senha</string>
+    <string name="reset_done">Senha alterada. Entre com a nova senha.</string>
+    <string name="reset_invalid_link">Link inválido ou expirado. Peça um novo em “Esqueceu a senha?”.</string>
 </resources>

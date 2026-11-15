@@ -2,32 +2,46 @@ package com.luxkasTech.PaintresLumiere.feature.auth.forgot
 
 import com.luxkasTech.PaintresLumiere.R
 import com.luxkasTech.PaintresLumiere.core.common.UiText
-import com.luxkasTech.PaintresLumiere.core.messages.ToastType
-import com.luxkasTech.PaintresLumiere.testing.FakeMessagesService
+import com.luxkasTech.PaintresLumiere.core.network.ApiError
+import com.luxkasTech.PaintresLumiere.testing.FakeAuthRepository
+import com.luxkasTech.PaintresLumiere.testing.MainDispatcherRule
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
+import java.io.IOException
 
 class ForgotPasswordViewModelTest {
 
-    private val messages = FakeMessagesService()
-    private val viewModel = ForgotPasswordViewModel(messages)
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    private val auth = FakeAuthRepository()
+    private val viewModel by lazy { ForgotPasswordViewModel(auth) }
 
     @Test
-    fun `invalid email shows an inline error and no toast`() {
+    fun `invalid email shows an inline error and calls nothing`() {
         viewModel.onEmailChange("nope")
         viewModel.sendResetLink()
         assertEquals(UiText.Resource(R.string.auth_signup_error_email), viewModel.state.value.emailError)
-        assertTrue(messages.shown.isEmpty())
+        assertTrue(auth.resetRequests.isEmpty())
     }
 
     @Test
-    fun `valid email does not fake a success while the endpoint is missing`() {
+    fun `valid email requests the link and shows the neutral confirmation`() {
+        viewModel.onEmailChange(" lucas@example.com ")
+        viewModel.sendResetLink()
+        assertEquals(listOf("lucas@example.com"), auth.resetRequests)
+        assertTrue(viewModel.state.value.linkSent)
+    }
+
+    @Test
+    fun `network failure keeps the form`() {
+        auth.resetRequestResult = Result.failure(ApiError.Network(IOException()))
         viewModel.onEmailChange("lucas@example.com")
         viewModel.sendResetLink()
         assertFalse(viewModel.state.value.linkSent)
-        assertEquals(ToastType.Warning, messages.shown.single().type)
-        assertEquals(UiText.Resource(R.string.toast_coming_soon_title), messages.shown.single().title)
+        assertEquals(UiText.Resource(R.string.error_network), viewModel.state.value.emailError)
     }
 }
