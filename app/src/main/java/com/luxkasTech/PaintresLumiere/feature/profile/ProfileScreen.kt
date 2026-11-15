@@ -56,16 +56,14 @@ import com.luxkasTech.PaintresLumiere.data.profile.UserProfile
 
 @Composable
 fun ProfileRoute(
-    onEditProfile: () -> Unit,
+    onMenuItemSelected: (ProfileMenuItem) -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     ProfileScreen(
         state = state,
         actions = ProfileActions(
-            onMenuItemClick = { item ->
-                if (item == ProfileMenuItem.EditProfile) onEditProfile() else viewModel.onMenuItemClick(item)
-            },
+            onMenuItemClick = onMenuItemSelected,
             onLogout = viewModel::logout,
             onDeleteAccount = viewModel::requestDeleteAccount,
             onConfirmDelete = viewModel::confirmDeleteAccount,
