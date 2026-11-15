@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -60,7 +61,8 @@ internal fun ProfileIdentity(
             }
             error != null -> Column {
                 Text(error.asString(), style = PLFont.body, color = PLColor.textMuted)
-                TextButton(onClick = onRetry) {
+                // No horizontal padding, so the button text lines up with the message above.
+                TextButton(onClick = onRetry, contentPadding = PaddingValues(vertical = PLSpacing.sm)) {
                     Text(stringResource(R.string.common_try_again), style = PLFont.link, color = PLColor.goldMid)
                 }
             }
