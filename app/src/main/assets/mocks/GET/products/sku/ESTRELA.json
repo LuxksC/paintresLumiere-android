@@ -1,0 +1,30 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000006",
+      "name": "Estrela",
+      "slug": "estrela-silver-10x10",
+      "description": "Estrela em acrílico espelhado, cortado a laser. Acabamento silver.",
+      "images": [],
+      "stock_quantity": 0,
+      "category": "images",
+      "barcode": "7890000000006",
+      "status": "out_of_stock",
+      "pricing": {
+        "selling_price": 29.9,
+        "discount_rate": 0.0,
+        "final_price": 29.9
+      },
+      "specifications": {
+        "color": "silver",
+        "dimensions": {
+          "width": 10,
+          "height": 10,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    }
+  ]
+}

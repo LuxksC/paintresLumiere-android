@@ -1,0 +1,56 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000013",
+      "name": "Coração",
+      "slug": "coracao-rose-12x11",
+      "description": "Coração em acrílico espelhado, cortado a laser. Acabamento rose.",
+      "images": [],
+      "stock_quantity": 10,
+      "category": "images",
+      "barcode": "7890000000013",
+      "status": "active",
+      "pricing": {
+        "selling_price": 24.9,
+        "discount_rate": 0.0,
+        "final_price": 24.9
+      },
+      "specifications": {
+        "color": "rose",
+        "dimensions": {
+          "width": 12,
+          "height": 11,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000014",
+      "name": "Coração",
+      "slug": "coracao-neon-12x11",
+      "description": "Coração em acrílico espelhado, cortado a laser. Acabamento neon.",
+      "images": [],
+      "stock_quantity": 3,
+      "category": "images",
+      "barcode": "7890000000014",
+      "status": "active",
+      "pricing": {
+        "selling_price": 24.9,
+        "discount_rate": 0.0,
+        "final_price": 24.9
+      },
+      "specifications": {
+        "color": "neon",
+        "dimensions": {
+          "width": 12,
+          "height": 11,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    }
+  ]
+}

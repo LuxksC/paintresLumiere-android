@@ -1,0 +1,56 @@
+{
+  "products": [
+    {
+      "id": "00000000-0000-4000-8000-000000000007",
+      "name": "Número 0",
+      "slug": "num-0-black-8x12",
+      "description": "Número 0 em acrílico espelhado, cortado a laser. Acabamento black.",
+      "images": [],
+      "stock_quantity": 20,
+      "category": "numbers",
+      "barcode": "7890000000007",
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.1,
+        "final_price": 17.91
+      },
+      "specifications": {
+        "color": "black",
+        "dimensions": {
+          "width": 8,
+          "height": 12,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    },
+    {
+      "id": "00000000-0000-4000-8000-000000000008",
+      "name": "Número 0",
+      "slug": "num-0-rose-8x12",
+      "description": "Número 0 em acrílico espelhado, cortado a laser. Acabamento rose.",
+      "images": [],
+      "stock_quantity": 6,
+      "category": "numbers",
+      "barcode": "7890000000008",
+      "status": "active",
+      "pricing": {
+        "selling_price": 19.9,
+        "discount_rate": 0.1,
+        "final_price": 17.91
+      },
+      "specifications": {
+        "color": "rose",
+        "dimensions": {
+          "width": 8,
+          "height": 12,
+          "length": null,
+          "thickness": 3,
+          "unit": "cm"
+        }
+      }
+    }
+  ]
+}
