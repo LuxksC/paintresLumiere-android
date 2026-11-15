@@ -273,4 +273,29 @@
     <string name="confirmation_next_steps">Avisaremos a cada etapa: produção, envio e entrega. Acompanhe pela aba Pedidos.</string>
     <string name="confirmation_view_order">Ver pedido</string>
     <string name="confirmation_back_to_catalog">Voltar ao catálogo</string>
+
+    <!-- Payment -->
+    <string name="payment_title">Pagamento</string>
+    <string name="payment_method_pix">Pix</string>
+    <string name="payment_method_boleto">Boleto parcelado (carnê)</string>
+    <string name="payment_method_card">Cartão de crédito</string>
+    <string name="payment_method_unknown">Outro</string>
+    <string name="payment_method_pix_description">Aprovação em minutos, com QR code ou copia-e-cola.</string>
+    <string name="payment_method_boleto_description">Parcele em boletos mensais. A produção começa após o primeiro pagamento.</string>
+    <string name="payment_method_card_description">Aprovação na hora, à vista ou parcelado.</string>
+    <string name="payment_installments">Parcelas</string>
+    <string name="payment_installment_option">%1$d× %2$s</string>
+    <string name="payment_confirm_pix">Gerar pix</string>
+    <string name="payment_confirm_boleto">Gerar carnê</string>
+    <string name="payment_confirm_card">Continuar para o cartão</string>
+    <string name="payment_not_payable">Este pedido já foi pago ou não pode mais receber pagamento.</string>
+    <string name="payment_status_pending">Aguardando pagamento</string>
+    <string name="payment_status_confirmed">Pago</string>
+    <string name="payment_status_received">Pago</string>
+    <string name="payment_status_overdue">Vencido</string>
+    <string name="payment_status_refunded">Estornado</string>
+    <string name="payment_status_cancelled">Cancelado</string>
+    <string name="payment_status_failed">Recusado</string>
+    <string name="payment_status_unknown">Em atualização</string>
+    <string name="confirmation_pay_now">Pagar agora</string>
 </resources>
