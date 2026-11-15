@@ -225,4 +225,5 @@
     <string name="admin_form_error_discount">Use um valor entre 0 e 100.</string>
     <string name="admin_form_error_stock">Informe um número inteiro.</string>
     <string name="home_section_categories">CATEGORIAS</string>
+    <string name="category_empty">Nenhuma peça nesta categoria por enquanto.</string>
 </resources>

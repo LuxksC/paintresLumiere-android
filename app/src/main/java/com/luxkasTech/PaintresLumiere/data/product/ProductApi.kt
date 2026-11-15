@@ -5,8 +5,15 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ProductApi {
+    /**
+     * [category] and [search] follow backend card PL-110 (not live yet — the API ignores unknown
+     * params, the `mock` flavor honours them).
+     */
     @GET("products")
-    suspend fun getProducts(): ProductsResponse<Product>
+    suspend fun getProducts(
+        @Query("category") category: String? = null,
+        @Query("search") search: String? = null,
+    ): ProductsResponse<Product>
 
     @GET("products/popular")
     suspend fun getPopularProducts(@Query("limit") limit: Int?): ProductsResponse<Product>

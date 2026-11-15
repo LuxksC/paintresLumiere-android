@@ -83,9 +83,6 @@ class HomeViewModel @Inject constructor(
 
     fun onNotificationsClick() = messages.showComingSoon()
 
-    /** The per-category list lands in the next PR (#28). */
-    fun onCategoryClick(category: ProductCategory) = messages.showComingSoon()
-
     private fun load() {
         viewModelScope.launch {
             val popular = async { runCatching { productRepository.getPopularProducts(POPULAR_LIMIT) } }
