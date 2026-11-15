@@ -7,7 +7,7 @@ import com.luxkasTech.PaintresLumiere.core.messages.MessagesService
 import com.luxkasTech.PaintresLumiere.core.messages.ToastType
 import com.luxkasTech.PaintresLumiere.core.network.toUiText
 import com.luxkasTech.PaintresLumiere.data.auth.AuthRepository
-import com.luxkasTech.PaintresLumiere.data.profile.ProfileRepository
+import com.luxkasTech.PaintresLumiere.data.profile.CurrentUserStore
 import com.luxkasTech.PaintresLumiere.data.profile.UserProfile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +38,7 @@ data class ProfileUiState(
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val profileRepository: ProfileRepository,
+    private val currentUser: CurrentUserStore,
     private val messages: MessagesService,
 ) : ViewModel() {
 
@@ -53,7 +53,7 @@ class ProfileViewModel @Inject constructor(
         _state.update { it.copy(isProfileLoading = true, profileError = null) }
         viewModelScope.launch {
             try {
-                val profile = profileRepository.getProfile()
+                val profile = currentUser.refresh()
                 _state.update { it.copy(profile = profile, isProfileLoading = false) }
             } catch (e: CancellationException) {
                 throw e
