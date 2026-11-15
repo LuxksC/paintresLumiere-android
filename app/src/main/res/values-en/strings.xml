@@ -309,4 +309,17 @@
     <string name="boleto_copy_line">Copy payment line</string>
     <string name="boleto_line_copied">Payment line copied</string>
     <string name="boleto_instructions">Production starts as soon as the first installment is paid. Boleto clearing can take up to 3 business days — this screen and the order update by themselves.</string>
+    <string name="card_number">Card number</string>
+    <string name="card_holder">Name on card</string>
+    <string name="card_holder_placeholder">AS PRINTED ON THE CARD</string>
+    <string name="card_expiry">Expiry</string>
+    <string name="card_cvv">CVV</string>
+    <string name="card_installments">Paying in %1$d installments</string>
+    <string name="card_field_invalid">Check this field.</string>
+    <string name="card_security_note">Card data goes straight to the payment provider and is never stored in the app or on our servers.</string>
+    <string name="card_pay">Pay</string>
+    <string name="card_declined">Payment declined. Check the details or use another card.</string>
+    <string name="card_not_confirmed">Couldn\'t confirm the payment right now.</string>
+    <string name="card_unavailable">Card payment is not available in this version yet.</string>
+    <string name="card_choose_another">Choose another payment method</string>
 </resources>

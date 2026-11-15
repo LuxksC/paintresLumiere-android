@@ -56,6 +56,7 @@ import com.luxkasTech.PaintresLumiere.feature.orders.OrdersRoute
 import com.luxkasTech.PaintresLumiere.data.payment.Payment
 import com.luxkasTech.PaintresLumiere.data.payment.PaymentMethod
 import com.luxkasTech.PaintresLumiere.feature.payment.BoletoPaymentRoute
+import com.luxkasTech.PaintresLumiere.feature.payment.CardPaymentRoute
 import com.luxkasTech.PaintresLumiere.feature.payment.PaymentMethodRoute
 import com.luxkasTech.PaintresLumiere.feature.payment.PixPaymentRoute
 import kotlinx.serialization.json.Json
@@ -85,6 +86,7 @@ import kotlinx.serialization.Serializable
 /** [payment] is the charge as JSON — it carries the QR / boleto data the screen shows immediately. */
 @Serializable data class PixPaymentDestination(val orderId: String, val payment: String)
 @Serializable data class BoletoPaymentDestination(val orderId: String, val payment: String)
+@Serializable data class CardPaymentDestination(val orderId: String, val installments: Int)
 @Serializable data object AdminDestination
 @Serializable data object AdminProductsDestination
 @Serializable data class AdminProductGroupDestination(val sku: String)
@@ -250,7 +252,18 @@ fun MainFlow(
                                 }
                                 navController.navigate(target) { popUpTo<PaymentMethodDestination> { inclusive = true } }
                             },
-                            onCardRequested = { _, _ -> },
+                            onCardRequested = { orderId, installments ->
+                                navController.navigate(CardPaymentDestination(orderId, installments))
+                            },
+                        )
+                    }
+                    composable<CardPaymentDestination> {
+                        CardPaymentRoute(
+                            onBack = { navController.popBackStack() },
+                            onPaid = { id ->
+                                navController.navigate(OrderDetailDestination(id)) { popUpTo<PaymentMethodDestination> { inclusive = true } }
+                            },
+                            onChooseAnotherMethod = { navController.popBackStack() },
                         )
                     }
                     composable<BoletoPaymentDestination> {
