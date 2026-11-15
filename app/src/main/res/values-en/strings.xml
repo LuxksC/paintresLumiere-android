@@ -169,4 +169,13 @@
     <string name="cart_icon_a11y_count">Cart, %1$d items</string>
     <string name="cart_error_stock_title">Not enough stock</string>
     <string name="cart_error_stock_message">Available to add: %1$d</string>
+
+    <!-- Admin -->
+    <string name="tab_admin">Admin</string>
+    <string name="admin_title">Administration</string>
+    <string name="admin_subtitle">STORE MANAGEMENT</string>
+    <string name="admin_section_products">Products</string>
+    <string name="admin_section_products_subtitle">Catalog, stock and images</string>
+    <string name="admin_section_orders">Orders</string>
+    <string name="admin_section_orders_subtitle">Production and delivery status</string>
 </resources>
